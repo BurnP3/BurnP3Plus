@@ -111,15 +111,22 @@ sampleLocations <- function(season, cause, firezone, data) {
 }
 
 # Sample number of ignitions per iteration ----
-ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
 
-# Sample from a discrete distribution is specified
-if(nrow(ignitionCountDistribution) > 0) {
-  numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+# Sample from the appropriate distribution
 
-# Otherwise sample from a normal distribution using default values for Mean and SD if not provided
-} else
+# If no distribution is specified
+if(is.na(distributionName)) {
+  numIgnitions <- rep(IgnitionsPerIteration$Mean, numIterations)
+  
+# If a normal distribution is requested
+} else if (distributionName == "Normal") {
   numIgnitions <- sampleNorm(IgnitionsPerIteration, numIterations)
+  
+# Otherwise sample from a user distribution
+} else {
+  ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
+  numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+}
   
 saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
 

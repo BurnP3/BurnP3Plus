@@ -71,29 +71,35 @@ sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMi
 sampleFireDuration <- function(season, firezone, data){
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
-  fireDurationDistributionName <- FireDurationTable %>%
-    filter(Season == season | is.na(Season), FireZone == firezone | is.na(FireZone)) %>%
+  filteredFireDurationTable <- FireDurationTable %>%
+    filter(Season == season | is.na(Season), FireZone == firezone | is.na(FireZone))
+  
+  fireDurationDistributionName <- filteredFireDurationTable %>%
     pull(DistributionType)
   
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  hoursBurningDistributionName <- HoursBurningTable %>%
-    filter(Season == season | is.na(Season)) %>%
+  filteredHoursBurningTable <- HoursBurningTable %>%
+    filter(Season == season | is.na(Season))
+  
+  hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)
   
-  # Pull out the relevant distributions
-  fireDurationDistribution <- DistributionValue %>% filter(Name == fireDurationDistributionName)
-  hoursBurningDistribution <- DistributionValue %>% filter(Name == hoursBurningDistributionName)
-  
-  # Sample from a discrete distribution is specified
-  if(nrow(fireDurationDistribution) > 0) {
-    fireDurations <- sample(fireDurationDistribution$Value, nrow(data), replace = T, prob = fireDurationDistribution$RelativeFrequency)
-  
-  # Otherwise sample from a normal distribution using default values for Mean and SD if not provided
-  } else
-    fireDurations <- sampleNorm(FireDurationTable, nrow(data))
-  
   # Sample fire durations
+  
+  # If no distribution is specified
+  if(is.na(fireDurationDistributionName)) {
+    fireDurations <- rep(filteredFireDurationTable$Mean, nrow(data))
+    
+  # If sampling form a normal distribution
+  } else if (fireDurationDistributionName == "Normal") {
+    fireDurations <- sampleNorm(filteredFireDurationTable, nrow(data))
+    
+  # Otherwise sample from a user defined distribution
+  } else {
+    fireDurationDistribution <- DistributionValue %>% filter(Name == fireDurationDistributionName)
+    fireDurations <- sample(fireDurationDistribution$Value, nrow(data), replace = T, prob = fireDurationDistribution$RelativeFrequency)
+  }
   
   # Update SyncroSim progress bar
   progressBar()
@@ -106,9 +112,20 @@ sampleFireDuration <- function(season, firezone, data){
         slice(.y) %>%
         expand_grid(BurnDay = seq(.x))) %>%
     mutate(
-      HoursBurning = ifelse(nrow(hoursBurningDistribution) > 0,
-                            sample(hoursBurningDistribution$Value, nrow(.), replace= T, prob = hoursBurningDistribution$RelativeFrequency),
-                            sampleNorm(HoursBurningTable, nrow(.))),
+      HoursBurning = 
+        # If no distribution is provided
+        if (is.na(hoursBurningDistributionName)) {
+          rep(filteredHoursBurningTable$Mean, nrow(.))
+        
+        # If sampling from a normal distribution
+        } else if (hoursBurningDistributionName == "Normal") {
+          sampleNorm(filteredHoursBurningTable, nrow(.))
+        
+        # Otherwise sample from a user defined distribution
+        } else {
+          hoursBurningDistribution <- DistributionValue %>% filter(Name == hoursBurningDistributionName)
+          sample(hoursBurningDistribution$Value, nrow(.), replace= T, prob = hoursBurningDistribution$RelativeFrequency)
+        },
       firezone = firezone,
       season = season) %>%
     return

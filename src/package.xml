@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.1.0">
+  version="0.1.1">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -516,7 +516,7 @@
 				</datafeed>
 			</datafeeds>
 		</transformer>
-		<transformer name="generateIgnitions" displayName="Generate Ignitions" isRunnable="True" programName="Rscript" runContext="AllowRemote" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl">
+		<transformer name="generateIgnitions" displayName="Generate Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="DistributionValue" type="Input"/>
@@ -530,7 +530,7 @@
 				<datafeed name="DeterministicIgnitionLocation" type="Output"/>
 			</pipeline>
 		</transformer>
-		<transformer name="generateBurningConditions" displayName="Generate Burning Conditions" isRunnable="True" programName="Rscript" runContext="AllowRemote" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl">
+		<transformer name="generateBurningConditions" displayName="Generate Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="DistributionValue" type="Input"/>

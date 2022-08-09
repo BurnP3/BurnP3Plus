@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.1.2">
+  version="0.2.0">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -78,13 +78,17 @@
 				</datafeed>
 				<datafeed name="Distribution" displayName="Distributions" dataScope="Project">
 					<datasheets>
-						<datasheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True">
+						<datasheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0">
 							<columns>
 								<column name="DistributionID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
+								<column name="IsAuto" dataType="Integer" isVisible="False"/>
 							</columns>
+							<defaultRecords>
+								<record columns="Name|IsAuto" values="Normal|-1"/>
+							</defaultRecords>
 						</datasheet>
 					</datasheets>
 				</datafeed>

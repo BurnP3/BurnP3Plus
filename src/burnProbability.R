@@ -77,58 +77,62 @@ mean_bp_classification <- function(input,output_filename){
 # Summarize fires ----
 
 if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability) {
-  progressBar(type = "message", message = "Summarizing fires...")
-  
   # Calculate burn count
   burnMapRaster <- 
     # Read in burn maps as raster stack
-    datasheetRaster(myScenario, "burnP3Plus_OutputBurnMap", "FileName")
-
-  # Initialize the SyncroSim progress bar
-  progressBar("begin", totalSteps = nlayers(burnMapRaster))
+    tryCatch(datasheetRaster(myScenario, "burnP3Plus_OutputBurnMap", "FileName"),
+             error = function(e) NULL)
   
-  # Setup counter
-  burnCountRaster <- raster(subset(burnMapRaster, 1)) %>%
-    raster::setValues(rep(0, ncell(burnMapRaster)))
-  
-  for(i in seq(nlayers(burnMapRaster))) {
-    # Update progress bar
-    progressBar()
+  # Check that there are outputs to summarize
+  if(!is.null(burnMapRaster)) {
     
-    # Binarize and add another burn map to burn counter
-    burnCountRaster <<- subset(burnMapRaster, i) %>%
-      min(1) %>%
-      `+`(burnCountRaster)
-  }
-  
-  progressBar(type = "message", message = "Writing spatial outputs...")
-  raster::writeRaster(burnCountRaster, burnCountFile, datatype = "INT4S", NAflag = -9999, overwrite = T)
-  
-  # Save burn count if requested by user
-  if(OutputOptionsSpatial$BurnCount)
-    saveDatasheet(
-      myScenario,
-      data.frame(Iteration = 1, Timestep = 0, FileName = burnCountFile),
-      "burnP3Plus_OutputBurnCount")
-  
-  # Calculate and save burn probability if requested by user
-  if(OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability){
-    burnProbabilityRaster <-
-      (burnCountRaster / RunControl$MaximumIteration) %>%
-      raster::writeRaster(burnProbabilityFile, datatype = "FLT8S", NAflag = -9999, overwrite = T)
+    # Initialize the SyncroSim progress bar
+    progressBar("begin", totalSteps = nlayers(burnMapRaster))
+    progressBar(type = "message", message = "Summarizing fires...")
     
-    if(OutputOptionsSpatial$BurnProbability)
+    # Setup counter
+    burnCountRaster <- raster(subset(burnMapRaster, 1)) %>%
+      raster::setValues(rep(0, ncell(burnMapRaster)))
+    
+    for(i in seq(nlayers(burnMapRaster))) {
+      # Update progress bar
+      progressBar()
+      
+      # Binarize and add another burn map to burn counter
+      burnCountRaster <<- subset(burnMapRaster, i) %>%
+        min(1) %>%
+        `+`(burnCountRaster)
+    }
+    
+    progressBar(type = "message", message = "Writing spatial outputs...")
+    raster::writeRaster(burnCountRaster, burnCountFile, datatype = "INT4S", NAflag = -9999, overwrite = T)
+    
+    # Save burn count if requested by user
+    if(OutputOptionsSpatial$BurnCount)
       saveDatasheet(
         myScenario,
-        data.frame(Iteration = 1, Timestep = 0, FileName = burnProbabilityFile),
-        "burnP3Plus_OutputBurnProbability")
+        data.frame(Iteration = 1, Timestep = 0, FileName = burnCountFile),
+        "burnP3Plus_OutputBurnCount")
     
-    if(OutputOptionsSpatial$RelativeBurnProbability) {
-      mean_bp_classification(input = burnProbabilityFile, output_filename = relativeBurnProbabilityFile)
-      saveDatasheet(
-        myScenario,
-        data.frame(Iteration = 1, Timestep = 0, FileName = relativeBurnProbabilityFile),
-        "burnP3Plus_OutputRelativeBurnProbability")
+    # Calculate and save burn probability if requested by user
+    if(OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability){
+      burnProbabilityRaster <-
+        (burnCountRaster / RunControl$MaximumIteration) %>%
+        raster::writeRaster(burnProbabilityFile, datatype = "FLT8S", NAflag = -9999, overwrite = T)
+      
+      if(OutputOptionsSpatial$BurnProbability)
+        saveDatasheet(
+          myScenario,
+          data.frame(Iteration = 1, Timestep = 0, FileName = burnProbabilityFile),
+          "burnP3Plus_OutputBurnProbability")
+      
+      if(OutputOptionsSpatial$RelativeBurnProbability) {
+        mean_bp_classification(input = burnProbabilityFile, output_filename = relativeBurnProbabilityFile)
+        saveDatasheet(
+          myScenario,
+          data.frame(Iteration = 1, Timestep = 0, FileName = relativeBurnProbabilityFile),
+          "burnP3Plus_OutputRelativeBurnProbability")
+      }
     }
   }
 }

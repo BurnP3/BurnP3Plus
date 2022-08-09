@@ -4,6 +4,7 @@ library(raster)
 library(terra)
 
 # Setup ----
+progressBar(type = "message", message = "Preparing inputs...")
 
 ## Connect to SyncroSim ----
 
@@ -31,6 +32,7 @@ relativeBurnProbabilityFile <- file.path(tempDir, "relativeBurnProbability.tif")
 if(nrow(OutputOptionsSpatial) == 0) {
   updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.")
   OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
+  saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
 }
   
 
@@ -75,6 +77,8 @@ mean_bp_classification <- function(input,output_filename){
 # Summarize fires ----
 
 if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability) {
+  progressBar(type = "message", message = "Summarizing fires...")
+  
   # Calculate burn count
   burnMapRaster <- 
     # Read in burn maps as raster stack
@@ -97,6 +101,7 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
       `+`(burnCountRaster)
   }
   
+  progressBar(type = "message", message = "Writing spatial outputs...")
   raster::writeRaster(burnCountRaster, burnCountFile, datatype = "INT4S", NAflag = -9999, overwrite = T)
   
   # Save burn count if requested by user

@@ -3,6 +3,7 @@ library(tidyverse)
 library(raster)
 
 # Setup ----
+progressBar(type = "message", message = "Preparing inputs...")
 
 ## Connect to SyncroSim ----
 
@@ -129,6 +130,7 @@ sampleLocations <- function(season, cause, firezone, data) {
 }
 
 # Sample number of ignitions per iteration ----
+progressBar(type = "message", message = "Sampling iterations...")
 
 # If no distribution is specified
 if(is.na(distributionName)) {
@@ -151,6 +153,7 @@ numIgnitions <- ceiling(numIgnitions * (1 + proportionExtraIgnitions))
 
 # Initialize the SyncroSim progress bar
 progressBar("begin", totalSteps = nrow(IgnitionDistribution))
+progressBar(type = "message", message = "Sampling iterations...")
 
 # Build table of ignitions ----
 DeterminisiticIgnitionLocation <- 

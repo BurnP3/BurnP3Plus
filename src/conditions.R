@@ -3,9 +3,9 @@ library(tidyverse)
 library(raster)
 
 # Setup ----
+progressBar(type = "message", message = "Preparing inputs...")
 
 ## Connect to SyncroSim ----
-
 myScenario <- scenario()
 
 # Load Run Controls and identify iterations to run
@@ -196,6 +196,7 @@ nsteps <- DeterministicIgnitionLocation %>%
   {uni(., "Season") * (uni(., "FireZone") + uni(., "WeatherZone"))}
 progressBar("begin", totalSteps = nsteps)
 
+progressBar(type = "message", message = "Sampling burning conditions...")
 
 # Sample burn conditions ----
 DeterministicBurnConditions <- DeterministicIgnitionLocation %>%

@@ -27,6 +27,13 @@ burnCountFile <- file.path(tempDir, "burnCount.tif")
 burnProbabilityFile <- file.path(tempDir, "burnProbability.tif")
 relativeBurnProbabilityFile <- file.path(tempDir, "relativeBurnProbability.tif")
 
+## Handle empty values ----
+if(nrow(OutputOptionsSpatial) == 0) {
+  updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.")
+  OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
+}
+  
+
 ## Function definitions ----
 
 # Taken from Brett's helper package

@@ -10,7 +10,6 @@ myScenario <- scenario()
 
 # Load Run Controls and identify iterations to run
 RunControl <- datasheet(myScenario, "burnP3Plus_RunControl")
-iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 
 # Load remaining datasheets
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
@@ -32,7 +31,26 @@ fireZoneRaster <- tryCatch(
   datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "FireZoneGridFileName"),
   error = function(e) NULL)
 
+## Handle empty values ----
+if(nrow(RunControl) == 0) {
+  updateRunLog("No iteration count provided, defaulting to 1 iteration.")
+  RunControl[1,] <- c(1,1,0,0)
+  saveDatasheet(myScenario, RunControl, "burnP3Plus_RunControl")
+}
+
+if(nrow(IgnitionsPerIteration) == 0) {
+  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.")
+  IgnitionsPerIteration[1,"Mean"] <- 1
+  saveDatasheet(myScenario, IgnitionsPerIteration, "burnP3Plus_IgnitionsPerIteration")
+}
+
+if(nrow(ResampleOption) == 0) {
+  ResampleOption[1,] <- c(0,0)
+  saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
+}
+
 ## Extract relevant parameters ----
+iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
 distributionName <- IgnitionsPerIteration$DistributionType
 proportionExtraIgnitions <- 0

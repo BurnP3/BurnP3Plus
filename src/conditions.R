@@ -34,7 +34,19 @@ weatherZoneRaster <- tryCatch(
   datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "WeatherZoneGridFileName"),
   error = function(e) NULL)
 
-# Handle empty tables 
+## Handle empty values ----
+if(nrow(FireDurationTable) == 0) {
+  updateRunLog("No fire duration distribution provided, defaulting to 1 day fires.")
+  FireDurationTable[1,"Mean"] <- 1
+  saveDatasheet(myScenario, FireDurationTable, "burnP3Plus_FireDuration")
+}
+
+if(nrow(HoursBurningTable) == 0) {
+  updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.")
+  HoursBurningTable[1,"Mean"] <- 4
+  saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
+}
+
 if(nrow(FireZoneTable) == 0)
   FireZoneTable <- data.frame(Name = "", ID = 0)
 if(nrow(WeatherZoneTable) == 0)

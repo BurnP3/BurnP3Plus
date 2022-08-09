@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.1.1">
+  version="0.1.2">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -594,40 +594,37 @@
 			<item name="RunControl"/>
 			<item name="LandscapeRasters"/>
 			<group name="Ignition" displayName="Ignitions">
-				<item name="IgnitionsPerIteration"/>
-				<item name="DeterministicIgnitionCount" showIf="isResult"/>
-				<item name="DeterministicIgnitionLocation" showIf="isResult"/>
+				<item name="IgnitionsPerIteration" showIf="inPipeline"/>
 			</group>
 			<group name="BurningConditions" displayName="Burning Conditions">
-				<item name="FireDuration"/>
-				<item name="HoursPerDayBurning"/>
-				<item name="WeatherStream"/>
-				<item name="DeterministicBurnCondition" showIf="isResult"/>
+				<item name="FireDuration" showIf="inPipeline"/>
+				<item name="HoursPerDayBurning" showIf="inPipeline"/>
+				<item name="WeatherStream" showIf="inPipeline"/>
 			</group>
 			<group name="OutputOption" displayName="Output Options">
-				<item name="OutputOption" displayName="Tabular"/>
-				<item name="OutputOptionSpatial" displayName="Spatial"/>
+				<item name="OutputOption" displayName="Tabular" showIf="inPipeline"/>
+				<item name="OutputOptionSpatial" displayName="Spatial" showIf="inPipeline"/>
 			</group>
 			<group name="Advanced" displayName="Advanced">
 				<group name="Ignitions" displayName="Ignitions">
-					<item name="ProbabilisticIgnitionLocation"/>
-					<item name="IgnitionRestriction"/>
-					<item name="IgnitionDistribution"/>
-					<item name="DeterministicIgnitionCount"/>
-					<item name="DeterministicIgnitionLocation"/>
+					<item name="ProbabilisticIgnitionLocation" showIf="inPipeline"/>
+					<item name="IgnitionRestriction" showIf="inPipeline"/>
+					<item name="IgnitionDistribution" showIf="inPipeline"/>
+					<item name="DeterministicIgnitionCount" showIf="inPipeline"/>
+					<item name="DeterministicIgnitionLocation" showIf="inPipeline"/>
 				</group>
 				<group name="BurningConditions" displayName="Burning Conditions">
-					<item name="WeatherOption"/>
-					<item name="WindGrid"/>
-					<item name="DeterministicBurnCondition"/>
+					<item name="WeatherOption" showIf="inPipeline"/>
+					<item name="WindGrid" showIf="inPipeline"/>
+					<item name="DeterministicBurnCondition" showIf="inPipeline"/>
 				</group>
 				<group name="FireGrowth" displayName="Fire Growth Models">
-					<item name="FireResampleOption"/>
-					<item name="FireBreak"/>
+					<item name="FireResampleOption" showIf="inPipeline"/>
+					<item name="FireBreak" showIf="inPipeline"/>
 				</group>
 				<item name="DistributionValue"/>
 			</group>
-			<item name="OutputFireStatistic" showIf="isResult"/>
+			<item name="OutputFireStatistic" showIf="inPipeline"/>
 		</layout>
 		<layout name="corestimeforms_Charts" configurationSheet="burnP3Plus_RunControl">
 			<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>

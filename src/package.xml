@@ -499,7 +499,7 @@
 				</datafeed>
 			</datafeeds>
 		</transformer>
-		<transformer name="generateIgnitions" displayName="Generate Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl">
+		<transformer name="generateIgnitions" displayName="Generate Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="DistributionValue" type="Input"/>
@@ -513,7 +513,7 @@
 				<datafeed name="DeterministicIgnitionLocation" type="Output"/>
 			</pipeline>
 		</transformer>
-		<transformer name="generateBurningConditions" displayName="Generate Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl">
+		<transformer name="generateBurningConditions" displayName="Generate Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="DistributionValue" type="Input"/>
@@ -526,7 +526,7 @@
 				<datafeed name="DeterministicBurnCondition" type="Output"/>
 			</pipeline>
 		</transformer>
-		<transformer name="burnProbability" displayName="Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl">
+		<transformer name="burnProbability" displayName="Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="OutputOptionSpatial" type="Input"/>

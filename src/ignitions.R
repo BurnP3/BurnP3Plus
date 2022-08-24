@@ -114,8 +114,8 @@ sampleLocations <- function(season, cause, firezone, data) {
     pull(IgnitionGridFileName) %>%
     {if(length(.) > 0) raster(.) else raster(fuelsRaster) %>% raster::setValues(1)} %>% # Use a uniform probability map if there is no valid grid
     
-    # Mask by the restrited fuels grid and firezone raster if present
-    {if(!is.null(fireZoneRaster)) mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
+    # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
+    {if(!is.null(fireZoneRaster) & firezone != "") mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
     mask(fuelsRaster, maskvalue = restrictedFuelIDs)
   
   # Sample cells from probability map

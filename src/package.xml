@@ -178,8 +178,6 @@
 								<column name="Y" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
-								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>

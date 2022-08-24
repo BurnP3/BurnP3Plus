@@ -33,14 +33,20 @@ fireZoneRaster <- tryCatch(
   error = function(e) NULL)
 
 ## Handle empty values ----
+if(nrow(FuelTypeTable) == 0) {
+  updateRunLog("No fuel table found! Using default Canadian Forest Service fuel codes.", type = "warning")
+  FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv"))
+  saveDatasheet(myScenario, FuelTypeTable, "burnP3Plus_FuelType")
+}
+
 if(nrow(RunControl) == 0) {
-  updateRunLog("No iteration count provided, defaulting to 1 iteration.")
+  updateRunLog("No iteration count provided, defaulting to 1 iteration.", type = "warning")
   RunControl[1,] <- c(1,1,0,0)
   saveDatasheet(myScenario, RunControl, "burnP3Plus_RunControl")
 }
 
 if(nrow(IgnitionsPerIteration) == 0) {
-  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.")
+  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.", type = "info")
   IgnitionsPerIteration[1,"Mean"] <- 1
   saveDatasheet(myScenario, IgnitionsPerIteration, "burnP3Plus_IgnitionsPerIteration")
 }

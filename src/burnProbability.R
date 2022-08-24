@@ -30,7 +30,7 @@ relativeBurnProbabilityFile <- file.path(tempDir, "relativeBurnProbability.tif")
 
 ## Handle empty values ----
 if(nrow(OutputOptionsSpatial) == 0) {
-  updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.")
+  updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.", type = "info")
   OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
   saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
 }

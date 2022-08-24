@@ -59,6 +59,7 @@
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
+								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -72,6 +73,7 @@
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
+								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -611,10 +613,10 @@
 			<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 		</layout>
 		<layout name="corestimeforms_Maps" configurationSheet="burnP3Plus_RunControl">
-			<item name="FuelMap" displayName ="Fuels Map" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
+			<item name="FuelMap" displayName ="Fuels Map" dataSheet="LandscapeRasters" column="FuelGridFileName" xcolorMapSource="FuelType"/>
 			<item name="ElevationMap" displayName ="Elevation Map" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
-			<item name="FireZoneMap" displayName ="Fire Zone Map" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
-			<item name="WeatherZoneMap" displayName ="Weather Zone Map" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
+			<item name="FireZoneMap" displayName ="Fire Zone Map" dataSheet="LandscapeRasters" column="FireZoneGridFileName" xcolorMapSource="FireZone"/>
+			<item name="WeatherZoneMap" displayName ="Weather Zone Map" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName" xcolorMapSource="WeatherZone"/>
 			<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName"/>
 			<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName"/>
 			<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName"/>

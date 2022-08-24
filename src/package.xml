@@ -626,4 +626,9 @@
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
+	<updateProvider 
+		schemaVersion="1" 
+		minPackageVersion="0.2.0" 
+		className="SyncroSim.Core.XMLUpdateProvider" 
+		classAssembly="SyncroSim.Core"/>
 </package>

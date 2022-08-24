@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_Distribution">
+    <item>ALTER TABLE burnP3Plus_Distribution ADD COLUMN IsAuto Integer</item>
+    <item>INSERT INTO burnP3Plus_Distribution (ProjectID, Name, IsAuto) SELECT ProjectID, 'Normal', '-1' FROM core_Project</item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_FireZone">
+    <item>ALTER TABLE burnP3Plus_FireZone ADD COLUMN Color TEXT</item>
+  </action>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_WeatherZone">
+    <item>ALTER TABLE burnP3Plus_WeatherZone ADD COLUMN Color TEXT</item>
+  </action>
+</update>

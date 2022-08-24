@@ -15,12 +15,13 @@ RunControl <- datasheet(myScenario, "burnP3Plus_RunControl")
 # Load remaining datasheets
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
+DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F)
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue")
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season")
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 
 # Load relevant ignition datasheets
-IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T)
+IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T, lookupsAsFactors = F)
 ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T)
 ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T)
 IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T)
@@ -33,14 +34,20 @@ fireZoneRaster <- tryCatch(
   error = function(e) NULL)
 
 ## Handle empty values ----
+if(nrow(FuelTypeTable) == 0) {
+  updateRunLog("No fuel table found! Using default Canadian Forest Service fuel codes.", type = "warning")
+  FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv"))
+  saveDatasheet(myScenario, FuelTypeTable, "burnP3Plus_FuelType")
+}
+
 if(nrow(RunControl) == 0) {
-  updateRunLog("No iteration count provided, defaulting to 1 iteration.")
+  updateRunLog("No iteration count provided, defaulting to 1 iteration.", type = "warning")
   RunControl[1,] <- c(1,1,0,0)
   saveDatasheet(myScenario, RunControl, "burnP3Plus_RunControl")
 }
 
 if(nrow(IgnitionsPerIteration) == 0) {
-  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.")
+  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.", type = "info")
   IgnitionsPerIteration[1,"Mean"] <- 1
   saveDatasheet(myScenario, IgnitionsPerIteration, "burnP3Plus_IgnitionsPerIteration")
 }
@@ -50,10 +57,37 @@ if(nrow(ResampleOption) == 0) {
   saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
 }
 
+## Parse distributions ----
+
+# Decide if sampling based on a distribution
+byDistribution <- any(!is.na(IgnitionsPerIteration$DistributionType))
+
+# If so, ensure only one distribution is specified
+if(byDistribution & nrow(IgnitionsPerIteration) > 1)
+  stop("If sampling Ignitions per Iteration from a distribution, only one record is accepted.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
+
+# Identify the name and type of distribution
+distributionName <- IgnitionsPerIteration$DistributionType
+isAuto <- DistributionType %>% filter(Name == distributionName) %>% pull(IsAuto) %>% replace_na(0) %>% `==`(-1) 
+distributionData <- DistributionValue %>% filter(Name == distributionName)
+
+# If using a built-in distribution, ensure Mean and SD are provided
+if(byDistribution & isAuto)
+  if(is.na(IgnitionsPerIteration$Mean) | is.na(IgnitionsPerIteration$DistributionSD))
+    stop("Please specify a Mean and SD to use this built-in distribution to sample Ignitions per Iteration")
+
+# If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
+if(byDistribution & !isAuto) {
+  if(nrow(distributionData) == 0)
+    stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
+  
+  if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
+     updateRunLog("Found Mean or SD values for a user-defined distribution in Ignitions per Iteration.\nThese values will not be respected during sampling. To modify a user-defined distribution, \nplease edit the 'Distributions' datasheet under the 'Advanced' tab in the scenario properties.", type = "warning")
+}
+
 ## Extract relevant parameters ----
 iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
-distributionName <- IgnitionsPerIteration$DistributionType
 proportionExtraIgnitions <- 0
 if (length(ResampleOption$ProportionExtraIgnition) > 0)
   proportionExtraIgnitions <- ResampleOption$ProportionExtraIgnition
@@ -108,8 +142,8 @@ sampleLocations <- function(season, cause, firezone, data) {
     pull(IgnitionGridFileName) %>%
     {if(length(.) > 0) raster(.) else raster(fuelsRaster) %>% raster::setValues(1)} %>% # Use a uniform probability map if there is no valid grid
     
-    # Mask by the restrited fuels grid and firezone raster if present
-    {if(!is.null(fireZoneRaster)) mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
+    # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
+    {if(!is.null(fireZoneRaster) & firezone != "") mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
     mask(fuelsRaster, maskvalue = restrictedFuelIDs)
   
   # Sample cells from probability map
@@ -134,7 +168,7 @@ progressBar(type = "message", message = "Sampling iterations...")
 
 # If no distribution is specified
 if(is.na(distributionName)) {
-  numIgnitions <- rep(IgnitionsPerIteration$Mean, numIterations)
+  numIgnitions <- sample(IgnitionsPerIteration$Mean, numIterations, replace = T)
   
 # If a normal distribution is requested
 } else if (distributionName == "Normal") {

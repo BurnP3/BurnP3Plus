@@ -59,6 +59,7 @@
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
+								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -72,6 +73,7 @@
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
+								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -141,8 +143,8 @@
 							<columns>
 								<column name="IgnitionsPerIterationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
 								<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution"  isOptional="True"/>
 								<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
@@ -159,7 +161,7 @@
 								<column name="DeterministicIgnitionCountID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 								<column name="Ignitions" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								</columns>
 						</datasheet>
@@ -171,15 +173,13 @@
 							<columns>
 								<column name="DeterministicIgnitionLocationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="X" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Y" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
-								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -190,8 +190,8 @@
 							<columns>
 								<column name="ProbabilisticIgnitionLocationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
 								<column name="IgnitionGridFileName" displayName="Ignition Grid" dataType="String" isExternalFile="True" isRaster="True"/>
@@ -205,8 +205,8 @@
 							<columns>
 								<column name="IgnitionRestrictionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
@@ -221,8 +221,8 @@
 							<columns>
 								<column name="FireDurationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
 								<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
@@ -240,8 +240,8 @@
 							<columns>
 								<column name="HoursPerDayBurningID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
 								<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
@@ -258,8 +258,8 @@
 							<columns>
 								<column name="IgnitionDistributionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="True"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" allowDbNull="True"/>
 								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" allowDbNull="True"/>
@@ -311,8 +311,8 @@
 							<columns>
 								<column name="DeterministicBurnConditionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" isOptional="True" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="HoursBurning" displayName="Hourse Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
@@ -415,7 +415,7 @@
 							<columns>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 								<column name="X" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Y" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
@@ -438,7 +438,7 @@
 							<columns>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
@@ -451,7 +451,7 @@
 							<columns>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="RelativeBurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
@@ -464,7 +464,7 @@
 							<columns>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnCount"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
@@ -477,7 +477,7 @@
 							<columns>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
@@ -491,7 +491,7 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="FireID" dataType="Integer"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
 							</columns>
 						</datasheet>
@@ -626,4 +626,9 @@
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
+	<updateProvider 
+		schemaVersion="1" 
+		minPackageVersion="0.2.0" 
+		className="SyncroSim.Core.XMLUpdateProvider" 
+		classAssembly="SyncroSim.Core"/>
 </package>

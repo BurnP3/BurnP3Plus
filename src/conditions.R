@@ -35,14 +35,18 @@ weatherZoneRaster <- tryCatch(
   error = function(e) NULL)
 
 ## Handle empty values ----
+if(nrow(WeatherStream) == 0) {
+  stop("Error: Please provide weather stream data to sample burning conditions.")
+}
+
 if(nrow(FireDurationTable) == 0) {
-  updateRunLog("No fire duration distribution provided, defaulting to 1 day fires.")
+  updateRunLog("No fire duration distribution provided, defaulting to 1 day fires.", type = "warning")
   FireDurationTable[1,"Mean"] <- 1
   saveDatasheet(myScenario, FireDurationTable, "burnP3Plus_FireDuration")
 }
 
 if(nrow(HoursBurningTable) == 0) {
-  updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.")
+  updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
   HoursBurningTable[1,"Mean"] <- 4
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }

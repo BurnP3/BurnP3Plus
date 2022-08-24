@@ -613,7 +613,7 @@
 			<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 		</layout>
 		<layout name="corestimeforms_Maps" configurationSheet="burnP3Plus_RunControl">
-			<item name="FuelMap" displayName ="Fuels Map" dataSheet="LandscapeRasters" column="FuelGridFileName/>
+			<item name="FuelMap" displayName ="Fuels Map" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
 			<item name="ElevationMap" displayName ="Elevation Map" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
 			<item name="FireZoneMap" displayName ="Fire Zone Map" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
 			<item name="WeatherZoneMap" displayName ="Weather Zone Map" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>

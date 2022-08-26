@@ -71,20 +71,21 @@ distributionName <- IgnitionsPerIteration$DistributionType
 isAuto <- DistributionType %>% filter(Name == distributionName) %>% pull(IsAuto) %>% replace_na(0) %>% `==`(-1) 
 distributionData <- DistributionValue %>% filter(Name == distributionName)
 
-# If using a built-in distribution, ensure Mean and SD are provided
-if(byDistribution & isAuto)
-  if(is.na(IgnitionsPerIteration$Mean) | is.na(IgnitionsPerIteration$DistributionSD))
-    stop("Please specify a Mean and SD to use this built-in distribution to sample Ignitions per Iteration")
-
-# If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
-if(byDistribution & !isAuto) {
-  if(nrow(distributionData) == 0)
-    stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
+if(byDistribution) {
+  # If using a built-in distribution, ensure Mean and SD are provided
+  if(isAuto)
+    if(is.na(IgnitionsPerIteration$Mean) | is.na(IgnitionsPerIteration$DistributionSD))
+      stop("Please specify a Mean and SD to use this built-in distribution to sample Ignitions per Iteration")
   
-  if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
-     updateRunLog("Found Mean or SD values for a user-defined distribution in Ignitions per Iteration.\nThese values will not be respected during sampling. To modify a user-defined distribution, \nplease edit the 'Distributions' datasheet under the 'Advanced' tab in the scenario properties.", type = "warning")
+  # If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
+  if(!isAuto) {
+    if(nrow(distributionData) == 0)
+      stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
+    
+    if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
+       updateRunLog("Found Mean or SD values for a user-defined distribution in Ignitions per Iteration.\nThese values will not be respected during sampling. To modify a user-defined distribution, \nplease edit the 'Distributions' datasheet under the 'Advanced' tab in the scenario properties.", type = "warning")
+  }
 }
-
 ## Extract relevant parameters ----
 iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)

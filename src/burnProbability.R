@@ -54,9 +54,9 @@ updateBreakpoint <- function() {
   if (elapsed < 60) {
     return(str_c(round(elapsed), "sec"))
   } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60), "min"))
+    return(str_c(round(elapsed / 60, 1), "min"))
   } else
-    return(str_c(round(elapsed / 60 / 60), "hr"))
+    return(str_c(round(elapsed / 60 / 60, 1), "hr"))
 }
 
 # Taken from Brett's helper package

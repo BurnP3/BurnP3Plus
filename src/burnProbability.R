@@ -6,6 +6,9 @@ library(terra)
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
 
+# Initialize first breakpoint for timing code
+currentBreakPoint <- proc.time()
+
 ## Connect to SyncroSim ----
 
 myScenario <- scenario()
@@ -37,6 +40,24 @@ if(nrow(OutputOptionsSpatial) == 0) {
   
 
 ## Function definitions ----
+
+# Function to time code by returning a clean string of time since this function was last called
+updateBreakpoint <- function() {
+  # Calculate time since last breakpoint
+  newBreakPoint <- proc.time()
+  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
+  
+  # Update current breakpoint
+  currentBreakPoint <<- newBreakPoint
+  
+  # Return cleaned elapsed time
+  if (elapsed < 60) {
+    return(str_c(round(elapsed), "sec"))
+  } else if (elapsed < 60^2) {
+    return(str_c(round(elapsed / 60), "min"))
+  } else
+    return(str_c(round(elapsed / 60 / 60), "hr"))
+}
 
 # Taken from Brett's helper package
 # - Consider importing package instead
@@ -73,6 +94,8 @@ mean_bp_classification <- function(input,output_filename){
                      NAflag = -9999
   )
 }
+
+updateRunLog("Finished preparing inputs in ", updateBreakpoint())
 
 # Summarize fires ----
 
@@ -139,3 +162,4 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
 
 # Wrap up SyncroSim progress bar
 progressBar("end")
+updateRunLog("Finished summarizing burn probability in ", updateBreakpoint(), "\n\n")

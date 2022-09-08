@@ -5,6 +5,9 @@ library(raster)
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
 
+# Initialize first breakpoint for timing code
+currentBreakPoint <- proc.time()
+
 ## Connect to SyncroSim ----
 
 myScenario <- scenario()
@@ -103,6 +106,24 @@ if(nrow(SeasonTable) == 0)
 
 ## Function Definitions ----
 
+# Function to time code by returning a clean string of time since this function was last called
+updateBreakpoint <- function() {
+  # Calculate time since last breakpoint
+  newBreakPoint <- proc.time()
+  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
+  
+  # Update current breakpoint
+  currentBreakPoint <<- newBreakPoint
+  
+  # Return cleaned elapsed time
+  if (elapsed < 60) {
+    return(str_c(round(elapsed), "sec"))
+  } else if (elapsed < 60^2) {
+    return(str_c(round(elapsed / 60), "min"))
+  } else
+    return(str_c(round(elapsed / 60 / 60), "hr"))
+}
+
 # Function to parse a table defining a normal distribution and sample accordingly
 sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
   
@@ -164,6 +185,8 @@ sampleLocations <- function(season, cause, firezone, data) {
       Cause = cause))
 }
 
+updateRunLog("Finished preparing inputs in ", updateBreakpoint())
+  
 # Sample number of ignitions per iteration ----
 progressBar(type = "message", message = "Sampling iterations...")
 
@@ -234,3 +257,4 @@ saveDatasheet(myScenario, DeterminisiticIgnitionLocation, "burnP3Plus_Determinis
 
 # Wrapup the SyncroSim progress bar
 progressBar("end")
+updateRunLog("Finished sampling ignitions in ", updateBreakpoint(), "\n\n")

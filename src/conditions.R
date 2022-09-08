@@ -5,6 +5,9 @@ library(raster)
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
 
+# Initialize first breakpoint for timing code
+currentBreakPoint <- proc.time()
+
 ## Connect to SyncroSim ----
 myScenario <- scenario()
 
@@ -57,6 +60,24 @@ if(nrow(WeatherZoneTable) == 0)
   WeatherZoneTable <- data.frame(Name = "", ID = 0)
 
 ## Function Definitions ----
+
+# Function to time code by returning a clean string of time since this function was last called
+updateBreakpoint <- function() {
+  # Calculate time since last breakpoint
+  newBreakPoint <- proc.time()
+  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
+  
+  # Update current breakpoint
+  currentBreakPoint <<- newBreakPoint
+  
+  # Return cleaned elapsed time
+  if (elapsed < 60) {
+    return(str_c(round(elapsed), "sec"))
+  } else if (elapsed < 60^2) {
+    return(str_c(round(elapsed / 60), "min"))
+  } else
+    return(str_c(round(elapsed / 60 / 60), "hr"))
+}
 
 # Define function to facilitate recoding a vector using a look-up table
 lookup <- function(x, old, new){
@@ -192,6 +213,8 @@ DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
   # Clean up
   dplyr::select(-cell, -firezoneID, -weatherzoneID)
 
+updateRunLog("Finished preparing inputs in ", updateBreakpoint())
+
 # Initialize the SyncroSim progress bar
 # - Fire duration must be sampled for every combination of season and firezone
 # - Weather must be sampled for every combination of season and weatherzone
@@ -226,3 +249,4 @@ saveDatasheet(myScenario, DeterministicBurnConditions, "burnP3Plus_Deterministic
 
 # Wrapup the SyncroSim progress bar
 progressBar("end")
+updateRunLog("Finished sampling burn conditions in ", updateBreakpoint(), "\n\n")

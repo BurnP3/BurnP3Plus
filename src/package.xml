@@ -161,7 +161,7 @@
 								<column name="DeterministicIgnitionCountID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Ignitions" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								</columns>
 						</datasheet>

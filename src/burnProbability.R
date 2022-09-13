@@ -1,6 +1,5 @@
 library(rsyncrosim)
 library(tidyverse)
-library(raster)
 library(terra)
 
 # Setup ----
@@ -103,32 +102,26 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
   # Calculate burn count
   burnMapRaster <- 
     # Read in burn maps as raster stack
-    tryCatch(datasheetRaster(myScenario, "burnP3Plus_OutputBurnMap", "FileName"),
-             error = function(e) NULL)
+    rast(tryCatch(datasheetRaster(myScenario, "burnP3Plus_OutputBurnMap", "FileName"),
+             error = function(e) NULL))
   
   # Check that there are outputs to summarize
   if(!is.null(burnMapRaster)) {
     
     # Initialize the SyncroSim progress bar
-    progressBar("begin", totalSteps = nlayers(burnMapRaster))
+    progressBar("begin", totalSteps = nlyr(burnMapRaster))
     progressBar(type = "message", message = "Summarizing fires...")
     
     # Setup counter
-    burnCountRaster <- raster(subset(burnMapRaster, 1)) %>%
-      raster::setValues(rep(0, ncell(burnMapRaster)))
-    
-    for(i in seq(nlayers(burnMapRaster))) {
-      # Update progress bar
-      progressBar()
-      
-      # Binarize and add another burn map to burn counter
-      burnCountRaster <<- subset(burnMapRaster, i) %>%
-        min(1) %>%
-        `+`(burnCountRaster)
-    }
+    burnCountRaster <- sum(burnMapRaster)
     
     progressBar(type = "message", message = "Writing spatial outputs...")
-    raster::writeRaster(burnCountRaster, burnCountFile, datatype = "INT4S", NAflag = -9999, overwrite = T)
+    terra::writeRaster(burnCountRaster, 
+                       burnCountFile, 
+                       wopt = list(filetype = "GTiff",
+                                   datatype = "INT4S",
+                                   gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")), 
+                       NAflag = -9999, overwrite = T)
     
     # Save burn count if requested by user
     if(OutputOptionsSpatial$BurnCount)
@@ -141,7 +134,11 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
     if(OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability){
       burnProbabilityRaster <-
         (burnCountRaster / RunControl$MaximumIteration) %>%
-        raster::writeRaster(burnProbabilityFile, datatype = "FLT8S", NAflag = -9999, overwrite = T)
+        terra::writeRaster(filename = burnProbabilityFile,
+                           wopt = list(filetype = "GTiff",
+                                       gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")),
+                           NAflag = -9999, 
+                           overwrite = T)
       
       if(OutputOptionsSpatial$BurnProbability)
         saveDatasheet(

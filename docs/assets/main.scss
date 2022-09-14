@@ -1,0 +1,60 @@
+---
+---
+
+@import "minima";
+
+/* Color of links and other bits an bolts of the website set as the same than on SyncroSim website */
+:root {
+    --apexOrange: #175cb6;
+}
+
+/* Links */
+a {
+    color: var(--apexOrange);
+}
+
+// Add logo to masthead
+.site-title::before {
+    content: url("images/logo/burnP3Plus-logo.png");
+    display: inline-block;
+    position: relative;
+    padding-right: 10px;
+    padding-top: 17px;
+}
+
+// Background pf site header
+.site-header {
+    background-color: #F0F0F0;
+}
+
+// Nav buttons
+.site-nav {
+    padding-top: 12px;
+}
+
+// Button text
+.site-nav .page-link {
+    color: --apexOrange;
+    font-size: larger;
+}
+
+// Avoid wrapping of email address
+.contact-list .u-email { font-size: 95%; }
+
+// size of wrapper
+.wrapper {
+    max-width: calc(1000px - (30px * 2));
+}
+
+// Change footer col sizes
+.footer-col-1 {
+    width: calc(35% - (30px / 2));
+}
+
+.footer-col-2 {
+    width: calc(40% - (30px / 2));
+}
+
+.footer-col-3 {
+    width: calc(25% - (30px / 2));
+}

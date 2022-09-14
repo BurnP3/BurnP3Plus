@@ -1,0 +1,8 @@
+title: BurnP3+
+theme: minima
+description: Powered by Jekyll and Minima
+author: Apex Resource Management Solutions
+email: info@apexrms.com
+header_pages:
+  - index.md
+  - getting_started.md

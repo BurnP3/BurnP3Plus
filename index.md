@@ -7,7 +7,7 @@ permalink: /
 
 # **BurnP3+** SyncroSim Package
 <img align="right" style="padding: 13px" width="180" src="assets/images/logo/burnP3Plus-sticker.png">
-[![GitHub release](https://img.shields.io/github/v/release/ApexRMS/BurnP3+.svg?style=for-the-badge&color=d68a06)](https://GitHub.com/ApexRMS/BurnP3+/releases/)    <a href="https://github.com/ApexRMS/BurnP3+"><img align="middle" style="padding: 1px" width="30" src="assets/images/logo/github-trans2.png">
+[![GitHub release](https://img.shields.io/github/v/release/BurnP3/BurnP3+.svg?style=for-the-badge&color=d68a06)](https://GitHub.com/BurnP3/BurnP3+/releases/)    <a href="https://github.com/BurnP3/BurnP3+"><img align="middle" style="padding: 1px" width="30" src="assets/images/logo/github-trans2.png">
 <br>
 ## Explore fire risk using fire growth models
 ### Burn-P3+ is an open-source [SyncroSim](https://syncrosim.com/){:target="_blank"} Base Package that facilitates sampling spatially-explicit fire growth models to explore fire risk across a landscape.
@@ -35,19 +35,19 @@ codetools v0.2-18
 
 ## How to Install
 
-For installation instructions, see the **Install BurnP3+** section on the [Getting Started](https://apexrms.github.io/BurnP3+/getting_started.html) page.
+For installation instructions, see the **Install BurnP3+** section on the [Getting Started](https://burnp3.github.io/BurnP3+/getting_started.html) page.
 
 ## Getting Started
 
-For more information on **BurnP3+**, including a Quickstart Tutorial, see the [Getting Started](https://apexrms.github.io/BurnP3+/getting_started.html) page.
+For more information on **BurnP3+**, including a Quickstart Tutorial, see the [Getting Started](https://burnp3.github.io/BurnP3+/getting_started.html) page.
 
 ## Links
 
 Browse source code at
-[http://github.com/ApexRMS/BurnP3+/](http://github.com/ApexRMS/BurnP3+/){:target="_blank"}
+[http://github.com/BurnP3/BurnP3+/](http://github.com/BurnP3/BurnP3+/){:target="_blank"}
 <br>
 Report a bug at
-[http://github.com/ApexRMS/BurnP3+/issues](http://github.com/ApexRMS/BurnP3+/issues){:target="_blank"}
+[http://github.com/BurnP3/BurnP3+/issues](http://github.com/BurnP3/BurnP3+/issues){:target="_blank"}
 
 ## Developers
 

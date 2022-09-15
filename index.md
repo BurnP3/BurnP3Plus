@@ -51,7 +51,23 @@ Report a bug at
 
 ## Developers
 
+Shreeram Senthivasan (Author)
+<br>
 Brett Moore (Author, maintainer) <a href="https://orcid.org/0000-0002-9456-8435" target="_blank"><img align="middle" style="padding: 0.5px" width="17" src="assets/images/ORCID.png"></a>
 <br>
-Shreeram Senthivasan (Author)
+Leonardo Frid (Author)
+<br>
+Colin Daniel (Author)
+<br>
+Katie Birchard (Author)
+<br>
+Sarah Chisholm (Author)
+<br>
+Peter Englefield (Author)
+<br>
+Quinn Barber (Author)
+<br>
+Denys Yemshanov (Author)
+<br>
+Chris Stockdale (Author)
 <br>

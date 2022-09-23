@@ -1,6 +1,6 @@
 library(rsyncrosim)
 library(tidyverse)
-library(raster)
+library(terra)
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -31,9 +31,9 @@ IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", o
 IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution")
 
 # Import relevant rasters, allowing for missing values
-fuelsRaster <- datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "FuelGridFileName")
+fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
 fireZoneRaster <- tryCatch(
-  datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "FireZoneGridFileName"),
+  rast(datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
   error = function(e) NULL)
 
 ## Handle empty values ----
@@ -162,7 +162,7 @@ sampleLocations <- function(season, cause, firezone, data) {
     # Start by finding the relevant probabilist ignition grid
     filter(Cause == cause) %>%
     pull(IgnitionGridFileName) %>%
-    {if(length(.) > 0) raster(.) else raster(fuelsRaster) %>% raster::setValues(1)} %>% # Use a uniform probability map if there is no valid grid
+    {if(length(.) > 0) rast(.) else rast(fuelsRaster, vals = 1)} %>% # Use a uniform probability map if there is no valid grid
     
     # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
     {if(!is.null(fireZoneRaster) & firezone != "") mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%

@@ -1,6 +1,6 @@
 library(rsyncrosim)
 library(tidyverse)
-library(raster)
+library(terra)
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -29,12 +29,12 @@ WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T)
 WeatherOptions <- datasheet(myScenario, "burnP3Plus_WeatherOption")
 
 # Import relevant rasters, allowing for missing values
-fuelsRaster <- datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "FuelGridFileName")
+fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
 fireZoneRaster <- tryCatch(
-  datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "FireZoneGridFileName"),
+  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
   error = function(e) NULL)
 weatherZoneRaster <- tryCatch(
-  datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters", "WeatherZoneGridFileName"),
+  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["WeatherZoneGridFileName"]]),
   error = function(e) NULL)
 
 ## Handle empty values ----
@@ -204,8 +204,8 @@ DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
   # Determine fire zone and weather zone using the respective maps
   mutate(
     cell = cellFromRowCol(fuelsRaster, Y, X),
-    weatherzoneID = ifelse(!is.null(weatherZoneRaster), weatherZoneRaster[cell], 0),
-    firezoneID = ifelse(!is.null(fireZoneRaster), fireZoneRaster[cell], 0),
+    weatherzoneID = ifelse(!is.null(weatherZoneRaster), weatherZoneRaster[][cell], 0),
+    firezoneID = ifelse(!is.null(fireZoneRaster), fireZoneRaster[][cell], 0),
     WeatherZone = lookup(weatherzoneID, WeatherZoneTable$ID, WeatherZoneTable$Name),
     FireZone = lookup(firezoneID, FireZoneTable$ID, FireZoneTable$Name)
   ) %>%

@@ -102,8 +102,11 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
   # Calculate burn count
   burnMapRaster <- 
     # Read in burn maps as raster stack
-    rast(tryCatch(datasheetRaster(myScenario, "burnP3Plus_OutputBurnMap", "FileName"),
-             error = function(e) NULL))
+    tryCatch(
+      datasheet(myScenario, "burnP3Plus_OutputBurnMap")[["FileName"]] %>%
+        {file.path(ssimEnvironment()$OutputDirectory, str_c("Scenario-", ssimEnvironment()$ScenarioId), "burnP3Plus_OutputBurnMap", basename(.))} %>%
+        rast,
+      error = function(e) NULL)
   
   # Check that there are outputs to summarize
   if(!is.null(burnMapRaster)) {

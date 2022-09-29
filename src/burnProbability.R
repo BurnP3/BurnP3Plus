@@ -116,7 +116,15 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
     progressBar(type = "message", message = "Summarizing fires...")
     
     # Setup counter
-    burnCountRaster <- sum(burnMapRaster)
+    burnCountRaster <- rast(burnMapRaster[[1]], vals = 0)
+    
+    # Sum one layer at a time to avoid loading entire burn stack into memory with `terra::sum()`
+    for(i in seq(nlyr(burnMapRaster))) {
+      # Update progress bar
+      progressBar()
+      
+      burnCountRaster <<- burnCountRaster + burnMapRaster[[i]]
+    }
     
     progressBar(type = "message", message = "Writing spatial outputs...")
     terra::writeRaster(burnCountRaster, 

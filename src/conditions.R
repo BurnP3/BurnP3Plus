@@ -1,6 +1,6 @@
 library(rsyncrosim)
-library(tidyverse)
-library(terra)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(terra))
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -20,12 +20,12 @@ DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_Deterministic
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
-DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue")
+DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
 
 # Load weather and burn condition table
-FireDurationTable <- datasheet(myScenario, "burnP3Plus_FireDuration", optional = T)
-HoursBurningTable <- datasheet(myScenario, "burnP3Plus_HoursPerDayBurning", optional = T)
-WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T)
+FireDurationTable <- datasheet(myScenario, "burnP3Plus_FireDuration", optional = T, lookupsAsFactors = F)
+HoursBurningTable <- datasheet(myScenario, "burnP3Plus_HoursPerDayBurning", optional = T, lookupsAsFactors = F)
+WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T, lookupsAsFactors = F)
 WeatherOptions <- datasheet(myScenario, "burnP3Plus_WeatherOption")
 
 # Import relevant rasters, allowing for missing values

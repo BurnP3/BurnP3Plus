@@ -1,6 +1,6 @@
 library(rsyncrosim)
-library(tidyverse)
-library(terra)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(terra))
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")

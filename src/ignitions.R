@@ -1,6 +1,6 @@
 library(rsyncrosim)
-library(tidyverse)
-library(terra)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(terra))
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -19,16 +19,16 @@ RunControl <- datasheet(myScenario, "burnP3Plus_RunControl")
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F)
-DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue")
+DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season")
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 
 # Load relevant ignition datasheets
 IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T, lookupsAsFactors = F)
 ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T)
-ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T)
-IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T)
-IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution")
+ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T, lookupsAsFactors = F)
+IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T, lookupsAsFactors = F)
+IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution", optional = T, lookupsAsFactors = F)
 
 # Import relevant rasters, allowing for missing values
 fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])

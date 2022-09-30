@@ -189,10 +189,18 @@ sampleLocations <- function(season, cause, firezone, data) {
   # and fuels that are not restricted
   maskedProbability <- ProbabilisticIgnitionLocation %>%
     
-    # Start by finding the relevant probabilist ignition grid
-    filter(Cause == cause) %>%
+    # Start by finding the relevant probabilistic ignition grid
+    filter(Cause %in% c(cause, NA), Season %in% c(season, NA)) %>%
     pull(IgnitionGridFileName) %>%
-    {if(length(.) > 0) rast(.) else rast(fuelsRaster, vals = 1)} %>% # Use a uniform probability map if there is no valid grid
+    
+    # Warn if multiple probabilistic ignition grids are specified
+    {if(length(.) > 1) {updateRunLog("Multiple probabilistic ignition grids specified for some combinations of season and cause. Using first applicable grid.", type = "warning"); .[1]} else .} %>%
+    
+    # Use a uniform probability map if there is no valid grid
+    {if(length(.) > 0) rast(.) else rast(fuelsRaster, vals = 1)} %>% 
+    
+    # Check the probability map for consistency
+    checkSpatialInput("Probabilistic Ignition Location", checkProjection = F) %>%
     
     # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
     {if(!is.null(fireZoneRaster) & firezone != "") mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%

@@ -60,6 +60,36 @@ if(nrow(ResampleOption) == 0) {
   saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
 }
 
+## Check raster inputs for consistency ----
+
+# Ensure fuels crs can be converted to Lat / Long
+tryCatch(fuelsRaster %>% project("+proj=longlat"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
+
+# Define function to check input raster for consistency
+checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
+  # Only check if not null
+  if(!is.null(x)) {
+    # Ensure comparable number of rows and cols in all spatial inputs
+      if(nrow(fuelsRaster) != nrow(x) | ncol(fuelsRaster) != ncol(x))
+        if(warnOnly) {
+          updateRunLog("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.", type = "warning")
+          invisible(NULL) # Return null silently to mimic behaviour of missing input
+        } else
+          stop("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.")
+    
+    # Info if CRS is not matching
+    if(checkProjection)
+      if(crs(x) != crs(fuelsRaster))
+        updateRunLog("Projection of ", name, " map does not match Fuels map. Please check that the CRS of these maps match.", type = "info")
+  }
+  
+  # Silently return for clean pipelining
+  invisible(x)
+}
+
+# Check optional inputs
+checkSpatialInput(fireZoneRaster, "Fire Zone")
+
 ## Parse distributions ----
 
 # Decide if sampling based on a distribution

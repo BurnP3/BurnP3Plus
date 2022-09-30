@@ -33,7 +33,7 @@ IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution",
 # Import relevant rasters, allowing for missing values
 fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
 fireZoneRaster <- tryCatch(
-  rast(datasheetRaster(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
+  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
   error = function(e) NULL)
 
 ## Handle empty values ----

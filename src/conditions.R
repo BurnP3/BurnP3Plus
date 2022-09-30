@@ -89,6 +89,17 @@ uni <- function(df, colName) {
   return(df[colName] %>% unique %>% nrow)
 }
 
+# Function to convert from latlong to cell index
+cellFromLatLong <- function(x, lat, long) {
+  # Convert list of lat and long to SpatVector, reproject to source crs
+  points <- matrix(c(long, lat), ncol = 2) %>%
+    vect(crs = "+proj=longlat +datum=WGS84 +no_defs") %>%
+    project(x)
+  
+  # Get vector of cell ID's from points
+  return(cells(x, points)[, "cell"])
+}
+
 # Function to parse a table defining a normal distribution and sample accordingly
 sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
   
@@ -203,7 +214,7 @@ DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
   
   # Determine fire zone and weather zone using the respective maps
   mutate(
-    cell = cellFromRowCol(fuelsRaster, Y, X),
+    cell = cellFromLatLong(fuelsRaster, Latitude, Longitude),
     weatherzoneID = ifelse(!is.null(weatherZoneRaster), weatherZoneRaster[][cell], 0),
     firezoneID = ifelse(!is.null(fireZoneRaster), fireZoneRaster[][cell], 0),
     WeatherZone = lookup(weatherzoneID, WeatherZoneTable$ID, WeatherZoneTable$Name),

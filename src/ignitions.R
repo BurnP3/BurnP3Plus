@@ -170,17 +170,19 @@ sampleLocations <- function(season, cause, firezone, data) {
   
   # Sample cells from probability map
   cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
+  longlat <- as.points(fuelsRaster)[cells] %>%
+    project("+proj=longlat") %>%
+    crds
   
   # Update SyncroSim progress bar
   progressBar()
-  
   # Convert cells to row/col, format, and return
   return(
     tibble(
       Iteration = data$Iteration,
       FireID = data$FireID,
-      X = colFromCell(maskedProbability, cells),
-      Y = rowFromCell(maskedProbability, cells),
+      Latitude = longlat[, "y"],
+      Longitude = longlat[, "x"],
       Season = season,
       Cause = cause))
 }

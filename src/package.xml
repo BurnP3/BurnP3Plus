@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.2.3">
+  version="0.2.4">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -176,8 +176,8 @@
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="X" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Y" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
+								<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause"/>
 							</columns>
@@ -417,8 +417,8 @@
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer"/>
-								<column name="X" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Y" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
+								<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
 								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause"/>
 								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone"/>
@@ -627,8 +627,8 @@
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
 	<updateProvider 
-		schemaVersion="1" 
-		minPackageVersion="0.2.0" 
+		schemaVersion="2" 
+		minPackageVersion="0.2.4" 
 		className="SyncroSim.Core.XMLUpdateProvider" 
 		classAssembly="SyncroSim.Core"/>
 </package>

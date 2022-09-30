@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_DeterministicIgnitionLocation">
+    <item>ALTER TABLE burnP3Plus_DeterministicIgnitionLocation ADD COLUMN Latitude Double</item>
+    <item>ALTER TABLE burnP3Plus_DeterministicIgnitionLocation ADD COLUMN Longitude Double</item>
+  </action>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFireStatistic">
+    <item>ALTER TABLE burnP3Plus_OutputFireStatistic ADD COLUMN Latitude Double</item>
+    <item>ALTER TABLE burnP3Plus_OutputFireStatistic ADD COLUMN Longitude Double</item>
+  </action>
+</update>

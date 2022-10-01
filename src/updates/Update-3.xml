@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_GreenUp">
+    <item>CREATE TABLE burnP3Plus_GreenUp(GreenUpID INTEGER PRIMARY KEY, ScenarioID INTEGER, Season INTEGER, GreenUp INTEGER)</item>
+  </action>
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_Curing">
+    <item>CREATE TABLE burnP3Plus_Curing(CuringID INTEGER PRIMARY KEY, ScenarioID INTEGER, Season INTEGER, Curing INTEGER)</item>
+  </action>
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_FuelLoad">
+    <item>CREATE TABLE burnP3Plus_FuelLoad(FuelLoadID INTEGER PRIMARY KEY, ScenarioID INTEGER, Season INTEGER, FuelLoad DOUBLE)</item>
+  </action>
+</update>

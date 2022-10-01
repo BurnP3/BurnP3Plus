@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.2.4">
+  version="0.2.5">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -357,6 +357,42 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
+				<datafeed name="GreenUp" displayName="Green Up" dataScope="Scenario">
+					<datasheets>
+						<datasheet name="GreenUp" displayName="Green Up">
+							<columns>
+								<column name="GreenUpID" dataType="Integer" isPrimary="True"/>
+								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True" initOptionalVisible="True"/>
+								<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
+							</columns>
+						</datasheet>
+					</datasheets>
+				</datafeed>
+				<datafeed name="Curing" displayName="Curing" dataScope="Scenario">
+					<datasheets>
+						<datasheet name="Curing" displayName="Curing">
+							<columns>
+								<column name="CuringID" dataType="Integer" isPrimary="True"/>
+								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"  initOptionalVisible="True"/>
+								<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
+							</columns>
+						</datasheet>
+					</datasheets>
+				</datafeed>
+				<datafeed name="FuelLoad" displayName="Fuel Load" dataScope="Scenario">
+					<datasheets>
+						<datasheet name="FuelLoad" displayName="Fuel Load">
+							<columns>
+								<column name="FuelLoadID" dataType="Integer" isPrimary="True"/>
+								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"  initOptionalVisible="True"/>
+								<column name="FuelLoad" displayName="Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
+							</columns>
+						</datasheet>
+					</datasheets>
+				</datafeed>
 				<datafeed name="FireBreak" displayName="Fire Breaks" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="FireBreak" displayName="Fire Breaks">
@@ -603,7 +639,9 @@
 				</group>
 				<group name="FireGrowth" displayName="Fire Growth Models">
 					<item name="FireResampleOption" showIf="inPipeline"/>
-					<item name="FireBreak" showIf="inPipeline"/>
+					<item name="GreenUp" showIf="inPipeline"/>
+					<item name="Curing" showIf="inPipeline"/>
+					<item name="FuelLoad" showIf="inPipeline"/>
 				</group>
 				<item name="DistributionValue"/>
 			</group>
@@ -627,8 +665,8 @@
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
 	<updateProvider 
-		schemaVersion="2" 
-		minPackageVersion="0.2.4" 
+		schemaVersion="3" 
+		minPackageVersion="0.2.5" 
 		className="SyncroSim.Core.XMLUpdateProvider" 
 		classAssembly="SyncroSim.Core"/>
 </package>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_WindGrid">
+    <item>ALTER TABLE burnP3Plus_WindGrid ADD COLUMN WindSpeed Double</item>
+  </action>
+</update>

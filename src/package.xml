@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.2.5">
+  version="0.2.6">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -337,6 +337,7 @@
 							<columns>
 								<column name="WindGridID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
+								<column name="WindSpeed" displayName="Prevailing Wind Speed" dataType="Double" validationType="Decimal" validationCondition="Greater" formula1="0.0" format="0.0"/>
 								<column name="WindSpeedNorth" displayName="Wind Speed North" dataType="String" isExternalFile="True" isRaster="True"/>
 								<column name="WindSpeedNorthEast" displayName="Wind Speed North East" dataType="String" isExternalFile="True" isRaster="True"/>
 								<column name="WindSpeedEast" displayName="Wind Speed East" dataType="String" isExternalFile="True" isRaster="True"/>
@@ -665,8 +666,8 @@
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
 	<updateProvider 
-		schemaVersion="3" 
-		minPackageVersion="0.2.5" 
+		schemaVersion="4" 
+		minPackageVersion="0.2.6" 
 		className="SyncroSim.Core.XMLUpdateProvider" 
 		classAssembly="SyncroSim.Core"/>
 </package>

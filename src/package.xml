@@ -364,7 +364,7 @@
 							<columns>
 								<column name="GreenUpID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True" initOptionalVisible="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
 							</columns>
 						</datasheet>
@@ -376,7 +376,7 @@
 							<columns>
 								<column name="CuringID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"  initOptionalVisible="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
 							</columns>
 						</datasheet>
@@ -388,7 +388,7 @@
 							<columns>
 								<column name="FuelLoadID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"  initOptionalVisible="True"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="FuelLoad" displayName="Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
 							</columns>
 						</datasheet>
@@ -613,7 +613,7 @@
 		<layout name="coreforms_ScenarioDatafeeds">
 			<item name="RunControl"/>
 			<item name="LandscapeRasters"/>
-			<group name="Ignition" displayName="Ignitions">
+			<group name="Ignition" displayName="Sample Ignitions">
 				<item name="IgnitionsPerIteration" showIf="inPipeline"/>
 				<group name="Advanced" displayName="Advanced">
 					<item name="ProbabilisticIgnitionLocation" showIf="inPipeline"/>
@@ -621,7 +621,7 @@
 					<item name="IgnitionDistribution" showIf="inPipeline"/>
 				</group>
 			</group>
-			<group name="BurningConditions" displayName="Burning Conditions">
+			<group name="BurningConditions" displayName="Sample Burning Conditions">
 				<item name="FireDuration" showIf="inPipeline"/>
 				<item name="HoursPerDayBurning" showIf="inPipeline"/>
 				<item name="WeatherStream" showIf="inPipeline"/>
@@ -629,7 +629,7 @@
 					<item name="WeatherOption" showIf="inPipeline"/>
 				</group>
 			</group>
-			<group name="FireGrowth" displayName="Fire Growth Models">
+			<group name="FireGrowth" displayName="Fire Growth Model Options">
 				<group name="Advanced" displayName="Advanced">
 					<item name="GreenUp" showIf="inPipeline"/>
 					<item name="Curing" showIf="inPipeline"/>
@@ -658,10 +658,10 @@
 			<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 		</layout>
 		<layout name="corestimeforms_Maps" configurationSheet="burnP3Plus_RunControl">
-			<item name="FuelMap" displayName ="Fuels Map" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
-			<item name="ElevationMap" displayName ="Elevation Map" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
-			<item name="FireZoneMap" displayName ="Fire Zone Map" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
-			<item name="WeatherZoneMap" displayName ="Weather Zone Map" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
+			<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
+			<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
+			<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
+			<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
 			<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName"/>
 			<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName"/>
 			<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName"/>

@@ -169,6 +169,26 @@ sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMi
     return
 }
 
+# Function to parse a table defining a gamma distribution and sample accordingly
+sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultMin = 1, defaultMax = Inf) {
+  
+  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
+  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
+  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
+  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
+  
+  # Calculate shape and rate from mean and sd
+  # - Derivation from: https://math.stackexchange.com/questions/1810257/gamma-functions-mean-and-standard-deviation-through-shape-and-rate
+  shape <- (distributionMean / distributionSD)^2
+  rate  <- distributionMean / (distributionSD^2)
+  
+  rgamma(numSamples, shape = shape, rate = rate) %>%
+    round(0) %>%
+    pmax(distributionMin) %>%
+    pmin(distributionMax) %>%
+    return
+}
+
 # Define function to sample locations given season, cause, and fire zone
 sampleLocations <- function(season, cause, firezone, data) {
   # Convert firezone to ID value
@@ -237,6 +257,10 @@ if(is.na(distributionName)) {
 # If a normal distribution is requested
 } else if (distributionName == "Normal") {
   numIgnitions <- sampleNorm(IgnitionsPerIteration, numIterations)
+  
+# If a gamma distribution is requested
+} else if (distributionName == "Gamma") {
+  numIgnitions <- sampleGamma(IgnitionsPerIteration, numIterations)
   
 # Otherwise sample from a user distribution
 } else {

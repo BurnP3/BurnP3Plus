@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.2.7">
+  version="0.2.8">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -90,6 +90,7 @@
 							</columns>
 							<defaultRecords>
 								<record columns="Name|IsAuto" values="Normal|-1"/>
+								<record columns="Name|IsAuto" values="Gamma|-1"/>
 							</defaultRecords>
 						</datasheet>
 					</datasheets>
@@ -672,8 +673,8 @@
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
 	<updateProvider 
-		schemaVersion="4" 
-		minPackageVersion="0.2.6" 
+		schemaVersion="5" 
+		minPackageVersion="0.2.8" 
 		className="SyncroSim.Core.XMLUpdateProvider" 
 		classAssembly="SyncroSim.Core"/>
 </package>

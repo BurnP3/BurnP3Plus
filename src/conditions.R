@@ -146,6 +146,26 @@ sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMi
     return
 }
 
+# Function to parse a table defining a gamma distribution and sample accordingly
+sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultMin = 1, defaultMax = Inf) {
+  
+  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
+  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
+  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
+  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
+  
+  # Calculate shape and rate from mean and sd
+  # - Derivation from: https://math.stackexchange.com/questions/1810257/gamma-functions-mean-and-standard-deviation-through-shape-and-rate
+  shape <- (distributionMean / distributionSD)^2
+  rate  <- distributionMean / (distributionSD^2)
+  
+  rgamma(numSamples, shape = shape, rate = rate) %>%
+    round(0) %>%
+    pmax(distributionMin) %>%
+    pmin(distributionMax) %>%
+    return
+}
+
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
   # Determine fire duration distribution type to use
@@ -174,6 +194,10 @@ sampleFireDuration <- function(season, firezone, data){
   } else if (fireDurationDistributionName == "Normal") {
     fireDurations <- sampleNorm(filteredFireDurationTable, nrow(data))
     
+  # If sampling form a gamma distribution
+  } else if (fireDurationDistributionName == "Gamma") {
+    fireDurations <- sampleGamma(filteredFireDurationTable, nrow(data))
+    
   # Otherwise sample from a user defined distribution
   } else {
     fireDurationDistribution <- DistributionValue %>% filter(Name == fireDurationDistributionName)
@@ -199,6 +223,10 @@ sampleFireDuration <- function(season, firezone, data){
         # If sampling from a normal distribution
         } else if (hoursBurningDistributionName == "Normal") {
           sampleNorm(filteredHoursBurningTable, nrow(.))
+          
+        # If sampling from a gamma distribution
+        } else if (hoursBurningDistributionName == "Gamma") {
+          sampleGamma(filteredHoursBurningTable, nrow(.))
         
         # Otherwise sample from a user defined distribution
         } else {

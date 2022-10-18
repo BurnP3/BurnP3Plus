@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_Distribution">
+    <item>INSERT INTO burnP3Plus_Distribution (ProjectID, Name, IsAuto) SELECT ProjectID, 'Gamma', '-1' FROM core_Project</item>
+  </action>
+</update>

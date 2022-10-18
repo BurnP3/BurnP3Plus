@@ -48,8 +48,8 @@ Browse source code for **BurnP3+** at
 [http://github.com/BurnP3/BurnP3Plus/](http://github.com/BurnP3/BurnP3Plus/){:target="_blank"}. <br>
 Report a bug with **BurnP3+** at
 [http://github.com/BurnP3/BurnP3Plus/issues](http://github.com/BurnP3/BurnP3Plus/issues){:target="_blank"}. <br>
-+Cell2Fire add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
-Prometheus add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
+Cell2Fire add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
+Prometheus add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
 Burn-P3 software at [https://firegrowthmodel.ca/pages/burnp3_overview_e.html](https://firegrowthmodel.ca/pages/burnp3_overview_e.html){:target="_blank"}. <br>
 Burn-P3 documentation at [https://cfs.nrcan.gc.ca/publications?id=25627](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}. <br>
 

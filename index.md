@@ -59,7 +59,7 @@ Burn-P3 documentation at [https://cfs.nrcan.gc.ca/publications?id=25627](https:/
 
 ## Developers
 
-Chris Stockdale (Author)
+Chris Stockdale (Author) <a href="https://orcid.org/0000-0002-2231-2692" target="_blank"><img align="middle" style="padding: 0.5px" width="17" src="assets/images/ORCID.png"></a>
 <br>
 Shreeram Senthivasan (Author) <a href="https://orcid.org/0000-0002-7118-9547" target="_blank"><img align="middle" style="padding: 0.5px" width="17" src="assets/images/ORCID.png"></a>
 <br>

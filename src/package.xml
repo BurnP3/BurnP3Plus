@@ -146,11 +146,11 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
+								<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" format="0.0" initOptionalVisible="True"/>
 								<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution"  isOptional="True"/>
-								<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMin" displayName="Ignition Count Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
+								<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMin" displayName="Ignition Count Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -226,11 +226,11 @@
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
-								<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
+								<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
 								<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
-								<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
+								<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -244,11 +244,11 @@
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" initOptionalVisible="True"/>
+								<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
 								<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
-								<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
-								<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True"/>
+								<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+								<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -277,17 +277,17 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
-								<column name="Temperature" dataType="Double" validationType="Decimal"/>
-								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+								<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
+								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 							</columns>
 						</datasheet>
 					</datasheets>

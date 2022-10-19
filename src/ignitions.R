@@ -252,7 +252,7 @@ progressBar(type = "message", message = "Sampling iterations...")
 
 # If no distribution is specified
 if(is.na(distributionName)) {
-  numIgnitions <- sample(IgnitionsPerIteration$Mean, numIterations, replace = T)
+  numIgnitions <- sample(rep(IgnitionsPerIteration$Mean, 2), numIterations, replace = T)
   
 # If a normal distribution is requested
 } else if (distributionName == "Normal") {

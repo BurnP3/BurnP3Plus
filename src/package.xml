@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.3.1">
+  version="0.3.2">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -317,17 +317,17 @@
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="HoursBurning" displayName="Hourse Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="Temperature" dataType="Double" validationType="Decimal"/>
-								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+								<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
+								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+								<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 							</columns>
 						</datasheet>
 					</datasheets>

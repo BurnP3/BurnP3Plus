@@ -223,12 +223,12 @@ sampleLocations <- function(season, cause, firezone, data) {
     checkSpatialInput("Probabilistic Ignition Location", checkProjection = F) %>%
     
     # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
-    {if(!is.null(fireZoneRaster) & firezone != "") mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
+    {if(!(is.null(fireZoneRaster) | is.na(firezone) | firezone == "")) mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
     mask(fuelsRaster, maskvalue = restrictedFuelIDs)
   
   # Sample cells from probability map
   cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
-  longlat <- as.points(fuelsRaster)[cells] %>%
+  longlat <- as.points(fuelsRaster, na.rm = F)[cells] %>%
     project("+proj=longlat") %>%
     crds
   

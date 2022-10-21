@@ -39,7 +39,7 @@ fireZoneRaster <- tryCatch(
 ## Handle empty values ----
 if(nrow(FuelTypeTable) == 0) {
   updateRunLog("No fuel table found! Using default Canadian Forest Service fuel codes.", type = "warning")
-  FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv"))
+  FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv")) %>% as.data.frame()
   saveDatasheet(myScenario, FuelTypeTable, "burnP3Plus_FuelType")
 }
 

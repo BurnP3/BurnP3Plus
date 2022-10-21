@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.3.2">
+  version="0.3.3">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -23,6 +23,10 @@
 								<column name="ID" dataType="Integer"/>
 								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 							</columns>
+							<validations>
+                <validation validationType="Unique" columns="Name"/>
+                <validation validationType="Unique" columns="ID"/>
+              </validations>
 						</datasheet>
 					</datasheets>
 				</datafeed>

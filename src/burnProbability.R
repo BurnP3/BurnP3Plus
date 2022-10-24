@@ -83,6 +83,14 @@ mean_bp_classification <- function(input,output_filename){
                                )
   )
   
+  # Add a standardized background
+  # - NA for no values in the fuel grid, 0 for never burned / non-fuel
+  mean_bp.r <- terra::classify(mean_bp.r,
+                               rcl = matrix(ncol = 2,
+                                            byrow = T,
+                                            data = c(NA, 0))) %>%
+    terra::mask(burnCountRaster)
+  
   terra::writeRaster(x = mean_bp.r,
                      filename = output_filename,
                      overwrite = T,
@@ -126,6 +134,9 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
       burnCountRaster <<- burnCountRaster + burnMapRaster[[i]]
     }
     
+    # Reclassify NaN to NA for consistency with other layers
+    burnCountRaster <- classify(burnCountRaster, matrix(c(NaN, NA), ncol = 2))
+    
     progressBar(type = "message", message = "Writing spatial outputs...")
     terra::writeRaster(burnCountRaster, 
                        burnCountFile, 
@@ -143,13 +154,13 @@ if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$BurnProbability | Outpu
     
     # Calculate and save burn probability if requested by user
     if(OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$RelativeBurnProbability){
-      burnProbabilityRaster <-
-        (burnCountRaster / RunControl$MaximumIteration) %>%
-        terra::writeRaster(filename = burnProbabilityFile,
-                           wopt = list(filetype = "GTiff",
-                                       gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")),
-                           NAflag = -9999, 
-                           overwrite = T)
+      burnProbabilityRaster <- (burnCountRaster / RunControl$MaximumIteration)
+      terra::writeRaster(burnProbabilityRaster,
+                         filename = burnProbabilityFile,
+                         wopt = list(filetype = "GTiff",
+                                     gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")),
+                         NAflag = -9999, 
+                         overwrite = T)
       
       if(OutputOptionsSpatial$BurnProbability)
         saveDatasheet(

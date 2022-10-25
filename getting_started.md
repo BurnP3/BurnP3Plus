@@ -86,7 +86,7 @@ Navigate to the **Fuel Types** tab, where you will find a **Name** list for each
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-6.png">
 
-Next, navigate to the **Add-Ons** tab. Under **Cell2Fire fire growth model add-on > Cell2Fire Fuel Code Crosswalk**, each fuel type listed under the **Fuel Types** tab needs to be linked to the fuel codes recognized by Cell2Fire.
+Next, navigate to the **Add-Ons** tab. Under **Cell2Fire fire growth model add-on > Cell2Fire Fuel Code Crosswalk**, each fuel type listed under the **Fuel Types** tab needs to be linked to the fuel codes recognized by Cell2Fire. In the case of these two fuel types, Cell2Fire recognizes the Canadian Forest Service Fuel Codes [C2](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"} and [S1](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"}.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-7.png">
 
@@ -135,7 +135,7 @@ The **Daily Weather** *Datafeed* is where weather variables for the landscape of
 
 ***Stage 3: Grow fires***
 
-Under the **Fire Growth Model Options** tab, all settings are optional and as advanced features will not be covered in this Quickstart tutorial.By leaving the **Fire Growth Model Options** empty, **BurnP3+** will use the default values.
+Under the **Fire Growth Model Options** tab, all settings are optional and as advanced features will not be covered in this Quickstart tutorial. By leaving the **Fire Growth Model Options** empty, **BurnP3+** will use the default values.
 
 ***Stage 4: Summarize burn probability***
 
@@ -195,6 +195,6 @@ Next, navigate to the **Maps** tab and double-click on **Burn Probability Maps**
 
 Lastly, under the **Maps** tab you can also find the **Input Maps** for fuel type and elevation.
 
-<img align="middle" style="padding: 3px" width="400" src="assets/images/BurnP3Plus-screenshot-22.png">
+<img align="middle" style="padding: 3px" width="350" src="assets/images/BurnP3Plus-screenshot-22.png">
 
 > **Note:** Map legends can be customized by double-clicking on the bins. You can also add and remove Scenario Results being charted or mapped by selecting a Scenario Result in the **Library Explorer** and then choosing either **Add to Results** or **Remove from Results** from context menu. Scenarios with results currently selected for analysis are highlighted in bold in the **Library Explorer**.

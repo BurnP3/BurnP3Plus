@@ -68,6 +68,8 @@ When you are ready to create the *Library* file, click **OK**. A new *Library* w
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-4.png">
 
+The *Library* **Cell2Fire Example** contains a *Project* named **Definitions**, with one *Scenario* named **Baseline Burning Hours**. This *Library* template uses a synthetic landscape to demonstrate the basics of running **BurnP3+** using the Cell2Fire model as the fire growth model, and to assess the effects of burning conditions on fire risk across the landscape.
+
 <br>
 
 ## **Step 3: Configuring the BurnP3+ *Library***
@@ -92,7 +94,7 @@ Lastly, on the **Library Explorer** window, you will see one *Scenario* named **
 
 To view the model inputs for the *Scenario*, double-click on **Baseline Burning Hours**. 
 
-On the **General** tab, the **Pipeline** [*Datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. In this example we will be running the full pipeline:
+On the **General** tab, the **Pipeline** [*Datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages: (1) Sample the number and locations of ignitions for each simulated burn season, or iteration; (2) Sample the burning conditions for each ignitions, which depend on when and where the ignitions occurred; (3) Simulate each fire deterministically using a fire growth model; and (4) Summarise the outputs of the fire growth model to calculate burn probability and other burn metrics. In this example, we will run the full pipeline:
 
 -	Stage 1: Sample ignitions
 -	Stage 2: Sample burn conditions
@@ -121,7 +123,7 @@ Under the **Sample Ignitions** tab, the **Ignition Count** *Datasheet* defines t
 
 ***Stage 2: Sample burn conditions***
 
-Navigate to the next tab, **Sample Burning Conditions**. The **Spread Event Days** *Datasheet* specifies the number of days uncontrolled fires are actively burning and spreading in a season. Similarly, for the purposes of this Quickstart tutorial, **Sample Burning Conditions** was set to **1**.
+Navigate to the next tab, **Sample Burning Conditions**. The **Spread Event Days** *Datasheet* specifies the number of days uncontrolled fires are actively burning and spreading in a season. Similarly, for the purposes of this Quickstart tutorial, **Spread Event Days** was set to **1**.
 
 The **Daily Burning Hours** *Datasheet* defines the number of hours fires are actively burning per day. For the **Baseline Burning Hours** *Scenario*, **Daily Burning Hours** was set to **4**.
 
@@ -133,11 +135,11 @@ The **Daily Weather** *Datafeed* is where weather variables for the landscape of
 
 ***Stage 3: Grow fires***
 
-Under the **Fire Growth Model Options** tab, all settings are optional and as advanced features will not be covered in this Quickstart tutorial.
+Under the **Fire Growth Model Options** tab, all settings are optional and as advanced features will not be covered in this Quickstart tutorial.By leaving the **Fire Growth Model Options** empty, **BurnP3+** will use the default values.
 
 ***Stage 4: Summarize burn probability***
 
-Finally, the **Output Options** tab specifies which outputs will be generated after running the Scenario. All **Tabular** and **Spatial** output options are set to **Yes**. The only exception is **Spatial > Burn Perimeters**, which is not handled by Cell2Fire.
+Finally, the **Output Options** tab specifies which outputs will be generated after running the Scenario. All **Tabular** and **Spatial** output options are set to **Yes**. The only exception is **Spatial > Burn Perimeters**, which is not provided by Cell2Fire.
 
 > **Note:** If all rows in the **Spatial Output Options** Datafeed are left blank, burnP3PlusCell2Fire will default to generating all spatial outputs. However, if some rows are set to return spatial outputs and others are not specified, the model will return spatial output for only those rows specified. 
 
@@ -145,7 +147,7 @@ Finally, the **Output Options** tab specifies which outputs will be generated af
 
 Close the window for the *Scenario* **Baseline Burning Hours**. 
 
-Next, you will create a new *Scenario*. To do so, on the **Library Explorer** window right-click on the current *Scenario*, **Baseline Burning Hours**, and select **Copy** and **Paste** from the context menu.
+Next, you will create a new *Scenario* to compare the effects of **Daily Burning Hours** on fire risk. While you could create a new empty *Scenario*, instead you will copy, paste, and modify the existing *Scenario* to save time and reuse the model inputs. To do so, on the **Library Explorer** window right-click on the current *Scenario*, **Baseline Burning Hours**, and select **Copy** and **Paste** from the context menu.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-15.png">
 
@@ -157,7 +159,11 @@ Rename the *Scenario* by right clicking the newly created *Scenario*, selecting 
 
 ## **Step 4: Running the model**
 
-After reviewing the model inputs and creating a new *Scenario*, you are now ready to run the model. First, right-click on the *Scenario* **Baseline Burning Hours**, and from the context menu select **Run**. If prompted to save your project, click **Yes**.
+After reviewing the model inputs and creating a new *Scenario*, you are now ready to run the model. 
+
+**Multiprocessing** is enabled to run 6 jobs in parallel. You can adjust the number of multiprocessing jobs according to the specifications of your computer. A good rule of thumb to follow is number of logical cores minus 1.
+
+Next, right-click on the *Scenario* **Baseline Burning Hours**, and from the context menu select **Run**. If prompted to save your project, click **Yes**.
 
 <img align="middle" style="padding: 3px" width="500" src="assets/images/BurnP3Plus-screenshot-17.png">
 

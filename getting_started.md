@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Getting started
-permalink: /getting_started
 ---
 
 # Getting started with **BurnP3+** SyncroSim Package 

@@ -3,7 +3,7 @@ layout: default
 title: Getting started
 ---
 
-# Getting started with **BurnP3+** SyncroSim Package 
+# Getting started with **BurnP3+**
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 

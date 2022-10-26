@@ -2,7 +2,8 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.3.4">
+  version="0.3.5"
+  url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>

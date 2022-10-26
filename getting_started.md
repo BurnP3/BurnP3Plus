@@ -15,19 +15,19 @@ title: Getting started
 
 This Quickstart tutorial will introduce you to the basics of working with **BurnP3+** in the Windows User Interface (UI). The steps include:
 
-1. Installing **BurnP3+** and required fire growth add-on packages
-2. Creating a new **BurnP3+** *Library*
-3. Configuring the **BurnP3+** *Library* to:
-* Sample ignitions
-* Sample burn conditions
-* Grow fires
-* Summarize burn probability
-4.	Running the model
-5.	Analyzing the model results
+1. <a href="#step1"> Installing <b>BurnP3+</b> and required fire growth add-on packages </a>
+2. <a href="#step2"> Creating a new <b>BurnP3+</b> <i>Library</i> </a>
+3. <a href="#step3"> Configuring the <b>BurnP3+</b> <i>Library</i> to: </a>
+* <a href="#stage1"> Sample ignitions </a>
+* <a href="#stage2"> Sample burn conditions </a>
+* <a href="#stage3"> Grow fires </a>
+* <a href="#stage4"> Summarize burn probability </a>
+4. <a href="#step4"> Running the model </a>
+5. <a href="#step5"> Analyzing the model results </a>
 
 <br>
 
-## Step 1: Installing BurnP3+ and required fire growth add-on packages
+<p id="step1"> <h2> <b>Step 1: Installing BurnP3+ and required fire growth add-on packages</b> </h2> </p>
 
 Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 2.4.10 or higher). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
 
@@ -55,7 +55,8 @@ For the purposes of this Quickstart tutorial, you will run **BurnP3+** with the 
 
 <br>
 
-## **Step 2: Creating a new BurnP3+ *Library***
+<p id="step2"> <h2> <b>Step 2: Creating a new BurnP3+ <i>Library</i></b> </h2> </p>
+
 Having installed **BurnP3+** and burnP3PlusCell2Fire, you are now ready to create your first SyncroSim *Library*. A [*Library*](https://docs.syncrosim.com/getting_started/overview.html#libraries){:target="_blank"} is a file (with extension .ssim) that contains all of your model inputs and outputs. To create a new *Library*, select **File > New Library...**.
 
 When a new window opens, select the row for **burnP3Plus - BurnP3+ package for burn probability modeling**.
@@ -72,7 +73,7 @@ The *Library* **Cell2Fire Example** contains a *Project* named **Definitions**, 
 
 <br>
 
-## **Step 3: Configuring the BurnP3+ *Library***
+<p id="step3"> <h2> <b>Step 3: Configuring the BurnP3+ <i>Library</i></b> </h2> </p>
 
 This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which is already enabled as an *Add-on Package* in this template *Library*.
 
@@ -117,13 +118,13 @@ Raster files for **Fire Zone** and **Weather Zone** are optional and will not be
 
 The following four tabs contain the rules for stages 1 to 4. 
 
-***Stage 1: Sample Ignitions***
+<p id="stage1"> <h3> <b><i>Stage 1: Sample Ignitions</i></b> </h3> </p>
 
 Under the **Sample Ignitions** tab, the **Ignition Count** *Datasheet* defines the number of fires that should be ignited every iteration within a season. For the purposes of this Quickstart tutorial, **Ignition Count** was set to **1**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-11.png">
 
-***Stage 2: Sample burn conditions***
+<p id="stage2"> <h3> <b><i>Stage 2: Sample burn conditions</i></b> </h3> </p>
 
 Navigate to the next tab, **Sample Burning Conditions**. The **Spread Event Days** *Datasheet* specifies the number of days uncontrolled fires are actively burning and spreading in a season. Similarly, for the purposes of this Quickstart tutorial, **Spread Event Days** was set to **1**.
 
@@ -135,11 +136,11 @@ The **Daily Weather** *Datasheet* specifies weather variables for the landscape 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-13.png">
 
-***Stage 3: Grow fires***
+<p id="stage3"> <h3> <b><i>Stage 3: Grow fires</i></b> </h3> </p>
 
 Under the **Fire Growth Model Options** tab, all settings are optional. However, as advanced features, they will not be covered in this Quickstart tutorial. By leaving the **Fire Growth Model Options** empty, **BurnP3+** will use the default values.
 
-***Stage 4: Summarize burn probability***
+<p id="stage4"> <h3> <b><i>Stage 4: Summarize burn probability</i></b> </h3> </p>
 
 Finally, the **Output Options** tab specifies which outputs will be generated after running the Scenario. All **Tabular** and **Spatial** output options are set to **Yes**. The only exception is **Spatial > Burn Perimeters**, which is not provided by Cell2Fire.
 
@@ -159,7 +160,7 @@ Rename the *Scenario* by right clicking the newly created *Scenario*, selecting 
 
 <br>
 
-## **Step 4: Running the model**
+<p id="step4"> <h2> <b>Step 4: Running the model</b> </h2> </p>
 
 After reviewing the model inputs and creating a new *Scenario*, you are now ready to run the model. 
 
@@ -181,7 +182,7 @@ Repeat the same process to run the *Scenario* **Extended Burning Hours**.
 
 <br>
 
-## **Step 6: Analyzing the model results**
+<p id="step5"> <h2> <b>Step 5: Analyzing the model results</b> </h2> </p>
 
 To view the tabular results from each of your runs, double-click on one of your *Scenario Results* and navigate to the last tab, **Output Fire Statistics**. Here, you can view the results and have the option to export the data by right-clicking anywhere on the spreadsheet, and selecting **Export All** from the context menu.
 

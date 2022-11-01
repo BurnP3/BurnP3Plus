@@ -47,11 +47,9 @@ Mark the checkboxes beside **burnP3Plus** and **burnP3PlusCell2Fire**, and click
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.png">
 
-If you do not have Miniconda installed in your computer, a dialog box will open asking if you would like to install [Miniconda](https://docs.conda.io/en/latest/miniconda.html){:target="_blank"}. Click **Yes**.
+If you do not have Miniconda installed in your computer, a dialog box will open asking if you would like to install [Miniconda](https://docs.conda.io/en/latest/miniconda.html){:target="_blank"}. Click **Yes**. Once Miniconda is done installing, a dialog box will open asking if you would like to create a new conda environment. Click **Yes**.
 
 > **Miniconda** is an installer for [conda](https://docs.conda.io/projects/conda/en/latest/){:target="_blank"}, a package environment management system that installs any required packages and their dependencies. By default, [**BurnP3+** runs conda](https://docs.syncrosim.com/how_to_guides/package_conda.html){:target="_blank"} to install, create, save, and load the required environment for running **BurnP3+**. The **BurnP3+** environment includes the R software environment and associated packages.
-
-Once Miniconda is done installing, a dialog box will open asking if you would like to create a new conda environment. Click **Yes**.
 
 <br>
 

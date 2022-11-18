@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.4.0"
+  version="0.4.1"
   url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
@@ -607,7 +607,9 @@
 			</group>
 		</layout>
 		<layout name="coreforms_ProjectDatafeeds">
-			<item name="FuelType"/>
+			<group name="FuelDefinition" displayName="Fuels">
+				<item name="FuelType"/>
+			</group>
 			<group name="Advanced">
 				<item name="Season"/>
 				<item name="Cause"/>

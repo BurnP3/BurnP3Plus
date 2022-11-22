@@ -81,11 +81,11 @@ This information can be found by selecting **File > Library Properties** and nav
 
 Next, on the **Library Explorer** window, double click on **Definitions**. Definitions are [*Project Datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all *Scenarios* for a *Project*. 
 
-Navigate to the **Fuel Types** tab, where you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. For the purposes of this Quickstart tutorial, the *Library* template was pre-loaded with a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
+Navigate to the **Fuels** tab, under **Fuel Types** you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. For the purposes of this Quickstart tutorial, the *Library* template was pre-loaded with a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-6.png">
 
-Next, navigate to the **Add-Ons** tab. Under **Cell2Fire fire growth model add-on > Cell2Fire Fuel Code Crosswalk**, each fuel type listed under the **Fuel Types** tab needs to be linked to the fuel codes recognized by Cell2Fire. In the case of these two fuel types, Cell2Fire recognizes the Canadian Forest Service Fuel Codes [C2](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"} and [S1](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"}.
+Next, under **Cell2Fire Crosswalk**, each fuel type listed under the **Fuel Types** tab needs to be linked to one of the fuel codes recognized by Cell2Fire. In the case of these two fuel types, Cell2Fire recognizes the Canadian Forest Service Fuel Codes [C2](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"} and [S1](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"}.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-7.png">
 

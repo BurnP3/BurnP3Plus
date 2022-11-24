@@ -2,7 +2,7 @@
 <package
   name="burnP3Plus"
   displayName="Burn-P3+ package for burn probability modeling"
-  version="0.4.1"
+  version="0.4.2"
   url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
@@ -388,14 +388,14 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="FuelLoad" displayName="Fuel Load" dataScope="Scenario">
+				<datafeed name="FuelLoad" displayName="Grass Fuel Load" dataScope="Scenario">
 					<datasheets>
-						<datasheet name="FuelLoad" displayName="Fuel Load">
+						<datasheet name="FuelLoad" displayName="Grass Fuel Load">
 							<columns>
 								<column name="FuelLoadID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="FuelLoad" displayName="Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
+								<column name="FuelLoad" displayName="Grass Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
 							</columns>
 						</datasheet>
 					</datasheets>

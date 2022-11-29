@@ -1,6 +1,7 @@
 .Rhistory
 .vs
 .metadata
+.vscode
 
 # Documentation
 _site

@@ -3,6 +3,7 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(terra))
 
 # Setup ----
+options(scipen = 100)
 progressBar(type = "message", message = "Preparing inputs...")
 
 # Initialize first breakpoint for timing code

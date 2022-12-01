@@ -3,7 +3,7 @@ description: Request a new feature in Burn-P3+
 title: "[Burn-P3+ FR]: "
 labels: ["feature", "triage", "BurnP3Plus"]
 assignees:
-  - spydmobile
+  - badgeronabike
 body:
   - type: markdown
     attributes:

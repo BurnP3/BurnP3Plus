@@ -14,11 +14,12 @@ permalink: /
 <br>
 
 ## Background
+
 **BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/pages/burnp3_overview_e.html){:target="_blank"}, a software application originally developed in 2005 by the Canadian Forest Service ([Parisien *et al.* 2005](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}). **BurnP3+** (probability, prediction, and planning) allows users to produce estimates of wildfire susceptibility and risk across a landscape. Using a Monte Carlo simulation modelling approach, **BurnP3+** combines stochastic draws of fire ignition, weather, and other burning conditions with a deterministic fire growth model. The outputs of a model run include raster grids of burn probability and burn count estimates, relative likelihood of burning, simulated fire perimeters , and metrics associated with the Fire Behaviour Prediction system such as rates of spread, fire intensity, and fuel consumption. Alternative scenarios can be contrasted to evaluate the response or sensitivity of these outputs to changes in input variables or conditions of interest, such as different weather conditions, fuel treatments, changes in ignition locations, or alternative land management practices. <br>
 
-**BurnP3+** was developed to improve scalability to larger landscapes and number of scenarios, allow for cross-compatibility among platforms (Windows and Linux) and interfaces (Graphical, command line, R and Python), and increase flexibility in model structure through the implementation of modules. With these enhancements, **BurnP3+** extends the success of Burn-P3 as a decision-support tool in land management and a framework for scientific inquiry ([Parisien *et al.* 2019](https://www.fs.usda.gov/research/treesearch/60727){:target="_blank"}). <br>
+**BurnP3+** was developed to improve scalability to larger landscapes and number of scenarios, allow for cross-compatibility among platforms (Windows and Linux) and interfaces (Graphical, command line, R and Python), and increase flexibility in model structure through the implementation of modules. With these enhancements, **BurnP3+** extends the success of Burn-P3 as a decision-support tool in land management and a framework for scientific inquiry ([Parisien *et al.* 2019](https://www.fs.usda.gov/research/treesearch/60727){:target="_blank"}). 
 
-Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. **BurnP3+** now provides two options of fire growth models, available as add-on packages: [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} enables users to grow fires with [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}; and [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. The Canadian Forest Service plans to develop additional fire growth add-on packages for **BurnP3+**. Alternatively, users also have the option to develop their own fire growth models and add-on packages. <br>
+<img align="left" style="padding-right: 13px; padding-top: 8px" width="330" src="assets/images/BurnP3Plus-SyncroSimUI.jpg"> Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. **BurnP3+** now provides two options of fire growth models, available as add-on packages: [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} enables users to grow fires with [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}; and [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. The Canadian Forest Service plans to develop additional fire growth add-on packages for **BurnP3+**. Alternatively, users also have the option to develop their own fire growth models and add-on packages. <br>
 
 **BurnP3+** users can load model inputs, export model outputs and view spatial and graphical result summaries via various SyncroSim interfaces, including the Windows Graphical User Interface, the [rsyncrosim](https://syncrosim.github.io/rsyncrosim/){:target="_blank"} package for [R](https://www.r-project.org/){:target="_blank"} and the [pysyncrosim](https://pysyncrosim.readthedocs.io/en/latest/index.html){:target="_blank"} package for [Python](https://www.python.org/){:target="_blank"}. <br>
 
@@ -42,6 +43,12 @@ For a guided tutorial on **BurnP3+**, including installation, set up, model run,
 
 <br>
 
+## Tutorials
+
+To see **BurnP3+** in action, watch this [video tutorial](https://youtu.be/iDaHoUEM3Rw){:target="_blank"}. <br>
+
+<br>
+
 ## Key Links
 
 Browse source code for **BurnP3+** at
@@ -54,6 +61,7 @@ Prometheus model at [https://firegrowthmodel.ca/pages/prometheus_overview_e.html
 Prometheus add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
 Burn-P3 software at [https://firegrowthmodel.ca/pages/burnp3_overview_e.html](https://firegrowthmodel.ca/pages/burnp3_overview_e.html){:target="_blank"}. <br>
 Burn-P3 documentation at [https://cfs.nrcan.gc.ca/publications?id=25627](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}. <br>
+**BurnP3+** discord channel at [https://discord.gg/Mx2cy9NF](https://discord.gg/Mx2cy9NF){:target="_blank"}. <br>
 
 <br>
 

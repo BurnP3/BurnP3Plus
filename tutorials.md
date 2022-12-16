@@ -13,7 +13,8 @@ This video tutorial covers how to configure models in the **BurnP3+** SyncroSim 
 To follow along, this tutorial requires:
 * the SyncroSim software, version 2.4.10 or higher
 * the **BurnP3+** SyncroSim *Package*
-* and the burnP3PlusPrometheus *Add-on Package*
+* the burnP3PlusPrometheus *Add-on Package*
+* and the dataset used in the example
 
 Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts.
 
@@ -28,6 +29,10 @@ Click on the **Install...** button.
 Mark the checkboxes beside **burnP3Plus** and **burnP3PlusPrometheus**, and click **OK**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2-2.png">
+
+Next, you will create a SyncroSim *Library* from a remote template. To do so, select **File > New...** and choose **burnP3Plus** from the list of packages and the **Glacier Example** as the template *Library*. You can edit the **File name** and use the **Browse** button to select where you would like to save the *Library*. When you are ready, click **OK**.
+
+<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-3-2.png">
 
 Now you are all set to follow along with the tutorial. This video will provide:
 

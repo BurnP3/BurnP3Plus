@@ -53,7 +53,7 @@ To see **BurnP3+** in action, watch this [video tutorial](https://youtu.be/iDaHo
 
 Browse source code for **BurnP3+** at
 [http://github.com/BurnP3/BurnP3Plus/](http://github.com/BurnP3/BurnP3Plus/){:target="_blank"}. <br>
-Report a bug with **BurnP3+** at
+Report a bug with **BurnP3+** or contribute an idea at
 [http://github.com/BurnP3/BurnP3Plus/issues](http://github.com/BurnP3/BurnP3Plus/issues){:target="_blank"}. <br>
 Cell2Fire model at [https://doi.org/10.3389/ffgc.2021.692706](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}. <br>
 Cell2Fire add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>

@@ -11,10 +11,9 @@ permalink: /tutorials
 This video tutorial covers how to configure models in the **BurnP3+** SyncroSim *Package*. 
 
 To follow along, this tutorial requires:
-* the SyncroSim software, version 2.4.10 or higher
-* the **BurnP3+** SyncroSim *Package*
+* the SyncroSim software, version 2.4.10 or higher;
+* the **BurnP3+** SyncroSim *Package*; and
 * the burnP3PlusPrometheus *Add-on Package*
-* and the dataset used in the example
 
 Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts.
 

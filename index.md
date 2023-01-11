@@ -61,7 +61,7 @@ Prometheus model at [https://firegrowthmodel.ca/pages/prometheus_overview_e.html
 Prometheus add-on package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
 Burn-P3 software at [https://firegrowthmodel.ca/pages/burnp3_overview_e.html](https://firegrowthmodel.ca/pages/burnp3_overview_e.html){:target="_blank"}. <br>
 Burn-P3 documentation at [https://cfs.nrcan.gc.ca/publications?id=25627](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}. <br>
-**BurnP3+** discord channel at [https://discord.gg/Mx2cy9NF](https://discord.gg/76QzY8eAYr){:target="_blank"}. <br>
+**BurnP3+** discord channel at [https://discord.gg/76QzY8eAYr](https://discord.gg/76QzY8eAYr){:target="_blank"}. <br>
 
 <br>
 

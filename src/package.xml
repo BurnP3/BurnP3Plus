@@ -317,7 +317,7 @@
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-								<column name="HoursBurning" displayName="Hourse Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="HoursBurning" displayName="Hours Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
 								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>

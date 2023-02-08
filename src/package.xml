@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.3" url="https://burnp3.github.io/BurnP3Plus/">
+<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.4" url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -431,6 +431,7 @@
 								<column name="BurnCount" dataType="Boolean" displayName="Burn Count Map"/>
 								<column name="BurnMap" dataType="Boolean" displayName="Burn Maps"/>
 								<column name="BurnPerimeter" dataType="Boolean" displayName="Burn Perimeters"/>
+								<column name="AllPerim" dataType="Boolean" displayName="Output Individual Burn Maps"/>
 							</columns>
 						</datasheet>
 					</datasheets>
@@ -523,6 +524,20 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
+				<datafeed name="OutputAllPerim" displayName="Output Individual Burn Maps" dataScope="Scenario" isOutput="True">
+					<datasheets>
+						<datasheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
+							<columns>
+								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="FireID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
+								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+							</columns>
+						</datasheet>
+					</datasheets>
+				</datafeed>
 				<datafeed name="OutputFirePerimeter" displayName="Output Fire Perimeters" dataScope="Scenario" isOutput="True">
 					<datasheets>
 						<datasheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
@@ -578,6 +593,7 @@
 		<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"/>
 		<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"/>
 		<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"/>
+		<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"/>
 	</transformers>
 	<layouts>
 		<layout name="coreforms_ResultTransformers">
@@ -585,6 +601,7 @@
 			<item name="corestime_MapTransformer"/>
 			<group name="Export">
 				<item name="BurnRasterMap" displayName="Burn Maps"/>
+				<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
 				<item name="BurnCountRasterMap" displayName="Burn Count Map"/>
 				<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>
 			</group>
@@ -670,10 +687,11 @@
 			<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName"/>
 			<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName"/>
 			<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName"/>
+			<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
 		</layout>
 	</layouts>
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
-	<updateProvider schemaVersion="5" minPackageVersion="0.2.8" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
+	<updateProvider schemaVersion="6" minPackageVersion="0.4.4" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 </package>

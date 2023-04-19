@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputOptionSpatial">
+    <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN AllPerim INTEGER</item>
+  </action>
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputAllPerim">
+    <item>CREATE TABLE burnP3Plus_OutputAllPerim(ScenarioID INTEGER,Iteration INTEGER,FireID INTEGER,Timestep INTEGER, FileName TEXT, Band INTEGER)</item>
+  </action>
+</update>

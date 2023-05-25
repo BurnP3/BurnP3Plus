@@ -64,7 +64,8 @@ if(nrow(ResampleOption) == 0) {
 ## Check raster inputs for consistency ----
 
 # Ensure fuels crs can be converted to Lat / Long
-tryCatch(fuelsRaster %>% project("+proj=longlat"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
+if(fuelsRaster %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
+tryCatch(fuelsRaster %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
 
 # Define function to check input raster for consistency
 checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
@@ -230,7 +231,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   # Sample cells from probability map
   cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
   longlat <- as.points(fuelsRaster, na.rm = F)[cells] %>%
-    project("+proj=longlat") %>%
+    project("EPSG:4326") %>%
     crds
   
   # Update SyncroSim progress bar

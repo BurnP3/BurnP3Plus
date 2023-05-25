@@ -9,4 +9,4 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
-.code-workspace
+*.code-workspace

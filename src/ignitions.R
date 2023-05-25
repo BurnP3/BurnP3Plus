@@ -231,7 +231,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   # Sample cells from probability map
   cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
   longlat <- as.points(fuelsRaster, na.rm = F)[cells] %>%
-    project("+proj=longlat") %>%
+    project("EPSG:4326") %>%
     crds
   
   # Update SyncroSim progress bar

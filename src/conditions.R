@@ -64,7 +64,7 @@ if(nrow(WeatherZoneTable) == 0)
 
 # Ensure fuels crs can be converted to Lat / Long
 if(fuelsRaster %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
-tryCatch(fuelsRaster %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
+tryCatch(fuelsRaster %>% project("EPSG:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
 
 # Define function to check input raster for consistency
 checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
@@ -126,7 +126,7 @@ uni <- function(df, colName) {
 cellFromLatLong <- function(x, lat, long) {
   # Convert list of lat and long to SpatVector, reproject to source crs
   points <- matrix(c(long, lat), ncol = 2) %>%
-    vect(crs = "+proj=longlat +datum=WGS84 +no_defs") %>%
+    vect(crs = "EPSG:4326") %>%
     project(x)
   
   # Get vector of cell ID's from points

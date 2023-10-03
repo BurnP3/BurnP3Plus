@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputOptionSpatial">
+    <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalBurnProbability INTEGER</item>
+    <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalRelativeBurnProbability INTEGER</item>
+    <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalBurnCount INTEGER</item>
+    <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalBurnMap INTEGER</item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_Season">
+    <item>ALTER TABLE burnP3Plus_Season ADD COLUMN IsAuto Integer</item>
+    <item>INSERT INTO burnP3Plus_Season (ProjectID, Name, IsAuto) SELECT ProjectID, 'All', '-1' FROM core_Project</item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnProbability">
+    <item>ALTER TABLE burnP3Plus_OutputBurnProbability ADD COLUMN Season INTEGER</item>
+  </action>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputRelativeBurnProbability">
+    <item>ALTER TABLE burnP3Plus_OutputRelativeBurnProbability ADD COLUMN Season INTEGER</item>
+  </action>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnCount">
+    <item>ALTER TABLE burnP3Plus_OutputBurnCount ADD COLUMN Season INTEGER</item>
+  </action>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnMap">
+    <item>ALTER TABLE burnP3Plus_OutputBurnMap ADD COLUMN Season INTEGER</item>
+  </action>
+</update>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.5" url="https://burnp3.github.io/BurnP3Plus/">
+<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.6" url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -42,13 +42,17 @@
 				</datafeed>
 				<datafeed name="Season" displayName="Seasons" dataScope="Project" valueMember="SeasonID" displayMember="Name">
 					<datasheets>
-						<datasheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name">
+						<datasheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0">
 							<columns>
 								<column name="SeasonID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
+								<column name="IsAuto" dataType="Integer" isVisible="False"/>
 							</columns>
+							<defaultRecords>
+								<record columns="Name|IsAuto" values="All|-1"/>
+							</defaultRecords>
 						</datasheet>
 					</datasheets>
 				</datafeed>
@@ -440,9 +444,13 @@
 								<column name="OutputOptionSpatialID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="BurnProbability" dataType="Boolean" displayName="Burn Probability Map"/>
+								<column name="SeasonalBurnProbability" dataType="Boolean" displayName="Seasonal Burn Probability Map"/>
 								<column name="RelativeBurnProbability" dataType="Boolean" displayName="Relative Burn Probability Map"/>
+								<column name="SeasonalRelativeBurnProbability" dataType="Boolean" displayName="Seasonal Relative Burn Probability Map"/>
 								<column name="BurnCount" dataType="Boolean" displayName="Burn Count Map"/>
+								<column name="SeasonalBurnCount" dataType="Boolean" displayName="Seasonal Burn Count Map"/>
 								<column name="BurnMap" dataType="Boolean" displayName="Burn Maps"/>
+								<column name="SeasonalBurnMap" dataType="Boolean" displayName="Seasonal Burn Maps"/>
 								<column name="BurnPerimeter" dataType="Boolean" displayName="Burn Perimeters"/>
 								<column name="AllPerim" dataType="Boolean" displayName="Output Individual Burn Maps"/>
 							</columns>
@@ -492,7 +500,8 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnProbability"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
 						</datasheet>
@@ -505,7 +514,8 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="RelativeBurnProbability"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="RelativeBurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
 						</datasheet>
@@ -518,7 +528,8 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnCount"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnCount"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
 						</datasheet>
@@ -531,7 +542,8 @@
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
+								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnMap"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
 						</datasheet>
@@ -697,15 +709,15 @@
 			<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
 			<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
 			<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
-			<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName"/>
-			<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName"/>
-			<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName"/>
-			<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName"/>
+			<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season"/>
+			<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
+			<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
+			<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
 			<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
 		</layout>
 	</layouts>
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
-	<updateProvider schemaVersion="7" minPackageVersion="0.4.5" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
+	<updateProvider schemaVersion="8" minPackageVersion="0.4.6" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 </package>

@@ -489,7 +489,7 @@
 								<column name="FireDuration" displayName="Fire Duration" dataType="Integer"/>
 								<column name="HoursBurning" displayName="Hours Burning" dataType="Integer"/>
 								<column name="Area" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-								<column name="ResampleStatus" displayName="Reample Status" dataType="String"/>
+								<column name="ResampleStatus" displayName="Resample Status" dataType="String"/>
 							</columns>
 						</datasheet>
 					</datasheets>

@@ -272,8 +272,17 @@ if(is.na(distributionName)) {
   
 saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
 
-# Add extra ignitions to each iteration if requested
-numIgnitions <- ceiling(numIgnitions * (1 + proportionExtraIgnitions))
+# Prepend extra ignitions for resampling to vector of ignition counts if requested (to be assigned to iteration 0)
+numIgnitions <- numIgnitions %>%
+  sum %>%
+  prod(proportionExtraIgnitions) %>%
+  ceiling %>%
+  c(numIgnitions)
+
+# Update iterations and numIterations
+# - Note: assumes this transformer remains single-threaded
+iterations <- c(0, iterations)
+numIterations <- numIterations + 1 
 
 # Initialize the SyncroSim progress bar
 progressBar("begin", totalSteps = nrow(IgnitionDistribution))

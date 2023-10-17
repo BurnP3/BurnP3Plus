@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.6" url="https://burnp3.github.io/BurnP3Plus/">
+<package name="burnP3Plus" displayName="Burn-P3+ package for burn probability modeling" version="0.4.7" url="https://burnp3.github.io/BurnP3Plus/">
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -192,7 +192,7 @@
 							<columns>
 								<column name="DeterministicIgnitionLocationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
@@ -330,7 +330,7 @@
 							<columns>
 								<column name="DeterministicBurnConditionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
@@ -470,12 +470,13 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputFireStatistic" displayName="Output Fire Statistics Table" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputFireStatistic" displayName="Output Fire Statistics Table" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
 							<columns>
+								<column name="OutputFireStatisticID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
@@ -493,10 +494,11 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputBurnProbability" displayName="Output Burn Probability" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputBurnProbability" displayName="Output Burn Probability" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputBurnProbability" displayName="Output Burn Probability">
 							<columns>
+								<column name="OutputBurnProbabilityID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -507,10 +509,11 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability">
 							<columns>
+								<column name="OutputRelativeBurnProbabilityID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -521,10 +524,11 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputBurnCount" displayName="Output Burn Count" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputBurnCount" displayName="Output Burn Count" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputBurnCount" displayName="Output Burn Count">
 							<columns>
+								<column name="OutputBurnCountID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -535,10 +539,11 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputBurnMap" displayName="Output Burn Map" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputBurnMap" displayName="Output Burn Map" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputBurnMap" displayName="Output Burn Map">
 							<columns>
+								<column name="OutputBurnMapID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -549,12 +554,13 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputAllPerim" displayName="Output Individual Burn Maps" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputAllPerim" displayName="Output Individual Burn Maps" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
 							<columns>
+								<column name="OutputAllPerimID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 								<column name="FireID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
@@ -563,10 +569,11 @@
 						</datasheet>
 					</datasheets>
 				</datafeed>
-				<datafeed name="OutputFirePerimeter" displayName="Output Fire Perimeters" dataScope="Scenario" isOutput="True">
+				<datafeed name="OutputFirePerimeter" displayName="Output Fire Perimeters" dataScope="Scenario">
 					<datasheets>
 						<datasheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
 							<columns>
+								<column name="OutputFirePerimeterID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="FireID" dataType="Integer"/>
@@ -608,8 +615,12 @@
 		<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 			<pipeline>
 				<datafeed name="RunControl" type="Input"/>
+				<datafeed name="DeterministicIgnitionLocation" type="Input"/>
+				<datafeed name="DeterministicBurnCondition" type="Input"/>
 				<datafeed name="OutputOptionSpatial" type="Input"/>
-				<datafeed name="OutputBurnMap" type="Input"/>
+				<datafeed name="OutputFireStatistic" type="Both"/>
+				<datafeed name="OutputAllPerim" type="Both"/>
+				<datafeed name="OutputBurnMap" type="Both"/>
 				<datafeed name="OutputBurnCount" type="Output"/>
 				<datafeed name="OutputBurnProbability" type="Output"/>
 				<datafeed name="OutputRelativeBurnProbability" type="Output"/>
@@ -719,5 +730,5 @@
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
-	<updateProvider schemaVersion="8" minPackageVersion="0.4.6" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
+	<updateProvider schemaVersion="9" minPackageVersion="0.4.7" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 </package>

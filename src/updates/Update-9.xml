@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update>
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFireStatistic">
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputFireStatistic</item>
+
+    <item> DROP TABLE burnP3Plus_OutputFireStatistic </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputFireStatistic (
+            OutputFireStatisticID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            FireID                INTEGER,
+            Latitude              DOUBLE,
+            Longitude             DOUBLE,
+            Season                INTEGER,
+            Cause                 INTEGER,
+            FireZone              INTEGER,
+            WeatherZone           INTEGER,
+            FuelType              INTEGER,
+            FireDuration          INTEGER,
+            HoursBurning          INTEGER,
+            Area                  DOUBLE,
+            ResampleStatus        TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputFireStatistic (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            Latitude,
+            Longitude,
+            Season,
+            Cause,
+            FireZone,
+            WeatherZone,
+            FuelType,
+            FireDuration,
+            HoursBurning,
+            Area,
+            ResampleStatus)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            Latitude,
+            Longitude,
+            Season,
+            Cause,
+            FireZone,
+            WeatherZone,
+            FuelType,
+            FireDuration,
+            HoursBurning,
+            Area,
+            ResampleStatus
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputFireStatistic_Index ON burnP3Plus_OutputFireStatistic (ScenarioID) </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnProbability">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputBurnProbability </item>
+
+    <item> DROP TABLE burnP3Plus_OutputBurnProbability </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputBurnProbability (
+            OutputBurnProbabilityID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            Band                  INTEGER,
+            Season                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputBurnProbability (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputBurnProbability_Index ON burnP3Plus_OutputBurnProbability (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputRelativeBurnProbability">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputRelativeBurnProbability </item>
+
+    <item> DROP TABLE burnP3Plus_OutputRelativeBurnProbability </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputRelativeBurnProbability (
+            OutputRelativeBurnProbabilityID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            Band                  INTEGER,
+            Season                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputRelativeBurnProbability (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputRelativeBurnProbability_Index ON burnP3Plus_OutputRelativeBurnProbability (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnCount">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputBurnCount </item>
+
+    <item> DROP TABLE burnP3Plus_OutputBurnCount </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputBurnCount (
+            OutputBurnCountID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            Band                  INTEGER,
+            Season                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputBurnCount (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputBurnCount_Index ON burnP3Plus_OutputBurnCount (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputBurnMap">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputBurnMap </item>
+
+    <item> DROP TABLE burnP3Plus_OutputBurnMap </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputBurnMap (
+            OutputBurnMapID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            Band                  INTEGER,
+            Season                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputBurnMap (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            Season,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputBurnMap_Index ON burnP3Plus_OutputBurnMap (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputAllPerim">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputAllPerim </item>
+
+    <item> DROP TABLE burnP3Plus_OutputAllPerim </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputAllPerim (
+            OutputAllPerimID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            Band                  INTEGER,
+            FireID                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputAllPerim (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            FireID,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            Band,
+            FireID,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputAllPerim_Index ON burnP3Plus_OutputAllPerim (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFirePerimeter">
+    <item> PRAGMA foreign_keys = 0 </item>
+
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputFirePerimeter </item>
+
+    <item> DROP TABLE burnP3Plus_OutputFirePerimeter </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputFirePerimeter (
+            OutputFirePerimeterID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            FireID                INTEGER,
+            FileName              TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputFirePerimeter (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            FileName)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            FileName
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputFirePerimeter_Index ON burnP3Plus_OutputFirePerimeter (ScenarioID) </item>
+
+    <item> PRAGMA foreign_keys = 1 </item>
+  </action>
+
+</update>

@@ -57,7 +57,8 @@ if(nrow(IgnitionsPerIteration) == 0) {
 }
 
 if(nrow(ResampleOption) == 0) {
-  ResampleOption[1,] <- c(0,0)
+  updateRunLog("No Minimum Fire Size chosen.\nDefaulting to a Minimum Fire Size of 1ha and drawing 10% extra fires for resampling.\nPlease see the Fire Resampling Options table for more details.", type = "info")
+  ResampleOption[1,] <- c(1,0.1)
   saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
 }
 

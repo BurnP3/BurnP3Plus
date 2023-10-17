@@ -12,12 +12,8 @@ currentBreakPoint <- proc.time()
 ## Connect to SyncroSim ----
 myScenario <- scenario()
 
-# Load Run Controls and identify iterations to run
-RunControl <- datasheet(myScenario, "burnP3Plus_RunControl")
-iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
-
 # Load remaining datasheets
-DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T) %>% unique %>% filter(Iteration %in% iterations)
+DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T) %>% unique
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
@@ -270,8 +266,6 @@ sampleWeather <- function(season, weatherzone, data) {
 
 # Determine Fire Zone and Weather Zone for each ignition ----
 DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
-  # Only consider iterations this job is responsible for
-  filter(Iteration %in% iterations) %>%
   
   # Determine fire zone and weather zone using the respective maps
   mutate(

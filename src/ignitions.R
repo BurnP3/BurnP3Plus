@@ -26,7 +26,7 @@ CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 
 # Load relevant ignition datasheets
 IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T, lookupsAsFactors = F)
-ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T)
+ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T) %>% dplyr::select(-starts_with("Scenario"))
 ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T, lookupsAsFactors = F)
 IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T, lookupsAsFactors = F)
 IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution", optional = T, lookupsAsFactors = F)

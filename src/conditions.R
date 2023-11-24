@@ -1,3 +1,8 @@
+# Clean global environment variables
+native_proj_lib <- Sys.getenv("PROJ_LIB")
+Sys.unsetenv("PROJ_LIB")
+
+# Load packages ----
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(terra))

@@ -345,7 +345,15 @@ if(saveBurnMaps) {
 
   # Calculate burn count
 
-  # Start by loading in burn maps by season and discarding any empty outputs
+  # Start by setting up an empty template
+  emptyTemplate <- NULL
+  if(nrow(OutputBurnMap > 0))
+    emptyTemplate <- OutputBurnMap %>%
+      pull(FileName) %>%
+      pluck(1) %>%
+      {tryCatch(rast(.) %>% rast(vals = 0), error = function(e) NULL)}
+
+  # Load in burn maps by season and replace any empty sets with a zero raster
   burnMapRasters <- 
     map(seasonValues, function(thisSeason) {
       # Read in burn maps per season as raster stack
@@ -356,7 +364,7 @@ if(saveBurnMaps) {
             !Iteration %in% incompleteIterations) %>% # Filter out any iterations that did not meet their ignition targets after reassignment
           pull(FileName) %>%
           rast,
-        error = function(e) NULL)
+        error = function(e) emptyTemplate) # If no valid maps are found for a given season for the entire run
     }) %>%
     set_names(seasonValues) %>%
     discard(is.null)
@@ -426,7 +434,7 @@ if(saveBurnMaps) {
        OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
 
       burnProbabilityRasters <- burnCountRasters %>%
-        map(function(burnCountRaster) (burnCountRaster / (RunControl$MaximumIteration - length(incompleteIterations)))) %>%
+        map(function(burnCountRaster) (burnCountRaster / max(RunControl$MaximumIteration - length(incompleteIterations), 1))) %>%
         set_names(names(burnCountRasters))
 
       # Discard seasonal probabilities if not requested

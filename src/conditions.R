@@ -18,9 +18,9 @@ checkPackageVersion <- function(packageString, minimumVersion){
 
 checkPackageVersion("rsyncrosim", "1.4.8")
 checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("terra",      "1.2.5")
+checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
-checkPackageVersion("codetools",  "0.2.15")
+checkPackageVersion("codetools",  "0.2.19")
 
 # Setup ----
 options(scipen = 100)

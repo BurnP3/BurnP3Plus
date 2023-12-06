@@ -14,7 +14,7 @@
 						<datasheet name="BatchOption" displayName="Batch Options" isSingleRow="True">
 							<columns>
 								<column name="BatchOptionID" dataType="Integer" isPrimary="True"/>
-								<column name="BatchSize" displayName="Batch size (iterations):" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
+								<column name="BatchSize" displayName="Batch size (ignitions):" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
 							</columns>
 							<defaultRecords>
                 				<record columns="BatchSize" values="250"/>

@@ -29,7 +29,7 @@ This Quickstart tutorial will introduce you to the basics of working with **Burn
 
 <p id="step1"> <h2> <b>Step 1: Installing BurnP3+ and required fire growth add-on packages</b> </h2> </p>
 
-Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 2.4.10 or higher). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
+Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 2.4.42). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
 
 In this Quickstart tutorial, you will run the **BurnP3+** [*Base Package*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"} with the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} model, which requires the [burnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} [*Add-on Package*](https://docs.syncrosim.com/how_to_guides/package_addon.html){:target="_blank"}.
 

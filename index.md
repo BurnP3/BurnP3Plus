@@ -27,7 +27,7 @@ Burn-P3 utilized a single deterministic fire growth model called [Prometheus](ht
 
 ## Requirements
 
-The **BurnP3+ SyncroSim Package** requires the SyncroSim software, [version 2.4.5](https://syncrosim.com/download/){:target="_blank"} or higher. <br>
+The **BurnP3+ SyncroSim Package** requires the SyncroSim software, [version 2.4.42](https://syncrosim.com/download/){:target="_blank"}. <br>
 
 If using the Cell2Fire fire growth model, you will also need to install the [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} add-on package. <br>
 

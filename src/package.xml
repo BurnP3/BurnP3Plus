@@ -316,7 +316,7 @@
 							<columns>
 								<column name="WeatherOptionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="SampleSequentially" displayName="Sample Weather Seqentially" dataType="Boolean"/>
+								<column name="SampleSequentially" displayName="Sample Weather Sequentially" dataType="Boolean"/>
 							</columns>
 							<defaultRecords>
 								<record columns="SampleSequentially" values="-1"/>

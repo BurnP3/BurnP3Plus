@@ -33,13 +33,13 @@ currentBreakPoint <- proc.time()
 myScenario <- scenario()
 
 # Load relevant datasheets
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T)
-RunControl <- datasheet(myScenario, "burnP3Plus_RunControl")
-DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", lookupsAsFactors = F, optional = T) %>% unique
-AllPerim <- datasheet(myScenario, "burnP3Plus_OutputAllPerim")
-OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap")
-OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial")
-OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic") %>% arrange(Iteration, FireID)
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T, returnInvisible = T)
+RunControl <- datasheet(myScenario, "burnP3Plus_RunControl", returnInvisible = T)
+DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
+AllPerim <- datasheet(myScenario, "burnP3Plus_OutputAllPerim", returnInvisible = T)
+OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap", returnInvisible = T)
+OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T)
+OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T) %>% arrange(Iteration, FireID)
 
 ## Setup files and folders ----
 

@@ -70,7 +70,7 @@
 				</datafeed>
 				<datafeed name="FireZone" displayName="Fire Zones" dataScope="Project">
 					<datasheets>
-						<datasheet name="FireZone" displayName="Fire Zones" valueMember="ID" displayMember="Name">
+						<datasheet name="FireZone" displayName="Fire Zones" valueMember="FireZoneID" displayMember="Name">
 							<columns>
 								<column name="FireZoneID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
@@ -84,7 +84,7 @@
 				</datafeed>
 				<datafeed name="WeatherZone" displayName="Weather Zones" dataScope="Project">
 					<datasheets>
-						<datasheet name="WeatherZone" displayName="Weather Zones" valueMember="ID" displayMember="Name">
+						<datasheet name="WeatherZone" displayName="Weather Zones" valueMember="WeatherZoneID" displayMember="Name">
 							<columns>
 								<column name="WeatherZoneID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>

@@ -220,7 +220,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   
   # Determine the restricted fuel types for the given season, cause, firezone
   restrictedFuels <- IgnitionRestriction %>%
-    filter(Season == season | is.na(Season), Cause == cause | is.na(Cause), FireZone == firezone | is.na(FireZone)) %>%
+    filter(Season %in% c(season,"All") | is.na(Season), Cause %in% c(cause,"All") | is.na(Cause), FireZone %in% c(firezone,"All") | is.na(FireZone)) %>%
     pull(FuelType)
   
   # Convert restricted fuels list to IDs, add NA as restricted fuel
@@ -234,7 +234,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   maskedProbability <- ProbabilisticIgnitionLocation %>%
     
     # Start by finding the relevant probabilistic ignition grid
-    filter(Cause %in% c(cause, NA), Season %in% c(season, NA)) %>%
+    filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
     pull(IgnitionGridFileName) %>%
     
     # Warn if multiple probabilistic ignition grids are specified

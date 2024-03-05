@@ -189,7 +189,7 @@ sampleFireDuration <- function(season, firezone, data){
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
-    filter(Season == season | is.na(Season), FireZone == firezone | is.na(FireZone))
+    filter(Season %in% c(season,"All") | is.na(Season), FireZone %in% c(firezone,"All") | is.na(FireZone))
   
   fireDurationDistributionName <- filteredFireDurationTable %>%
     pull(DistributionType)
@@ -197,7 +197,7 @@ sampleFireDuration <- function(season, firezone, data){
   # Determine hours burning per day distribution type to use
   # This is a function of season only
   filteredHoursBurningTable <- HoursBurningTable %>%
-    filter(Season == season | is.na(Season))
+    filter(Season %in% c(season,"All") | is.na(Season))
   
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)
@@ -260,7 +260,7 @@ sampleFireDuration <- function(season, firezone, data){
 sampleWeather <- function(season, weatherzone, data) {
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
-    filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%
+    filter(Season %in% c(season,"All") | is.na(Season), WeatherZone %in% c(weatherzone,"All") | is.na(WeatherZone)) %>%
     dplyr::select(-Season, -WeatherZone)
   
   # Sample rows of the weather stream randomly

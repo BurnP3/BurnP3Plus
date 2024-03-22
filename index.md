@@ -7,6 +7,7 @@ permalink: /
 
 # **BurnP3+** SyncroSim Package
 <img align="right" style="padding: 13px" width="180" src="assets/images/logo/burnP3Plus-sticker.png">
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10293566.svg)](https://doi.org/10.5281/zenodo.10293566) <br>
 [![GitHub release](https://img.shields.io/github/v/release/BurnP3/BurnP3Plus.svg?style=for-the-badge&color=d68a06)](https://GitHub.com/BurnP3/BurnP3Plus/releases/)    <a href="https://github.com/BurnP3/BurnP3Plus"><img align="middle" style="padding: 1px" width="30" src="assets/images/logo/github-trans2.png"> <br>
 
 ### **BurnP3+** is an open-source [SyncroSim](https://syncrosim.com/){:target="_blank"} base package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. **BurnP3+** is funded, developed and maintained by the [Canadian Forest Service](https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/the-canadian-forest-service/about-canadian-forest-service/17545){:target="_blank"}. <br>

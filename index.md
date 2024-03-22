@@ -75,7 +75,7 @@ Brett Moore (Author, Maintainer) <a href="https://orcid.org/0000-0002-9456-8435"
 <br>
 Colin Daniel (Author) <a href="https://orcid.org/0000-0001-7367-2041" target="_blank"><img align="middle" style="padding: 0.5px" width="17" src="assets/images/ORCID.png"></a>
 <br>
-Katie Birchard (Author)
+Katie Birchard (Author) <a href="https://orcid.org/0009-0003-7519-4751" target="_blank"><img align="middle" style="padding: 0.5px" width="17" src="assets/images/ORCID.png"></a>
 <br>
 Peter Englefield (Author)
 <br>

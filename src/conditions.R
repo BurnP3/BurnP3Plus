@@ -290,8 +290,10 @@ DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
   # Determine fire zone and weather zone using the respective maps
   mutate(
     cell = cellFromLatLong(fuelsRaster, Latitude, Longitude),
-    weatherzoneID = ifelse(!is.null(weatherZoneRaster), weatherZoneRaster[][cell], 0),
-    firezoneID = ifelse(!is.null(fireZoneRaster), fireZoneRaster[][cell], 0),
+    weatherzoneID = case_when(is.null(weatherZoneRaster) ~ 0,
+                              !is.null(weatherZoneRaster) ~ weatherZoneRaster[][cell]),
+    firezoneID = case_when(is.null(fireZoneRaster) ~ 0,
+                           !is.null(fireZoneRaster) ~ fireZoneRaster[][cell]),
     WeatherZone = lookup(weatherzoneID, WeatherZoneTable$ID, WeatherZoneTable$Name),
     FireZone = lookup(firezoneID, FireZoneTable$ID, FireZoneTable$Name)
   ) %>%

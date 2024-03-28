@@ -86,11 +86,11 @@ updateBreakpoint <- function() {
   
   # Return cleaned elapsed time
   if (elapsed < 60) {
-    return(str_c(round(elapsed), "sec"))
+    return(str_c(round(elapsed), " seconds"))
   } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), "min"))
+    return(str_c(round(elapsed / 60, 1), " minutes"))
   } else
-    return(str_c(round(elapsed / 60 / 60, 1), "hr"))
+    return(str_c(round(elapsed / 60 / 60, 1), " hours"))
 }
 
 # Define a function to facilitate recoding values using a lookup table

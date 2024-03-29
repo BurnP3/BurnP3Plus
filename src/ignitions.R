@@ -10,9 +10,16 @@ suppressPackageStartupMessages(library(terra))
 checkPackageVersion <- function(packageString, minimumVersion){
   result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
   if (result < 0) {
-    stop("The R package ", packageString, " (", as.character(packageVersion(packageString)), ") does not meet the minimum requirements (", minimumVersion, ") for this version of BurnP3+. Please upgrade this package and rerun this scenario.", type = "warning")
+    updateRunLog("The R package ", packageString, " (", 
+         as.character(packageVersion(packageString)), 
+         ") does not meet the minimum requirements (", minimumVersion, 
+         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.", 
+         type = "warning")
   } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (", as.character(packageVersion(packageString)), ") than BurnP3+ was built against (", minimumVersion, ").", type = "info")
+    updateRunLog("Using a newer version of ", packageString, " (", 
+                 as.character(packageVersion(packageString)), 
+                 ") than BurnP3+ was built against (", 
+                 minimumVersion, ").", type = "info")
   }
 }
 

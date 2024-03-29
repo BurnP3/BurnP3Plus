@@ -10,17 +10,25 @@ suppressPackageStartupMessages(library(terra))
 checkPackageVersion <- function(packageString, minimumVersion){
   result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
   if (result < 0) {
-    stop("The R package ", packageString, " (", as.character(packageVersion(packageString)), ") does not meet the minimum requirements (", minimumVersion, ") for this version of BurnP3+. Please upgrade this package and rerun this scenario.", type = "warning")
+    updateRunLog("The R package ", packageString, " (", 
+         as.character(packageVersion(packageString)), 
+         ") does not meet the minimum requirements (", minimumVersion, 
+         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.", 
+         type = "warning")
   } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (", as.character(packageVersion(packageString)), ") than BurnP3+ was built against (", minimumVersion, ").", type = "info")
+    updateRunLog("Using a newer version of ", packageString, " (", 
+                 as.character(packageVersion(packageString)), 
+                 ") than BurnP3+ was built against (", 
+                 minimumVersion, ").", type = "info")
   }
 }
 
-checkPackageVersion("rsyncrosim", "1.4.8")
+checkPackageVersion("rsyncrosim", "1.5.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
+checkPackageVersion("data.table", "1.14.8")
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -86,11 +94,11 @@ updateBreakpoint <- function() {
   
   # Return cleaned elapsed time
   if (elapsed < 60) {
-    return(str_c(round(elapsed), "sec"))
+    return(str_c(round(elapsed), " seconds"))
   } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), "min"))
+    return(str_c(round(elapsed / 60, 1), " minutes"))
   } else
-    return(str_c(round(elapsed / 60 / 60, 1), "hr"))
+    return(str_c(round(elapsed / 60 / 60, 1), " hours"))
 }
 
 # Define a function to facilitate recoding values using a lookup table

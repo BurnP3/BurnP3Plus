@@ -81,21 +81,21 @@ if(nrow(HoursBurningTable) == 0) {
 
 # If HoursBurningTable set to "All", then all seasons in the SeasonTable
 # not specified in the HoursBurningTable should also have that value
-if ("All" %in% HoursBurningTable$Season){
-  if (nrow(HoursBurningTable > 1)){
-    updateRunLog(
-      "Value provided for hours burning per day distribution for 'All' seasons will be applied to all seasons without distributions specified.", 
-      type = "info")
-  }
+if (!"All" %in% HoursBurningTable$Season){
+  HoursBurningTable[1, "Season"] <- "All"
+  HoursBurningTable[1, "Mean"] <- 4
+}
+
+for (s in SeasonTable$Name){
   
-  for (s in SeasonTable$Name){
-    
-    if (!s %in% HoursBurningTable$Season){
-      newRow <- HoursBurningTable[HoursBurningTable$Season == "All", ]
-      newRow$Season <- s
-      HoursBurningTable <- HoursBurningTable %>%
-        add_row(newRow)
-    }
+  if (!s %in% HoursBurningTable$Season){
+    msg <- paste0("No hours burning per day distribution provided for season ", s, 
+                  ". Defaulting to either 'All' or 4 hours of burning per burn day.")
+    updateRunLog(msg, type = "info")
+    newRow <- HoursBurningTable[HoursBurningTable$Season == "All", ]
+    newRow$Season <- s
+    HoursBurningTable <- HoursBurningTable %>%
+      add_row(newRow)
   }
 }
 

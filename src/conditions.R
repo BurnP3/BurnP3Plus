@@ -45,6 +45,7 @@ FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
 
 # Load weather and burn condition table
 FireDurationTable <- datasheet(myScenario, "burnP3Plus_FireDuration", optional = T, lookupsAsFactors = F, returnInvisible = T)
@@ -76,6 +77,26 @@ if(nrow(HoursBurningTable) == 0) {
   updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
   HoursBurningTable[1,"Mean"] <- 4
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
+}
+
+# If HoursBurningTable set to "All", then all seasons in the SeasonTable
+# not specified in the HoursBurningTable should also have that value
+if (!"All" %in% HoursBurningTable$Season){
+  HoursBurningTable[1, "Season"] <- "All"
+  HoursBurningTable[1, "Mean"] <- 4
+}
+
+for (s in SeasonTable$Name){
+  
+  if (!s %in% HoursBurningTable$Season){
+    msg <- paste0("No hours burning per day distribution provided for season ", s, 
+                  ". Defaulting to either 'All' or 4 hours of burning per burn day.")
+    updateRunLog(msg, type = "info")
+    newRow <- HoursBurningTable[HoursBurningTable$Season == "All", ]
+    newRow$Season <- s
+    HoursBurningTable <- HoursBurningTable %>%
+      add_row(newRow)
+  }
 }
 
 if(nrow(FireZoneTable) == 0)

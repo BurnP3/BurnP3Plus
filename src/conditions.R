@@ -81,9 +81,9 @@ if(nrow(HoursBurningTable) == 0) {
 
 # If HoursBurningTable set to "All", then all seasons in the SeasonTable
 # not specified in the HoursBurningTable should also have that value
-if (!"All" %in% HoursBurningTable$Season){
-  HoursBurningTable[1, "Season"] <- "All"
-  HoursBurningTable[1, "Mean"] <- 4
+if (!"All" %in% HoursBurningTable$Season && !is.na(HoursBurningTable$Season[1])){
+  HoursBurningTable <- HoursBurningTable %>%
+    add_row(Season = c("All"), Mean = c(4))
 }
 
 for (s in SeasonTable$Name){

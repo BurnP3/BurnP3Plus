@@ -62,10 +62,8 @@
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="IsAuto" dataType="Integer" isVisible="False"/>
-		<defaultRecords>
-			<record columns="Name|IsAuto" values="Normal|-1"/>
-			<record columns="Name|IsAuto" values="Gamma|-1"/>
-		</defaultRecords>
+		<record columns="Name|IsAuto" values="Normal|-1"/>
+		<record columns="Name|IsAuto" values="Gamma|-1"/>
 	</dataSheet>
 
 	<!--Scenario Datasheets-->
@@ -211,9 +209,7 @@
 		<column name="WeatherOptionId" dataType="Integer" isPrimary="True"/>
 		<column name="ScenarioId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="SampleSequentially" displayName="Sample Weather Sequentially" dataType="Boolean"/>
-		<defaultRecords>
-			<record columns="SampleSequentially" values="-1"/>
-		</defaultRecords>
+		<record columns="SampleSequentially" values="-1"/>
 	</dataSheet>
 
 	<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
@@ -402,7 +398,6 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-
 	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
@@ -417,7 +412,6 @@
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-
 	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
@@ -431,21 +425,20 @@
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-
 	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
-		<datafeed name="RunControl" type="Input"/>
-		<datafeed name="DeterministicIgnitionLocation" type="Input"/>
-		<datafeed name="DeterministicBurnCondition" type="Input"/>
-		<datafeed name="OutputOptionSpatial" type="Input"/>
-		<datafeed name="OutputFireStatistic" type="Both"/>
-		<datafeed name="OutputAllPerim" type="Both"/>
-		<datafeed name="OutputBurnMap" type="Both"/>
-		<datafeed name="OutputBurnCount" type="Output"/>
-		<datafeed name="OutputBurnProbability" type="Output"/>
-		<datafeed name="OutputRelativeBurnProbability" type="Output"/>
+		<dataSheet name="RunControl" type="Input"/>
+		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+		<dataSheet name="DeterministicBurnCondition" type="Input"/>
+		<dataSheet name="OutputOptionSpatial" type="Input"/>
+		<dataSheet name="OutputFireStatistic" type="Both"/>
+		<dataSheet name="OutputAllPerim" type="Both"/>
+		<dataSheet name="OutputBurnMap" type="Both"/>
+		<dataSheet name="OutputBurnCount" type="Output"/>
+		<dataSheet name="OutputBurnProbability" type="Output"/>
+		<dataSheet name="OutputRelativeBurnProbability" type="Output"/>
 	</transformer>
 
-	<!--Folder Export Transformers-->
+	<!--Export Transformers-->
 
 	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
 	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
@@ -455,7 +448,6 @@
 	<!--Layouts-->
 
 	<!--Result Transformers Layout-->
-
 	<layout type = "Export">
 		<item name="corestime_ChartTransformer"/>
 		<item name="corestime_MapTransformer"/>
@@ -468,7 +460,6 @@
 	</layout>
 
 	<!--Library Layout-->
-
 	<layout type = "Library">
 		<item name="core_SysFolder"/>
 		<item name="core_Backup"/>
@@ -485,7 +476,6 @@
 	</layout>
 
 	<!--Project Layout-->
-
 	<layout type = "Project">
 		<group name="FuelDefinition" displayName="Fuels">
 			<item name="FuelType"/>
@@ -500,7 +490,6 @@
 	</layout>
 
 	<!--Scenario Layout-->
-
 	<layout type = "Scenario">
 		<item name="RunControl"/>
 		<item name="LandscapeRasters"/>
@@ -547,13 +536,11 @@
 	</layout>
 
 	<!--Chart Layout-->
-
 	<layout name="corestimeforms_Charts" configurationSheet="burnP3Plus_RunControl">
 		<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 	</layout>
 
 	<!--Map Layout-->
-
 	<layout type = "Map" configurationSheet="burnP3Plus_RunControl">
 		<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
 		<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>

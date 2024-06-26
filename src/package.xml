@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package name="burnP3Plus" displayName = "Burn-P3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
+	
 	<transformers>
 		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
 			<include>
@@ -8,141 +9,93 @@
 				<transformer name="generateBurningConditions"/>
 				<transformer name="burnProbability"/>
 			</include>
-			<datafeeds>
-				<datafeed name="BatchOption" displayName="Batch Options" dataScope="Library">
-					<datasheets>
-						<datasheet name="BatchOption" displayName="Batch Options" isSingleRow="True">
-							<columns>
-								<column name="BatchOptionID" dataType="Integer" isPrimary="True"/>
+			
+			
+				
+						<dataSheet name="BatchOption" displayName="Batch Options" isSingleRow="True" dataScope="Library">
+								<column name="BatchOptionId" dataType="Integer" isPrimary="True"/>
 								<column name="BatchSize" displayName="Batch size (ignitions):" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
-							</columns>
 							<defaultRecords>
-                				<record columns="BatchSize" values="250"/>
-              				</defaultRecords>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="FuelType" displayName="Fuel Types" dataScope="Project">
-					<datasheets>
-						<datasheet name="FuelType" displayName="Fuel Types" valueMember="FuelTypeID" displayMember="Name">
-							<columns>
-								<column name="FuelTypeID" dataType="Integer" isPrimary="True"/>
-								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
+								<record columns="BatchSize" values="250"/>
+							</defaultRecords>
+						</dataSheet>
+					
+						<dataSheet name="FuelType" displayName="Fuel Types" valueMember="FuelTypeID" displayMember="Name" dataScope="Project">
+								<column name="FuelTypeId" dataType="Integer" isPrimary="True"/>
+								<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
-								<column name="ID" dataType="Integer"/>
+								<column name="Id" dataType="Integer"/>
 								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
-							</columns>
-							<validations>
 								<validation validationType="Unique" columns="Name"/>
-								<validation validationType="Unique" columns="ID"/>
-							</validations>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="Season" displayName="Seasons" dataScope="Project" valueMember="SeasonID" displayMember="Name">
-					<datasheets>
-						<datasheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0">
-							<columns>
+								<validation validationType="Unique" columns="Id"/>
+						</dataSheet>
+
+						<dataSheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 								<column name="SeasonID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="IsAuto" dataType="Integer" isVisible="False"/>
-							</columns>
 							<defaultRecords>
 								<record columns="Name|IsAuto" values="All|-1"/>
 							</defaultRecords>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="Cause" displayName="Causes" dataScope="Project">
-					<datasheets>
-						<datasheet name="Cause" displayName="Causes" valueMember="CauseID" displayMember="Name">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="Cause" displayName="Causes" valueMember="CauseID" displayMember="Name" dataScope="Project">
 								<column name="CauseID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="FireZone" displayName="Fire Zones" dataScope="Project">
-					<datasheets>
-						<datasheet name="FireZone" displayName="Fire Zones" valueMember="FireZoneID" displayMember="Name">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="FireZone" displayName="Fire Zones" valueMember="FireZoneID" displayMember="Name" dataScope="Project">
 								<column name="FireZoneID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
 								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="WeatherZone" displayName="Weather Zones" dataScope="Project">
-					<datasheets>
-						<datasheet name="WeatherZone" displayName="Weather Zones" valueMember="WeatherZoneID" displayMember="Name">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="WeatherZone" displayName="Weather Zones" valueMember="WeatherZoneID" displayMember="Name" dataScope="Project">
 								<column name="WeatherZoneID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="ID" dataType="Integer"/>
 								<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="Distribution" displayName="Distributions" dataScope="Project">
-					<datasheets>
-						<datasheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 								<column name="DistributionID" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Name" dataType="String"/>
 								<column name="Description" dataType="String" isOptional="True"/>
 								<column name="IsAuto" dataType="Integer" isVisible="False"/>
-							</columns>
 							<defaultRecords>
 								<record columns="Name|IsAuto" values="Normal|-1"/>
 								<record columns="Name|IsAuto" values="Gamma|-1"/>
 							</defaultRecords>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="RunControl" displayName="Run Control" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="RunControl" displayName="Run Control" isSingleRow="True">
-							<columns>
+						</dataSheet>
+						
+						<dataSheet name="RunControl" displayName="Run Control" isSingleRow="True">
 								<column name="RunControlID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="MinimumIteration" dataType="Integer" defaultValue="1" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1" isVisible="False"/>
 								<column name="MaximumIteration" displayName="Number of Iterations" dataType="Integer" defaultValue="1" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
 								<column name="MinimumTimestep" displayName="Minimum Timestep" dataType="Integer" defaultValue="0" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="MaximumTimestep" displayName="Maximum Timestep" dataType="Integer" defaultValue="0" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="FireResampleOption" displayName="Fire Resampling Options" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="FireResampleOption" displayName="Fire Resampling Options" isSingleRow="True">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="FireResampleOption" displayName="Fire Resampling Options" isSingleRow="True">
 								<column name="FireResampleOptionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="MinimumFireSize" displayName="Minimum Fire Size (ha)" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0"/>
 								<column name="ProportionExtraIgnition" displayName="Proportion of Extra Ignitions to Sample for Replacing Fires below Minimum Size" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
-				<datafeed name="LandscapeRasters" displayName="Landscape Maps" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
-							<columns>
+						</dataSheet>
+
+						<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
 								<column name="LandscapeRastersID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
@@ -152,30 +105,28 @@
 								<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
 								<column name="WeatherZoneGridFileName" displayName="Weather Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True" isVisible="False"/>
-							</columns>
-						</datasheet>
-					</datasheets>
-				</datafeed>
+						</dataSheet>
+						
 				<datafeed name="IgnitionsPerIteration" displayName="Ignition Count" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="IgnitionsPerIteration" displayName="Ignition Count">
+					<dataSheets>
+						<dataSheet name="IgnitionsPerIteration" displayName="Ignition Count">
 							<columns>
 								<column name="IgnitionsPerIterationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" format="0.0" initOptionalVisible="True"/>
-								<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+								<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
 								<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMin" displayName="Ignition Count Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="DeterministicIgnitionCount" displayName="Deterministic Ignition Count" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="DeterministicIgnitionCount" displayName="Deterministic Ignition Count">
+					<dataSheets>
+						<dataSheet name="DeterministicIgnitionCount" displayName="Deterministic Ignition Count">
 							<columns>
 								<column name="DeterministicIgnitionCountID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -183,12 +134,12 @@
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="Ignitions" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
+					<dataSheets>
+						<dataSheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
 							<columns>
 								<column name="DeterministicIgnitionLocationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -197,104 +148,104 @@
 								<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 								<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="ProbabilisticIgnitionLocation" displayName="Ignition Location" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="ProbabilisticIgnitionLocation" displayName="Ignition Location">
+					<dataSheets>
+						<dataSheet name="ProbabilisticIgnitionLocation" displayName="Ignition Location">
 							<columns>
 								<column name="ProbabilisticIgnitionLocationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
 								<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="IgnitionRestriction" displayName="Ignition Restrictions" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="IgnitionRestriction" displayName="Ignition Restrictions">
+					<dataSheets>
+						<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">
 							<columns>
 								<column name="IgnitionRestrictionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+								<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="dataSheet" formula1="FuelType"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
+								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="FireDuration" displayName="Spread Event Days" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="FireDuration" displayName="Spread Event Days">
+					<dataSheets>
+						<dataSheet name="FireDuration" displayName="Spread Event Days">
 							<columns>
 								<column name="FireDurationID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
 								<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
-								<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+								<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
 								<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="HoursPerDayBurning" displayName="Daily Burning Hours" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
+					<dataSheets>
+						<dataSheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
 							<columns>
 								<column name="HoursPerDayBurningID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
 								<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
-								<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+								<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
 								<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 								<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="IgnitionDistribution" displayName="Ignition Distribution" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="IgnitionDistribution" displayName="Ignition Distribution">
+					<dataSheets>
+						<dataSheet name="IgnitionDistribution" displayName="Ignition Distribution">
 							<columns>
 								<column name="IgnitionDistributionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
-								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
+								<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
+								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
 								<column name="RelativeLikelihood" displayName="Relative Likelihood" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="WeatherStream" displayName="Daily Weather" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="WeatherStream" displayName="Daily Weather">
+					<dataSheets>
+						<dataSheet name="WeatherStream" displayName="Daily Weather">
 							<columns>
 								<column name="WeatherStreamID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="dataSheet" formula1="WeatherZone" isOptional="True"/>
 								<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
 								<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 								<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
@@ -307,12 +258,12 @@
 								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="WeatherOption" displayName="Weather Sampling Options" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="WeatherOption" displayName="Weather Sampling Options" isSingleRow="True">
+					<dataSheets>
+						<dataSheet name="WeatherOption" displayName="Weather Sampling Options" isSingleRow="True">
 							<columns>
 								<column name="WeatherOptionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -321,12 +272,12 @@
 							<defaultRecords>
 								<record columns="SampleSequentially" values="-1"/>
 							</defaultRecords>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
+					<dataSheets>
+						<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
 							<columns>
 								<column name="DeterministicBurnConditionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -347,12 +298,12 @@
 								<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 								<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="WindGrid" displayName="Wind Grid" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="WindGrid" displayName="Wind Grid" isSingleRow="True">
+					<dataSheets>
+						<dataSheet name="WindGrid" displayName="Wind Grid" isSingleRow="True">
 							<columns>
 								<column name="WindGridID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -374,48 +325,48 @@
 								<column name="WindDirectionWest" displayName="Wind Direction West" dataType="String" isExternalFile="True" isRaster="True"/>
 								<column name="WindDirectionNorthWest" displayName="Wind Direction North West" dataType="String" isExternalFile="True" isRaster="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="GreenUp" displayName="Green Up" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="GreenUp" displayName="Green Up">
+					<dataSheets>
+						<dataSheet name="GreenUp" displayName="Green Up">
 							<columns>
 								<column name="GreenUpID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
 								<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="Curing" displayName="Curing" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="Curing" displayName="Curing">
+					<dataSheets>
+						<dataSheet name="Curing" displayName="Curing">
 							<columns>
 								<column name="CuringID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
 								<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="FuelLoad" displayName="Grass Fuel Load" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="FuelLoad" displayName="Grass Fuel Load">
+					<dataSheets>
+						<dataSheet name="FuelLoad" displayName="Grass Fuel Load">
 							<columns>
 								<column name="FuelLoadID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
 								<column name="FuelLoad" displayName="Grass Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="FireBreak" displayName="Fire Breaks" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="FireBreak" displayName="Fire Breaks">
+					<dataSheets>
+						<dataSheet name="FireBreak" displayName="Fire Breaks">
 							<columns>
 								<column name="FireBreakID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -423,23 +374,23 @@
 								<column name="FileName" displayName="File Name" dataType="String" isExternalFile="True" isRaster="True"/>
 								<column name="AssociatedFiles" dataType="String" isExternalFile="True" isRaster="True" isVisible="False"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputOption" displayName="Output Options" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputOption" displayName="Output Options" isSingleRow="True">
+					<dataSheets>
+						<dataSheet name="OutputOption" displayName="Output Options" isSingleRow="True">
 							<columns>
 								<column name="OutputOptionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="FireStatistics" dataType="Boolean" displayName="Fire Statistics Table"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputOptionSpatial" displayName="Spatial Output Options" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputOptionSpatial" displayName="Spatial Output Options" isSingleRow="True">
+					<dataSheets>
+						<dataSheet name="OutputOptionSpatial" displayName="Spatial Output Options" isSingleRow="True">
 							<columns>
 								<column name="OutputOptionSpatialID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -454,25 +405,25 @@
 								<column name="BurnPerimeter" dataType="Boolean" displayName="Burn Perimeters"/>
 								<column name="AllPerim" dataType="Boolean" displayName="Output Individual Burn Maps"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="DistributionValue" displayName="Distributions" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="DistributionValue" displayName="Distributions" viewFilterColumn="Name">
+					<dataSheets>
+						<dataSheet name="DistributionValue" displayName="Distributions" viewFilterColumn="Name">
 							<columns>
 								<column name="DistributionValueID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
-								<column name="Name" dataType="Integer" validationType="Datasheet" formula1="Distribution"/>
+								<column name="Name" dataType="Integer" validationType="dataSheet" formula1="Distribution"/>
 								<column name="Value" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0"/>
 								<column name="RelativeFrequency" displayName="Relative Frequency" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputFireStatistic" displayName="Output Fire Statistics Table" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
+					<dataSheets>
+						<dataSheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
 							<columns>
 								<column name="OutputFireStatisticID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -481,82 +432,82 @@
 								<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 								<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 								<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
-								<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
-								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
-								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
-								<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+								<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
+								<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
+								<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="dataSheet" formula1="WeatherZone" isOptional="True"/>
+								<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="dataSheet" formula1="FuelType"/>
 								<column name="FireDuration" displayName="Fire Duration" dataType="Integer"/>
 								<column name="HoursBurning" displayName="Hours Burning" dataType="Integer"/>
 								<column name="Area" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
 								<column name="ResampleStatus" displayName="Resample Status" dataType="String"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputBurnProbability" displayName="Output Burn Probability" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputBurnProbability" displayName="Output Burn Probability">
+					<dataSheets>
+						<dataSheet name="OutputBurnProbability" displayName="Output Burn Probability">
 							<columns>
 								<column name="OutputBurnProbabilityID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
 								<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability">
+					<dataSheets>
+						<dataSheet name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability">
 							<columns>
 								<column name="OutputRelativeBurnProbabilityID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
 								<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="RelativeBurnProbability"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputBurnCount" displayName="Output Burn Count" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputBurnCount" displayName="Output Burn Count">
+					<dataSheets>
+						<dataSheet name="OutputBurnCount" displayName="Output Burn Count">
 							<columns>
 								<column name="OutputBurnCountID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
 								<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnCount"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputBurnMap" displayName="Output Burn Map" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputBurnMap" displayName="Output Burn Map">
+					<dataSheets>
+						<dataSheet name="OutputBurnMap" displayName="Output Burn Map">
 							<columns>
 								<column name="OutputBurnMapID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
 								<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-								<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+								<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
 								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnMap"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputAllPerim" displayName="Output Individual Burn Maps" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
+					<dataSheets>
+						<dataSheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
 							<columns>
 								<column name="OutputAllPerimID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -566,12 +517,12 @@
 								<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
 								<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
 				<datafeed name="OutputFirePerimeter" displayName="Output Fire Perimeters" dataScope="Scenario">
-					<datasheets>
-						<datasheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
+					<dataSheets>
+						<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
 							<columns>
 								<column name="OutputFirePerimeterID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -580,10 +531,11 @@
 								<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 								<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
 							</columns>
-						</datasheet>
-					</datasheets>
+						</dataSheet>
+					</dataSheets>
 				</datafeed>
-			</datafeeds>
+
+
 		</transformer>
 		<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
 			<pipeline>
@@ -642,7 +594,7 @@
 				<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>
 			</group>
 		</layout>
-		<layout name="coreforms_LibraryDatafeeds">
+		<layout name="coreforms_Library">
 			<item name="core_SysFolder"/>
 			<item name="core_Backup"/>
 			<group name="Multiprocessing">

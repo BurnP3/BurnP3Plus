@@ -536,7 +536,7 @@
 	</layout>
 
 	<!--Chart Layout-->
-	<layout name="corestimeforms_Charts" configurationSheet="burnP3Plus_RunControl">
+	<layout type = "Chart" configurationSheet="burnP3Plus_RunControl">
 		<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 	</layout>
 
@@ -556,6 +556,7 @@
 	<views>
 		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</views>
-	<updateProvider schemaVersion="9" minPackageVersion="0.4.7" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
+
+	<updateProvider className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 
 </package>

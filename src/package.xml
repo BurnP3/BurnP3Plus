@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package name="burnP3Plus" displayName = "Burn-P3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
-	
-	<transformers>
-		<transformer name="Primary" isPrimary="True" isPipelineBased="True" configurationSheet="burnP3Plus_RunControl" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime">
-			<include>
-				<transformer name="corestime_Runtime"/>
-				<transformer name="generateIgnitions"/>
-				<transformer name="generateBurningConditions"/>
-				<transformer name="burnProbability"/>
-			</include>
-			
+				
 			<!--Library Datasheets-->
 				
 						<dataSheet name="BatchOption" displayName="Batch Options" isSingleRow="True" dataScope="Library">

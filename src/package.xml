@@ -10,7 +10,7 @@
 				<transformer name="burnProbability"/>
 			</include>
 			
-			
+			<!--Library Datasheets-->
 				
 						<dataSheet name="BatchOption" displayName="Batch Options" isSingleRow="True" dataScope="Library">
 								<column name="BatchOptionId" dataType="Integer" isPrimary="True"/>
@@ -20,6 +20,8 @@
 							</defaultRecords>
 						</dataSheet>
 					
+			<!--Project Datasheets-->
+
 						<dataSheet name="FuelType" displayName="Fuel Types" valueMember="FuelTypeID" displayMember="Name" dataScope="Project">
 								<column name="FuelTypeId" dataType="Integer" isPrimary="True"/>
 								<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
@@ -78,6 +80,8 @@
 								<record columns="Name|IsAuto" values="Gamma|-1"/>
 							</defaultRecords>
 						</dataSheet>
+
+			<!--Scenario Datasheets-->
 						
 						<dataSheet name="RunControl" displayName="Run Control" isSingleRow="True">
 								<column name="RunControlID" dataType="Integer" isPrimary="True"/>
@@ -297,6 +301,8 @@
 								<column name="AssociatedFiles" dataType="String" isExternalFile="True" isRaster="True" isVisible="False"/>
 						</dataSheet>
 
+			<!-- Spatial Output Options-->
+
 						<dataSheet name="OutputOption" displayName="Output Options" isSingleRow="True">
 								<column name="OutputOptionID" dataType="Integer" isPrimary="True"/>
 								<column name="ScenarioID" dataType="Integer" isCompositeIndex="True"/>
@@ -325,6 +331,8 @@
 								<column name="Value" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0"/>
 								<column name="RelativeFrequency" displayName="Relative Frequency" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 						</dataSheet>
+
+			<!--Output Datasheets-->
 
 						<dataSheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
 								<column name="OutputFireStatisticID" dataType="Integer" isPrimary="True"/>
@@ -404,37 +412,67 @@
 								<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
 						</dataSheet>
 
+		<!--Transformers-->
 
+		<!--Generate Ignitions Transformer-->
+
+		<transformer 
+			name="generateIgnitions" 
+			displayName="1 - Sample Ignitions" 
+			isRunnable="True" programName="Rscript" 
+			runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" 
+			classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" 
+			configurationSheet="burnP3Plus_RunControl" 
+			condaEnv="burnP3Plus.yml">
+				<dataSheet name="RunControl" type="Input"/>
+				<dataSheet name="DistributionValue" type="Input"/>
+				<dataSheet name="IgnitionsPerIteration" type="Input"/>
+				<dataSheet name="FireResampleOption" type="Input"/>
+				<dataSheet name="ProbabilisticIgnitionLocation" type="Input"/>
+				<dataSheet name="IgnitionRestriction" type="Input"/>
+				<dataSheet name="IgnitionDistribution" type="Input"/>
+				<dataSheet name="LandscapeRasters" type="Input"/>
+				<dataSheet name="DeterministicIgnitionCount" type="Output"/>
+				<dataSheet name="DeterministicIgnitionLocation" type="Output"/>
 		</transformer>
-		<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
-			<pipeline>
-				<datafeed name="RunControl" type="Input"/>
-				<datafeed name="DistributionValue" type="Input"/>
-				<datafeed name="IgnitionsPerIteration" type="Input"/>
-				<datafeed name="FireResampleOption" type="Input"/>
-				<datafeed name="ProbabilisticIgnitionLocation" type="Input"/>
-				<datafeed name="IgnitionRestriction" type="Input"/>
-				<datafeed name="IgnitionDistribution" type="Input"/>
-				<datafeed name="LandscapeRasters" type="Input"/>
-				<datafeed name="DeterministicIgnitionCount" type="Output"/>
-				<datafeed name="DeterministicIgnitionLocation" type="Output"/>
-			</pipeline>
+
+		<!--Generate Burning Conditions Transformer-->
+
+		<transformer 
+			name="generateBurningConditions" 
+			displayName="2 - Sample Burning Conditions" 
+			isRunnable="True" 
+			programName="Rscript" 
+			runContext="LocalOnly" 
+			className="SyncroSim.StochasticTime.StochasticTimeTransformer" 
+			classAssembly="SyncroSim.StochasticTime" 
+			programArguments="conditions.R" 
+			configurationSheet="burnP3Plus_RunControl" 
+			condaEnv="burnP3Plus.yml">
+				<dataSheet name="RunControl" type="Input"/>
+				<dataSheet name="DistributionValue" type="Input"/>
+				<dataSheet name="FireDuration" type="Input"/>
+				<dataSheet name="HoursPerDayBurning" type="Input"/>
+				<dataSheet name="WeatherStream" type="Input"/>
+				<dataSheet name="WeatherOption" type="Input"/>
+				<dataSheet name="LandscapeRasters" type="Input"/>
+				<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+				<dataSheet name="DeterministicBurnCondition" type="Output"/>
 		</transformer>
-		<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
-			<pipeline>
-				<datafeed name="RunControl" type="Input"/>
-				<datafeed name="DistributionValue" type="Input"/>
-				<datafeed name="FireDuration" type="Input"/>
-				<datafeed name="HoursPerDayBurning" type="Input"/>
-				<datafeed name="WeatherStream" type="Input"/>
-				<datafeed name="WeatherOption" type="Input"/>
-				<datafeed name="LandscapeRasters" type="Input"/>
-				<datafeed name="DeterministicIgnitionLocation" type="Input"/>
-				<datafeed name="DeterministicBurnCondition" type="Output"/>
-			</pipeline>
-		</transformer>
-		<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
-			<pipeline>
+
+		<!--Summarize Burn Probability Transformer-->
+
+		<transformer 
+			name="burnProbability" 
+			displayName="4 - Summarize Burn Probability" 
+			isRunnable="True" 
+			programName="Rscript" 
+			runContext="LocalOnly" 
+			className="SyncroSim.StochasticTime.StochasticTimeTransformer" 
+			classAssembly="SyncroSim.StochasticTime" 
+			programArguments="burnProbability.R" 
+			configurationSheet="burnP3Plus_RunControl" 
+			condaEnv="burnP3Plus.yml">
 				<datafeed name="RunControl" type="Input"/>
 				<datafeed name="DeterministicIgnitionLocation" type="Input"/>
 				<datafeed name="DeterministicBurnCondition" type="Input"/>
@@ -445,14 +483,16 @@
 				<datafeed name="OutputBurnCount" type="Output"/>
 				<datafeed name="OutputBurnProbability" type="Output"/>
 				<datafeed name="OutputRelativeBurnProbability" type="Output"/>
-			</pipeline>
 		</transformer>
-		<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"/>
-		<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"/>
-		<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"/>
-		<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"/>
-	</transformers>
-	<layouts>
+
+		<!--Folder Export Transformers-->
+
+		<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"/><transformer>
+		<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"/><transformer>
+		<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"/><transformer>
+		<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"/><transformer>
+
+		<layouts>
 		<layout name="coreforms_ResultTransformers">
 			<item name="corestime_ChartTransformer"/>
 			<item name="corestime_MapTransformer"/>

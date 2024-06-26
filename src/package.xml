@@ -455,109 +455,123 @@
 	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
 	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
 
-				<layout name="coreforms_ResultTransformers">
-					<item name="corestime_ChartTransformer"/>
-					<item name="corestime_MapTransformer"/>
-					<group name="Export">
-						<item name="BurnRasterMap" displayName="Burn Maps"/>
-						<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
-						<item name="BurnCountRasterMap" displayName="Burn Count Map"/>
-						<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>
-					</group>
-				</layout>
+	<!--Layouts-->
 
-				<layout name="coreforms_Library">
-					<item name="core_SysFolder"/>
-					<item name="core_Backup"/>
-					<group name="Multiprocessing">
-						<item name="core_Multiprocessing" displayName="General"/>
-						<item name="core_ProcessorGroup"/>
-					</group>
-					<item name="corestime_Options" displayName="Spatial"/>
-					<group name="Options">
-						<item name="core_Options" displayName="General"/>
-						<item name="core_Rconfig"/>
-						<item name="BatchOption" displayName="Batch Burns"/>
-					</group>
-				</layout>
+	<!--Result Transformers Layout-->
 
-				<layout name="coreforms_ProjectDatafeeds">
-					<group name="FuelDefinition" displayName="Fuels">
-						<item name="FuelType"/>
-					</group>
-					<group name="Advanced">
-						<item name="Season"/>
-						<item name="Cause"/>
-						<item name="FireZone"/>
-						<item name="WeatherZone"/>
-						<item name="Distribution"/>
-					</group>
-				</layout>
+	<layout type = "Export">
+		<item name="corestime_ChartTransformer"/>
+		<item name="corestime_MapTransformer"/>
+		<group name="Export">
+			<item name="BurnRasterMap" displayName="Burn Maps"/>
+			<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
+			<item name="BurnCountRasterMap" displayName="Burn Count Map"/>
+			<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>
+		</group>
+	</layout>
 
-				<layout name="coreforms_ScenarioDatafeeds">
-					<item name="RunControl"/>
-					<item name="LandscapeRasters"/>
-					<group name="Ignition" displayName="Sample Ignitions">
-						<item name="IgnitionsPerIteration" showIf="inPipeline"/>
-						<group name="Advanced" displayName="Advanced">
-							<item name="ProbabilisticIgnitionLocation" showIf="inPipeline"/>
-							<item name="IgnitionRestriction" showIf="inPipeline"/>
-							<item name="IgnitionDistribution" showIf="inPipeline"/>
-						</group>
-					</group>
-					<group name="BurningConditions" displayName="Sample Burning Conditions">
-						<item name="FireDuration" showIf="inPipeline"/>
-						<item name="HoursPerDayBurning" showIf="inPipeline"/>
-						<item name="WeatherStream" showIf="inPipeline"/>
-						<group name="Advanced" displayName="Advanced">
-							<item name="WeatherOption" showIf="inPipeline"/>
-						</group>
-					</group>
-					<group name="FireGrowth" displayName="Fire Growth Model Options">
-						<group name="Advanced" displayName="Advanced">
-							<item name="GreenUp" showIf="inPipeline"/>
-							<item name="Curing" showIf="inPipeline"/>
-							<item name="FuelLoad" showIf="inPipeline"/>
-							<group name="BurnModifies" displayName="Burn Condition Modifiers">
-								<item name="WindGrid" showIf="inPipeline"/>
-							</group>
-						</group>
-					</group>
-					<group name="OutputOption" displayName="Output Options">
-						<item name="OutputOption" displayName="Tabular" showIf="inPipeline"/>
-						<item name="OutputOptionSpatial" displayName="Spatial" showIf="inPipeline"/>
-					</group>
-					<group name="Advanced" displayName="Advanced">
-						<group name="DeterministicInputs" displayName="Deterministic Inputs">
-							<item name="DeterministicIgnitionCount" showIf="inPipeline"/>
-							<item name="DeterministicIgnitionLocation" showIf="inPipeline"/>
-							<item name="DeterministicBurnCondition" showIf="inPipeline"/>
-						</group>
-						<item name="FireResampleOption" showIf="inPipeline"/>
-						<item name="DistributionValue"/>
-					</group>
-					<item name="OutputFireStatistic" showIf="inPipeline"/>
-				</layout>
+	<!--Library Layout-->
 
-				<layout name="corestimeforms_Charts" configurationSheet="burnP3Plus_RunControl">
-					<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
-				</layout>
+	<layout type = "Library">
+		<item name="core_SysFolder"/>
+		<item name="core_Backup"/>
+		<group name="Multiprocessing">
+			<item name="core_Multiprocessing" displayName="General"/>
+			<item name="core_ProcessorGroup"/>
+		</group>
+		<item name="corestime_Options" displayName="Spatial"/>
+		<group name="Options">
+			<item name="core_Options" displayName="General"/>
+			<item name="core_Rconfig"/>
+			<item name="BatchOption" displayName="Batch Burns"/>
+		</group>
+	</layout>
 
-				<layout name="corestimeforms_Maps" configurationSheet="burnP3Plus_RunControl">
-					<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
-					<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
-					<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
-					<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
-					<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season"/>
-					<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
-					<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
-					<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
-					<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
-				</layout>
+	<!--Project Layout-->
 
-			<views>
-				<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
-			</views>
-			<updateProvider schemaVersion="9" minPackageVersion="0.4.7" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
-	
+	<layout type = "Project">
+		<group name="FuelDefinition" displayName="Fuels">
+			<item name="FuelType"/>
+		</group>
+		<group name="Advanced">
+			<item name="Season"/>
+			<item name="Cause"/>
+			<item name="FireZone"/>
+			<item name="WeatherZone"/>
+			<item name="Distribution"/>
+		</group>
+	</layout>
+
+	<!--Scenario Layout-->
+
+	<layout type = "Scenario">
+		<item name="RunControl"/>
+		<item name="LandscapeRasters"/>
+		<group name="Ignition" displayName="Sample Ignitions">
+			<item name="IgnitionsPerIteration" showIf="inPipeline"/>
+			<group name="Advanced" displayName="Advanced">
+				<item name="ProbabilisticIgnitionLocation" showIf="inPipeline"/>
+				<item name="IgnitionRestriction" showIf="inPipeline"/>
+				<item name="IgnitionDistribution" showIf="inPipeline"/>
+			</group>
+		</group>
+		<group name="BurningConditions" displayName="Sample Burning Conditions">
+			<item name="FireDuration" showIf="inPipeline"/>
+			<item name="HoursPerDayBurning" showIf="inPipeline"/>
+			<item name="WeatherStream" showIf="inPipeline"/>
+			<group name="Advanced" displayName="Advanced">
+				<item name="WeatherOption" showIf="inPipeline"/>
+			</group>
+		</group>
+		<group name="FireGrowth" displayName="Fire Growth Model Options">
+			<group name="Advanced" displayName="Advanced">
+				<item name="GreenUp" showIf="inPipeline"/>
+				<item name="Curing" showIf="inPipeline"/>
+				<item name="FuelLoad" showIf="inPipeline"/>
+				<group name="BurnModifies" displayName="Burn Condition Modifiers">
+					<item name="WindGrid" showIf="inPipeline"/>
+				</group>
+			</group>
+		</group>
+		<group name="OutputOption" displayName="Output Options">
+			<item name="OutputOption" displayName="Tabular" showIf="inPipeline"/>
+			<item name="OutputOptionSpatial" displayName="Spatial" showIf="inPipeline"/>
+		</group>
+		<group name="Advanced" displayName="Advanced">
+			<group name="DeterministicInputs" displayName="Deterministic Inputs">
+				<item name="DeterministicIgnitionCount" showIf="inPipeline"/>
+				<item name="DeterministicIgnitionLocation" showIf="inPipeline"/>
+				<item name="DeterministicBurnCondition" showIf="inPipeline"/>
+			</group>
+			<item name="FireResampleOption" showIf="inPipeline"/>
+			<item name="DistributionValue"/>
+		</group>
+		<item name="OutputFireStatistic" showIf="inPipeline"/>
+	</layout>
+
+	<!--Chart Layout-->
+
+	<layout name="corestimeforms_Charts" configurationSheet="burnP3Plus_RunControl">
+		<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
+	</layout>
+
+	<!--Map Layout-->
+
+	<layout type = "Map" configurationSheet="burnP3Plus_RunControl">
+		<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
+		<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
+		<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
+		<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
+		<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season"/>
+		<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
+		<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
+		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
+		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
+	</layout>
+
+	<views>
+		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
+	</views>
+	<updateProvider schemaVersion="9" minPackageVersion="0.4.7" className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
+
 </package>

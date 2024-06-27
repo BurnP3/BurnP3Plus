@@ -377,7 +377,7 @@
 	<!--Layouts-->
 
 	<!--Result Transformers Layout-->
-	<layout type = "Export">
+	<layout type="Export">
 		<item name="corestime_ChartTransformer"/>
 		<item name="corestime_MapTransformer"/>
 		<group name="Export">
@@ -389,7 +389,7 @@
 	</layout>
 
 	<!--Library Layout-->
-	<layout type = "Library">
+	<layout type="Library">
 		<item name="core_SysFolder"/>
 		<item name="core_Backup"/>
 		<group name="Multiprocessing">
@@ -405,7 +405,7 @@
 	</layout>
 
 	<!--Project Layout-->
-	<layout type = "Project">
+	<layout type="Project">
 		<group name="FuelDefinition" displayName="Fuels">
 			<item name="FuelType"/>
 		</group>
@@ -419,7 +419,7 @@
 	</layout>
 
 	<!--Scenario Layout-->
-	<layout type = "Scenario">
+	<layout type="Scenario">
 		<item name="RunControl"/>
 		<item name="LandscapeRasters"/>
 		<group name="Ignition" displayName="Sample Ignitions">
@@ -465,12 +465,12 @@
 	</layout>
 
 	<!--Chart Layout-->
-	<layout type = "Chart" configurationSheet="burnP3Plus_RunControl">
+	<layout type="Chart" configurationSheet="burnP3Plus_RunControl">
 		<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
 	</layout>
 
 	<!--Map Layout-->
-	<layout type = "Map" configurationSheet="burnP3Plus_RunControl">
+	<layout type="Map" configurationSheet="burnP3Plus_RunControl">
 		<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
 		<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
 		<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>

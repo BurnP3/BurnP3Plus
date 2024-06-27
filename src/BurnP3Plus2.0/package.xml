@@ -10,7 +10,7 @@
 
 	<!--Project Datasheets-->
 
-	<dataSheet name="FuelType" displayName="Fuel Types" valueMember="FuelTypeID" displayMember="Name" dataScope="Project">
+	<dataSheet name="FuelType" displayName="Fuel Types" displayMember="Name" dataScope="Project">
 		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
@@ -20,7 +20,7 @@
 		<validation validationType="Unique" columns="Id"/>
 	</dataSheet>
 
-	<dataSheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
+	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
@@ -28,21 +28,13 @@
 		<record columns="Name|IsAuto" values="All|-1"/>
 	</dataSheet>
 
-	<dataSheet name="Cause" displayName="Causes" valueMember="CauseID" displayMember="Name" dataScope="Project">
+	<dataSheet name="Cause" displayName="Causes" displayMember="Name" dataScope="Project">
 		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 	</dataSheet>
 
-	<dataSheet name="FireZone" displayName="Fire Zones" valueMember="FireZoneID" displayMember="Name" dataScope="Project">
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
-		<column name="Name" dataType="String"/>
-		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
-		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
-	</dataSheet>
-
-	<dataSheet name="WeatherZone" displayName="Weather Zones" valueMember="WeatherZoneID" displayMember="Name" dataScope="Project">
+	<dataSheet name="FireZone" displayName="Fire Zones" displayMember="Name" dataScope="Project">
 		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
@@ -50,7 +42,15 @@
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 	</dataSheet>
 
-	<dataSheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
+	<dataSheet name="WeatherZone" displayName="Weather Zones" displayMember="Name" dataScope="Project">
+		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="Id" dataType="Integer"/>
+		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
+	</dataSheet>
+
+	<dataSheet name="Distribution" displayName="Distributions" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>

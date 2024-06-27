@@ -81,7 +81,7 @@
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" format="0.0" initOptionalVisible="True"/>
-		<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="datasheet" formula1="Distribution" isOptional="True"/>
 		<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMin" displayName="Ignition Count Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
@@ -99,34 +99,34 @@
 		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="datasheet" formula1="Cause" isOptional="True"/>
 	</dataSheet>
 
 	<dataSheet name="ProbabilisticIgnitionLocation" displayName="Ignition Location">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="datasheet" formula1="Cause" isOptional="True"/>
 		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True"/>
 	</dataSheet>
 
 	<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="dataSheet" formula1="FuelType"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
-		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
+		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="datasheet" formula1="FuelType"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="datasheet" formula1="Cause" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="datasheet" formula1="FireZone" isOptional="True"/>
 	</dataSheet>
 
 	<dataSheet name="FireDuration" displayName="Spread Event Days">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="datasheet" formula1="FireZone" isOptional="True"/>
 		<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
-		<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="datasheet" formula1="Distribution" isOptional="True"/>
 		<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
@@ -135,9 +135,9 @@
 	<dataSheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
 		<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
-		<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="dataSheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="datasheet" formula1="Distribution" isOptional="True"/>
 		<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
@@ -146,15 +146,15 @@
 	<dataSheet name="IgnitionDistribution" displayName="Ignition Distribution">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
-		<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
-		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
+		<column name="Cause" dataType="Integer" validationType="datasheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="datasheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
 		<column name="RelativeLikelihood" displayName="Relative Likelihood" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 	</dataSheet>
 
 	<dataSheet name="WeatherStream" displayName="Daily Weather">
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="dataSheet" formula1="WeatherZone" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="datasheet" formula1="WeatherZone" isOptional="True"/>
 		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
 		<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 		<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
@@ -213,17 +213,17 @@
 	</dataSheet>
 
 	<dataSheet name="GreenUp" displayName="Green Up">
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
 		<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
 	</dataSheet>
 
 	<dataSheet name="Curing" displayName="Curing">
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
 		<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
 	</dataSheet>
 
 	<dataSheet name="FuelLoad" displayName="Grass Fuel Load">
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
 		<column name="FuelLoad" displayName="Grass Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
 	</dataSheet>
 
@@ -253,7 +253,7 @@
 	</dataSheet>
 
 	<dataSheet name="DistributionValue" displayName="Distributions" viewFilterColumn="Name">
-		<column name="Name" dataType="Integer" validationType="dataSheet" formula1="Distribution"/>
+		<column name="Name" dataType="Integer" validationType="datasheet" formula1="Distribution"/>
 		<column name="Value" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0"/>
 		<column name="RelativeFrequency" displayName="Relative Frequency" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
 	</dataSheet>
@@ -266,11 +266,11 @@
 		<column name="FireId" displayName="Fire ID" dataType="Integer"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season" isOptional="True"/>
-		<column name="Cause" dataType="Integer" validationType="dataSheet" formula1="Cause" isOptional="True"/>
-		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="dataSheet" formula1="FireZone" isOptional="True"/>
-		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="dataSheet" formula1="WeatherZone" isOptional="True"/>
-		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="dataSheet" formula1="FuelType"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="datasheet" formula1="Cause" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="datasheet" formula1="FireZone" isOptional="True"/>
+		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="datasheet" formula1="WeatherZone" isOptional="True"/>
+		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="datasheet" formula1="FuelType"/>
 		<column name="FireDuration" displayName="Fire Duration" dataType="Integer"/>
 		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer"/>
 		<column name="Area" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
@@ -280,7 +280,7 @@
 	<dataSheet name="OutputBurnProbability" displayName="Output Burn Probability">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season"/>
 		<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnProbability"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 	</dataSheet>
@@ -288,7 +288,7 @@
 	<dataSheet name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season"/>
 		<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="RelativeBurnProbability"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 	</dataSheet>
@@ -296,7 +296,7 @@
 	<dataSheet name="OutputBurnCount" displayName="Output Burn Count">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season"/>
 		<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnCount"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 	</dataSheet>
@@ -304,7 +304,7 @@
 	<dataSheet name="OutputBurnMap" displayName="Output Burn Map">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="dataSheet" formula1="Season"/>
+		<column name="Season" dataType="Integer" validationType="datasheet" formula1="Season"/>
 		<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnMap"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 	</dataSheet>

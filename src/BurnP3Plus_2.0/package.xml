@@ -390,16 +390,16 @@
 
 	<!--Library Layout-->
 	<layout type="Library">
-		<item name="core_SysFolder"/>
-		<item name="core_Backup"/>
+		<item name="coreSysFolder"/>
+		<item name="coreBackup"/>
 		<group name="Multiprocessing">
-			<item name="core_Multiprocessing" displayName="General"/>
-			<item name="core_ProcessorGroup"/>
+			<item name="coreMultiprocessing" displayName="General"/>
+			<item name="coreProcessorGroup"/>
 		</group>
 		<item name="corestimeOptions" displayName="Spatial"/>
 		<group name="Options">
-			<item name="core_Options" displayName="General"/>
-			<item name="core_Rconfig"/>
+			<item name="coreOptions" displayName="General"/>
+			<item name="coreRconfig"/>
 			<item name="BatchOption" displayName="Batch Burns"/>
 		</group>
 	</layout>

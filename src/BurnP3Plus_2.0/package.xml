@@ -256,6 +256,7 @@
 		<column name="Name" dataType="Integer" validationType="Datasheet" formula1="Distribution"/>
 		<column name="Value" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0"/>
 		<column name="RelativeFrequency" displayName="Relative Frequency" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
 	</dataSheet>
 
 	<!--Output Datasheets-->
@@ -481,10 +482,6 @@
 		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
 		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
 	</layout>
-
-	<views>
-		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
-	</views>
 
 	<updateProvider className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 

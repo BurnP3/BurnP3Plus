@@ -378,8 +378,8 @@
 
 	<!--Result Transformers Layout-->
 	<layout type="Export">
-		<item name="corestime_ChartTransformer"/>
-		<item name="corestime_MapTransformer"/>
+		<item name="corestimeChartTransformer"/>
+		<item name="corestimeMapTransformer"/>
 		<group name="Export">
 			<item name="BurnRasterMap" displayName="Burn Maps"/>
 			<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
@@ -396,7 +396,7 @@
 			<item name="core_Multiprocessing" displayName="General"/>
 			<item name="core_ProcessorGroup"/>
 		</group>
-		<item name="corestime_Options" displayName="Spatial"/>
+		<item name="corestimeOptions" displayName="Spatial"/>
 		<group name="Options">
 			<item name="core_Options" displayName="General"/>
 			<item name="core_Rconfig"/>

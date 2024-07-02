@@ -12,8 +12,6 @@
 	<!--Project Datasheets-->
 
 	<dataSheet name="FuelType" displayName="Fuel Types" valueMember="FuelTypeID" displayMember="Name" dataScope="Project">
-		<column name="FuelTypeId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="Id" dataType="Integer"/>
@@ -23,8 +21,6 @@
 	</dataSheet>
 
 	<dataSheet name="Season" displayName="Seasons" valueMember="SeasonID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
-		<column name="SeasonId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="IsAuto" dataType="Integer" isVisible="False"/>
@@ -32,15 +28,11 @@
 	</dataSheet>
 
 	<dataSheet name="Cause" displayName="Causes" valueMember="CauseID" displayMember="Name" dataScope="Project">
-		<column name="CauseId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 	</dataSheet>
 
 	<dataSheet name="FireZone" displayName="Fire Zones" valueMember="FireZoneID" displayMember="Name" dataScope="Project">
-		<column name="FireZoneId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="Id" dataType="Integer"/>
@@ -48,8 +40,6 @@
 	</dataSheet>
 
 	<dataSheet name="WeatherZone" displayName="Weather Zones" valueMember="WeatherZoneID" displayMember="Name" dataScope="Project">
-		<column name="WeatherZoneId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="Id" dataType="Integer"/>
@@ -57,8 +47,6 @@
 	</dataSheet>
 
 	<dataSheet name="Distribution" displayName="Distributions" valueMember="DistributionID" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
-		<column name="DistributionId" dataType="Integer" isPrimary="True"/>
-		<column name="ProjectId" dataType="Integer" isCompositeIndex="True"/>
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="IsAuto" dataType="Integer" isVisible="False"/>

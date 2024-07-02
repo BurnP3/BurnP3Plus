@@ -75,6 +75,7 @@ if(nrow(FireDurationTable) == 0) {
 
 if(nrow(HoursBurningTable) == 0) {
   updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
+  HoursBurningTable[1, "Season"] <- "All" 
   HoursBurningTable[1,"Mean"] <- 4
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }
@@ -224,8 +225,13 @@ sampleFireDuration <- function(season, firezone, data){
   
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  filteredHoursBurningTable <- HoursBurningTable %>%
-    filter(Season == season | is.na(Season))
+  if (season %in% HoursBurningTable$Season){
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(Season == season)
+  } else {
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(is.na(Season))
+  }
   
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)

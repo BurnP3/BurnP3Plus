@@ -225,13 +225,8 @@ sampleFireDuration <- function(season, firezone, data){
   
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  if (season %in% HoursBurningTable$Season){
-    filteredHoursBurningTable <- HoursBurningTable %>%
-      filter(Season == season)
-  } else {
-    filteredHoursBurningTable <- HoursBurningTable %>%
-      filter(is.na(Season))
-  }
+  filteredHoursBurningTable <- HoursBurningTable %>%
+    filter(Season == season | is.na(Season))
   
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)

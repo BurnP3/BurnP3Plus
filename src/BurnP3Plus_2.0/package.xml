@@ -370,10 +370,10 @@
 
 	<!--Export Transformers-->
 
-	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" isExport="True" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" isExport="True" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" isExport="True" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" isExport="True" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
 
 	<!--Layouts-->
 

@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package name="burnP3Plus" displayName = "Burn-P3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
+
+	<!--Library Datasheets-->
+
+	<dataSheet name="BatchOption" displayName="Batch Options" isSingleRow="True" dataScope="Library">
+		<column name="BatchSize" displayName="Batch size (ignitions):" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
+		<record columns="BatchSize" values="250"/>
+	</dataSheet>
+
+	<!--Project Datasheets-->
+
+	<dataSheet name="FuelType" displayName="Fuel Types" displayMember="Name" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="Id" dataType="Integer"/>
+		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
+		<validation validationType="Unique" columns="Name"/>
+		<validation validationType="Unique" columns="Id"/>
+	</dataSheet>
+
+	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<record columns="Name|IsAuto" values="All|-1"/>
+	</dataSheet>
+
+	<dataSheet name="Cause" displayName="Causes" displayMember="Name" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="FireZone" displayName="Fire Zones" displayMember="Name" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="Id" dataType="Integer"/>
+		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
+	</dataSheet>
+
+	<dataSheet name="WeatherZone" displayName="Weather Zones" displayMember="Name" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="Id" dataType="Integer"/>
+		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
+	</dataSheet>
+
+	<dataSheet name="Distribution" displayName="Distributions" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
+		<column name="Name" dataType="String"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<record columns="Name|IsAuto" values="Normal|-1"/>
+		<record columns="Name|IsAuto" values="Gamma|-1"/>
+	</dataSheet>
+
+	<!--Scenario Datasheets-->
+
+	<dataSheet name="RunControl" displayName="Run Control" isSingleRow="True">
+		<column name="MinimumIteration" dataType="Integer" defaultValue="1" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1" isVisible="False"/>
+		<column name="MaximumIteration" displayName="Number of Iterations" dataType="Integer" defaultValue="1" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
+		<column name="MinimumTimestep" displayName="Minimum Timestep" dataType="Integer" defaultValue="0" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="MaximumTimestep" displayName="Maximum Timestep" dataType="Integer" defaultValue="0" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+	</dataSheet>
+
+	<dataSheet name="FireResampleOption" displayName="Fire Resampling Options" isSingleRow="True">
+		<column name="MinimumFireSize" displayName="Minimum Fire Size (ha)" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0"/>
+		<column name="ProportionExtraIgnition" displayName="Proportion of Extra Ignitions to Sample for Replacing Fires below Minimum Size" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+	</dataSheet>
+
+	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" defaultValue="0" isVisible="False"/>
+		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="ElevationGridFileName" displayName="Elevation" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="WeatherZoneGridFileName" displayName="Weather Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True" isVisible="False"/>
+	</dataSheet>
+
+	<dataSheet name="IgnitionsPerIteration" displayName="Ignition Count">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Mean" displayName="Ignition Count" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" isOptional="True" format="0.0" initOptionalVisible="True"/>
+		<column name="DistributionType" displayName="Ignition Count Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionSD" displayName="Ignition Count SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMin" displayName="Ignition Count Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="DeterministicIgnitionCount" displayName="Deterministic Ignition Count">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Ignitions" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+	</dataSheet>
+
+	<dataSheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
+		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="ProbabilisticIgnitionLocation" displayName="Ignition Location">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True"/>
+	</dataSheet>
+
+	<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="FireDuration" displayName="Spread Event Days">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+		<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
+		<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
+		<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
+		<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="IgnitionDistribution" displayName="Ignition Distribution">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
+		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
+		<column name="RelativeLikelihood" displayName="Relative Likelihood" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+	</dataSheet>
+
+	<dataSheet name="WeatherStream" displayName="Daily Weather">
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
+		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
+		<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+	</dataSheet>
+
+	<dataSheet name="WeatherOption" displayName="Weather Sampling Options" isSingleRow="True">
+		<column name="SampleSequentially" displayName="Sample Weather Sequentially" dataType="Boolean"/>
+		<record columns="SampleSequentially" values="-1"/>
+	</dataSheet>
+
+	<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
+		<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="WindSpeed" displayName="Wind Speed" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="WindDirection" displayName="Wind Direction" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="Precipitation" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<column name="FineFuelMoistureCode" displayName="Fine Fuel Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="DuffMoistureCode" displayName="Duff Moisture Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="DroughtCode" displayName="Drought Code" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+	</dataSheet>
+
+	<dataSheet name="WindGrid" displayName="Wind Grid" isSingleRow="True">
+		<column name="WindSpeed" displayName="Prevailing Wind Speed" dataType="Double" validationType="Decimal" validationCondition="Greater" formula1="0.0" format="0.0"/>
+		<column name="WindSpeedNorth" displayName="Wind Speed North" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedNorthEast" displayName="Wind Speed North East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedEast" displayName="Wind Speed East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedSouthEast" displayName="Wind Speed South East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedSouth" displayName="Wind Speed South" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedSouthWest" displayName="Wind Speed South West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedWest" displayName="Wind Speed West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedNorthWest" displayName="Wind Speed North West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionNorth" displayName="Wind Direction North" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionNorthEast" displayName="Wind Direction North East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionEast" displayName="Wind Direction East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionSouthEast" displayName="Wind Direction South East" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionSouth" displayName="Wind Direction South" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionSouthWest" displayName="Wind Direction South West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionWest" displayName="Wind Direction West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindDirectionNorthWest" displayName="Wind Direction North West" dataType="String" isExternalFile="True" isRaster="True"/>
+	</dataSheet>
+
+	<dataSheet name="GreenUp" displayName="Green Up">
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
+	</dataSheet>
+
+	<dataSheet name="Curing" displayName="Curing">
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
+	</dataSheet>
+
+	<dataSheet name="FuelLoad" displayName="Grass Fuel Load">
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="FuelLoad" displayName="Grass Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
+	</dataSheet>
+
+	<dataSheet name="FireBreak" displayName="Fire Breaks">
+		<column name="Name" dataType="String"/>
+		<column name="FileName" displayName="File Name" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="AssociatedFiles" dataType="String" isExternalFile="True" isRaster="True" isVisible="False"/>
+	</dataSheet>
+
+	<!-- Spatial Output Options-->
+
+	<dataSheet name="OutputOption" displayName="Output Options" isSingleRow="True">
+		<column name="FireStatistics" dataType="Boolean" displayName="Fire Statistics Table"/>
+	</dataSheet>
+
+	<dataSheet name="OutputOptionSpatial" displayName="Spatial Output Options" isSingleRow="True">
+		<column name="BurnProbability" dataType="Boolean" displayName="Burn Probability Map"/>
+		<column name="SeasonalBurnProbability" dataType="Boolean" displayName="Seasonal Burn Probability Map"/>
+		<column name="RelativeBurnProbability" dataType="Boolean" displayName="Relative Burn Probability Map"/>
+		<column name="SeasonalRelativeBurnProbability" dataType="Boolean" displayName="Seasonal Relative Burn Probability Map"/>
+		<column name="BurnCount" dataType="Boolean" displayName="Burn Count Map"/>
+		<column name="SeasonalBurnCount" dataType="Boolean" displayName="Seasonal Burn Count Map"/>
+		<column name="BurnMap" dataType="Boolean" displayName="Burn Maps"/>
+		<column name="SeasonalBurnMap" dataType="Boolean" displayName="Seasonal Burn Maps"/>
+		<column name="BurnPerimeter" dataType="Boolean" displayName="Burn Perimeters"/>
+		<column name="AllPerim" dataType="Boolean" displayName="Output Individual Burn Maps"/>
+	</dataSheet>
+
+	<dataSheet name="DistributionValue" displayName="Distributions" viewFilterColumn="Name">
+		<column name="Name" dataType="Integer" validationType="Datasheet" formula1="Distribution"/>
+		<column name="Value" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0"/>
+		<column name="RelativeFrequency" displayName="Relative Frequency" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<view name="DistributionDataFeedView" target="DistributionValue" className="SyncroSim.Core.Forms.FilteredDataFeedView" classAssembly="SyncroSim.Core.Forms"/>
+	</dataSheet>
+
+	<!--Output Datasheets-->
+
+	<dataSheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FireId" displayName="Fire ID" dataType="Integer"/>
+		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
+		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
+		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
+		<column name="FireDuration" displayName="Fire Duration" dataType="Integer"/>
+		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer"/>
+		<column name="Area" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+		<column name="ResampleStatus" displayName="Resample Status" dataType="String"/>
+	</dataSheet>
+
+	<dataSheet name="OutputBurnProbability" displayName="Output Burn Probability">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+		<column name="FileName" displayName="Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnProbability"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="OutputRelativeBurnProbability" displayName="Output Relative Burn Probability">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+		<column name="FileName" displayName="Relative Burn Probability Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="RelativeBurnProbability"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="OutputBurnCount" displayName="Output Burn Count">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+		<column name="FileName" displayName="Burn Count Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnCount"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="OutputBurnMap" displayName="Output Burn Map">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season"/>
+		<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" bandFilterColumn="Season" filenameCode="BurnMap"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
+		<column name="FireId" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
+		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
+	</dataSheet>
+
+	<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireId" dataType="Integer"/>
+		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
+		<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
+	</dataSheet>
+
+	<!--Transformers-->
+
+	<!--Generate Ignitions Transformer-->
+	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
+		<dataSheet name="RunControl" type="Input"/>
+		<dataSheet name="DistributionValue" type="Input"/>
+		<dataSheet name="IgnitionsPerIteration" type="Input"/>
+		<dataSheet name="FireResampleOption" type="Input"/>
+		<dataSheet name="ProbabilisticIgnitionLocation" type="Input"/>
+		<dataSheet name="IgnitionRestriction" type="Input"/>
+		<dataSheet name="IgnitionDistribution" type="Input"/>
+		<dataSheet name="LandscapeRasters" type="Input"/>
+		<dataSheet name="DeterministicIgnitionCount" type="Output"/>
+		<dataSheet name="DeterministicIgnitionLocation" type="Output"/>
+	</transformer>
+
+	<!--Generate Burning Conditions Transformer-->
+	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
+		<dataSheet name="RunControl" type="Input"/>
+		<dataSheet name="DistributionValue" type="Input"/>
+		<dataSheet name="FireDuration" type="Input"/>
+		<dataSheet name="HoursPerDayBurning" type="Input"/>
+		<dataSheet name="WeatherStream" type="Input"/>
+		<dataSheet name="WeatherOption" type="Input"/>
+		<dataSheet name="LandscapeRasters" type="Input"/>
+		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+		<dataSheet name="DeterministicBurnCondition" type="Output"/>
+	</transformer>
+
+	<!--Summarize Burn Probability Transformer-->
+	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
+		<dataSheet name="RunControl" type="Input"/>
+		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+		<dataSheet name="DeterministicBurnCondition" type="Input"/>
+		<dataSheet name="OutputOptionSpatial" type="Input"/>
+		<dataSheet name="OutputFireStatistic" type="Both"/>
+		<dataSheet name="OutputAllPerim" type="Both"/>
+		<dataSheet name="OutputBurnMap" type="Both"/>
+		<dataSheet name="OutputBurnCount" type="Output"/>
+		<dataSheet name="OutputBurnProbability" type="Output"/>
+		<dataSheet name="OutputRelativeBurnProbability" type="Output"/>
+	</transformer>
+
+	<!--Export Transformers-->
+
+	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
+
+	<!--Layouts-->
+
+	<!--Result Transformers Layout-->
+	<layout type="Export">
+		<group name="Export">
+			<item name="BurnRasterMap" displayName="Burn Maps"/>
+			<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
+			<item name="BurnCountRasterMap" displayName="Burn Count Map"/>
+			<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>
+		</group>
+	</layout>
+
+	<!--Library Layout-->
+	<layout type="Library">
+		<item name="BatchOption" displayName="Batch Burns"/>
+	</layout>
+
+	<!--Project Layout-->
+	<layout type="Project">
+		<group name="FuelDefinition" displayName="Fuels">
+			<item name="FuelType"/>
+		</group>
+		<group name="Advanced">
+			<item name="Season"/>
+			<item name="Cause"/>
+			<item name="FireZone"/>
+			<item name="WeatherZone"/>
+			<item name="Distribution"/>
+		</group>
+	</layout>
+
+	<!--Scenario Layout-->
+	<layout type="Scenario">
+		<item name="RunControl"/>
+		<item name="LandscapeRasters"/>
+		<group name="Ignition" displayName="Sample Ignitions">
+			<item name="IgnitionsPerIteration" showIf="inPipeline"/>
+			<group name="Advanced" displayName="Advanced">
+				<item name="ProbabilisticIgnitionLocation" showIf="inPipeline"/>
+				<item name="IgnitionRestriction" showIf="inPipeline"/>
+				<item name="IgnitionDistribution" showIf="inPipeline"/>
+			</group>
+		</group>
+		<group name="BurningConditions" displayName="Sample Burning Conditions">
+			<item name="FireDuration" showIf="inPipeline"/>
+			<item name="HoursPerDayBurning" showIf="inPipeline"/>
+			<item name="WeatherStream" showIf="inPipeline"/>
+			<group name="Advanced" displayName="Advanced">
+				<item name="WeatherOption" showIf="inPipeline"/>
+			</group>
+		</group>
+		<group name="FireGrowth" displayName="Fire Growth Model Options">
+			<group name="Advanced" displayName="Advanced">
+				<item name="GreenUp" showIf="inPipeline"/>
+				<item name="Curing" showIf="inPipeline"/>
+				<item name="FuelLoad" showIf="inPipeline"/>
+				<group name="BurnModifies" displayName="Burn Condition Modifiers">
+					<item name="WindGrid" showIf="inPipeline"/>
+				</group>
+			</group>
+		</group>
+		<group name="OutputOption" displayName="Output Options">
+			<item name="OutputOption" displayName="Tabular" showIf="inPipeline"/>
+			<item name="OutputOptionSpatial" displayName="Spatial" showIf="inPipeline"/>
+		</group>
+		<group name="Advanced" displayName="Advanced">
+			<group name="DeterministicInputs" displayName="Deterministic Inputs">
+				<item name="DeterministicIgnitionCount" showIf="inPipeline"/>
+				<item name="DeterministicIgnitionLocation" showIf="inPipeline"/>
+				<item name="DeterministicBurnCondition" showIf="inPipeline"/>
+			</group>
+			<item name="FireResampleOption" showIf="inPipeline"/>
+			<item name="DistributionValue"/>
+		</group>
+		<item name="OutputFireStatistic" showIf="inPipeline"/>
+	</layout>
+
+	<!--Chart Layout-->
+	<layout type="Chart" configurationSheet="burnP3Plus_RunControl">
+		<item name="Area" displayName ="Burn Area" dataSheet="OutputFireStatistic" column="Area" filter="Season|Cause|FireZone|WeatherZone|FuelType"/>
+	</layout>
+
+	<!--Map Layout-->
+	<layout type="Map" configurationSheet="burnP3Plus_RunControl">
+		<item name="FuelMap" displayName ="Fuels" dataSheet="LandscapeRasters" column="FuelGridFileName"/>
+		<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
+		<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
+		<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
+		<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season"/>
+		<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
+		<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
+		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
+		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
+	</layout>
+
+</package>

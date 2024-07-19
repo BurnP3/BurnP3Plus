@@ -65,6 +65,7 @@
 	<dataSheet name="FireResampleOption" displayName="Fire Resampling Options" isSingleRow="True">
 		<column name="MinimumFireSize" displayName="Minimum Fire Size (ha)" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0"/>
 		<column name="ProportionExtraIgnition" displayName="Proportion of Extra Ignitions to Sample for Replacing Fires below Minimum Size" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+		<record columns="MinimumFireSize|ProportionExtraIgnition" values="0|0"/>
 	</dataSheet>
 
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">

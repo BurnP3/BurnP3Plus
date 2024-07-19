@@ -1,7 +1,6 @@
 # Clean global environment variables
 native_proj_lib <- Sys.getenv("PROJ_LIB")
 Sys.unsetenv("PROJ_LIB")
-options(scipen = 999)
 
 # Check and load packages ----
 library(rsyncrosim)
@@ -35,6 +34,7 @@ options(scipen = 100)
 progressBar(type = "message", message = "Preparing inputs...")
 
 # Initialize first breakpoint for timing code
+currentBreakPoint <- proc.time()
 
 ## Connect to SyncroSim ----
 

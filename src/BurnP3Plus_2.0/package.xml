@@ -13,10 +13,10 @@
 	<dataSheet name="FuelType" displayName="Fuel Types" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 		<validation validationType="Unique" columns="Name"/>
-		<validation validationType="Unique" columns="Id"/>
+		<validation validationType="Unique" columns="ID"/>
 	</dataSheet>
 
 	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
@@ -34,14 +34,14 @@
 	<dataSheet name="FireZone" displayName="Fire Zones" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 	</dataSheet>
 
 	<dataSheet name="WeatherZone" displayName="Weather Zones" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 	</dataSheet>
 
@@ -97,7 +97,7 @@
 	<dataSheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
@@ -177,7 +177,7 @@
 	<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
@@ -265,7 +265,7 @@
 	<dataSheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
@@ -313,7 +313,7 @@
 
 	<dataSheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
-		<column name="FireId" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
@@ -321,7 +321,7 @@
 
 	<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-		<column name="FireId" dataType="Integer"/>
+		<column name="FireID" dataType="Integer"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
 	</dataSheet>

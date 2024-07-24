@@ -13,10 +13,10 @@
 	<dataSheet name="FuelType" displayName="Fuel Types" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 		<validation validationType="Unique" columns="Name"/>
-		<validation validationType="Unique" columns="Id"/>
+		<validation validationType="Unique" columns="ID"/>
 	</dataSheet>
 
 	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
@@ -34,14 +34,14 @@
 	<dataSheet name="FireZone" displayName="Fire Zones" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 	</dataSheet>
 
 	<dataSheet name="WeatherZone" displayName="Weather Zones" displayMember="Name" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="Id" dataType="Integer"/>
+		<column name="ID" dataType="Integer"/>
 		<column name="Color" dataType="String" isOptional="True" autoSizeMode="None" width="35" isColor="True"/>
 	</dataSheet>
 
@@ -65,6 +65,7 @@
 	<dataSheet name="FireResampleOption" displayName="Fire Resampling Options" isSingleRow="True">
 		<column name="MinimumFireSize" displayName="Minimum Fire Size (ha)" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0"/>
 		<column name="ProportionExtraIgnition" displayName="Proportion of Extra Ignitions to Sample for Replacing Fires below Minimum Size" dataType="Double" defaultValue="0" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
+		<record columns="MinimumFireSize|ProportionExtraIgnition" values="0|0"/>
 	</dataSheet>
 
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
@@ -96,7 +97,7 @@
 	<dataSheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
@@ -176,7 +177,7 @@
 	<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="BurnDay" displayName="Burn Day" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
@@ -264,7 +265,7 @@
 	<dataSheet name="OutputFireStatistic" displayName="Output Fire Statistics Table">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="FireId" displayName="Fire ID" dataType="Integer"/>
+		<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
@@ -312,7 +313,7 @@
 
 	<dataSheet name="OutputAllPerim" displayName="Output Individual Burn Maps">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
-		<column name="FireId" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="FireID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FileName" displayName="Burn Map" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="True" bandColumn="Band" filenameCode="BurnMap"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
@@ -320,7 +321,7 @@
 
 	<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-		<column name="FireId" dataType="Integer"/>
+		<column name="FireID" dataType="Integer"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
 	</dataSheet>
@@ -328,7 +329,7 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
+	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="IgnitionsPerIteration" type="Input"/>
@@ -342,7 +343,7 @@
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
+	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="FireDuration" type="Input"/>
@@ -355,7 +356,7 @@
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" className="SyncroSim.StochasticTime.StochasticTimeTransformer" classAssembly="SyncroSim.StochasticTime" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml">
+	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" runContext="LocalOnly" isStochasticTime="True" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
 		<dataSheet name="DeterministicBurnCondition" type="Input"/>
@@ -370,17 +371,15 @@
 
 	<!--Export Transformers-->
 
-	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
-	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" className="SyncroSim.StochasticTime.Forms.StochasticTimeExportTransformer" classAssembly="SyncroSim.StochasticTime.Forms" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" isExport="True" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" isExport="True" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" isExport="True" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" isExport="True" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
 
 	<!--Layouts-->
 
 	<!--Result Transformers Layout-->
 	<layout type="Export">
-		<item name="corestimeChartTransformer"/>
-		<item name="corestimeMapTransformer"/>
 		<group name="Export">
 			<item name="BurnRasterMap" displayName="Burn Maps"/>
 			<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
@@ -391,18 +390,7 @@
 
 	<!--Library Layout-->
 	<layout type="Library">
-		<item name="coreSysFolder"/>
-		<item name="coreBackup"/>
-		<group name="Multiprocessing">
-			<item name="coreMultiprocessing" displayName="General"/>
-			<item name="coreProcessorGroup"/>
-		</group>
-		<item name="corestimeOptions" displayName="Spatial"/>
-		<group name="Options">
-			<item name="coreOptions" displayName="General"/>
-			<item name="coreRconfig"/>
-			<item name="BatchOption" displayName="Batch Burns"/>
-		</group>
+		<item name="BatchOption" displayName="Batch Burns"/>
 	</layout>
 
 	<!--Project Layout-->
@@ -482,7 +470,5 @@
 		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
 		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
 	</layout>
-
-	<updateProvider className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 
 </package>

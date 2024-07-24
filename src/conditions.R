@@ -2,6 +2,7 @@
 native_proj_lib <- Sys.getenv("PROJ_LIB")
 Sys.unsetenv("PROJ_LIB")
 
+
 # Check and load packages ----
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
@@ -23,7 +24,7 @@ checkPackageVersion <- function(packageString, minimumVersion){
   }
 }
 
-checkPackageVersion("rsyncrosim", "1.5.0")
+checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")

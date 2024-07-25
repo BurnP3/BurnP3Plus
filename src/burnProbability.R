@@ -504,7 +504,7 @@ if(saveBurnMaps) {
             FileName = relativeBurnProbabilityFilenames,
             Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
             mutate(
-              Season = lookup(Season, SeasonTable$SeasonI, SeasonTable$Name)) %>%
+              Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
             as.data.frame(),
           "burnP3Plus_OutputRelativeBurnProbability")
       }

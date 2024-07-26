@@ -154,7 +154,7 @@ if(byDistribution) {
 iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
 proportionExtraIgnitions <- 0
-if (length(ResampleOption$ProportionExtraIgnition) > 0)
+if (!is.na(ResampleOption$ProportionExtraIgnition))
   proportionExtraIgnitions <- ResampleOption$ProportionExtraIgnition
 
 ## Handle empty tables ----

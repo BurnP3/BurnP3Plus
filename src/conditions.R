@@ -1,6 +1,7 @@
 # Clean global environment variables
 native_proj_lib <- Sys.getenv("PROJ_LIB")
 Sys.unsetenv("PROJ_LIB")
+options(scipen = 999)
 
 
 # Check and load packages ----
@@ -76,6 +77,7 @@ if(nrow(FireDurationTable) == 0) {
 
 if(nrow(HoursBurningTable) == 0) {
   updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
+  HoursBurningTable[1, "Season"] <- "All" 
   HoursBurningTable[1,"Mean"] <- 4
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }

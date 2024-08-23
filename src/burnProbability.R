@@ -1,6 +1,7 @@
 # Clean global environment variables
 native_proj_lib <- Sys.getenv("PROJ_LIB")
 Sys.unsetenv("PROJ_LIB")
+options(scipen = 999)
 
 # Check and load packages ----
 library(rsyncrosim)

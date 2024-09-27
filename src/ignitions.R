@@ -7,26 +7,26 @@ options(scipen = 999)
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(terra))
+suppressPackageStartupMessages(library(sf))
 
 checkPackageVersion <- function(packageString, minimumVersion){
   result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
   if (result < 0) {
-    updateRunLog("The R package ", packageString, " (", 
-         as.character(packageVersion(packageString)), 
-         ") does not meet the minimum requirements (", minimumVersion, 
-         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.", 
+    updateRunLog("The R package ", packageString, " (",
+         as.character(packageVersion(packageString)),
+         ") does not meet the minimum requirements (", minimumVersion,
+         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.",
          type = "warning")
   } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (", 
-                 as.character(packageVersion(packageString)), 
-                 ") than BurnP3+ was built against (", 
+    updateRunLog("Using a newer version of ", packageString, " (",
+                 as.character(packageVersion(packageString)),
+                 ") than BurnP3+ was built against (",
                  minimumVersion, ").", type = "info")
   }
 }
 
 checkPackageVersion("rsyncrosim", "1.5.0")
 checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
 
@@ -92,7 +92,7 @@ if(nrow(ResampleOption) == 0) {
 
 ## Check raster inputs for consistency ----
 
-test.point <- vect(matrix(crds(fuelsRaster)[1,],ncol=2), crs = crs(fuelsRaster))
+test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
 # Ensure fuels crs can be converted to Lat / Long
 if(test.point %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
 tryCatch(test.point %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
@@ -108,13 +108,13 @@ checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
           invisible(NULL) # Return null silently to mimic behaviour of missing input
         } else
           stop("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.")
-    
+
     # Info if CRS is not matching
     if(checkProjection)
       if(crs(x) != crs(fuelsRaster))
         updateRunLog("Projection of ", name, " map does not match Fuels map. Please check that the CRS of these maps match.", type = "info")
   }
-  
+
   # Silently return for clean pipelining
   invisible(x)
 }
@@ -133,7 +133,7 @@ if(byDistribution & nrow(IgnitionsPerIteration) > 1)
 
 # Identify the name and type of distribution
 distributionName <- IgnitionsPerIteration$DistributionType
-isAuto <- DistributionType %>% filter(Name == distributionName) %>% pull(IsAuto) %>% replace_na(0) %>% `==`(-1) 
+isAuto <- DistributionType %>% filter(Name == distributionName) %>% pull(IsAuto) %>% replace_na(0) %>% `==`(-1)
 distributionData <- DistributionValue %>% filter(Name == distributionName)
 
 if(byDistribution) {
@@ -141,12 +141,12 @@ if(byDistribution) {
   if(isAuto)
     if(is.na(IgnitionsPerIteration$Mean) | is.na(IgnitionsPerIteration$DistributionSD))
       stop("Please specify a Mean and SD to use this built-in distribution to sample Ignitions per Iteration")
-  
+
   # If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
   if(!isAuto) {
     if(nrow(distributionData) == 0)
       stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
-    
+
     if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
        updateRunLog("Found Mean or SD values for a user-defined distribution in Ignitions per Iteration.\nThese values will not be respected during sampling. To modify a user-defined distribution, \nplease edit the 'Distributions' datasheet under the 'Advanced' tab in the scenario properties.", type = "warning")
   }
@@ -173,10 +173,10 @@ updateBreakpoint <- function() {
   # Calculate time since last breakpoint
   newBreakPoint <- proc.time()
   elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
-  
+
   # Update current breakpoint
   currentBreakPoint <<- newBreakPoint
-  
+
   # Return cleaned elapsed time
   if (elapsed < 60) {
     return(str_c(round(elapsed), "sec"))
@@ -188,12 +188,12 @@ updateBreakpoint <- function() {
 
 # Function to parse a table defining a normal distribution and sample accordingly
 sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
-  
+
   distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
   distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
   distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
   distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-  
+
   rnorm(numSamples, distributionMean, distributionSD) %>%
     round(0) %>%
     pmax(distributionMin) %>%
@@ -203,17 +203,17 @@ sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMi
 
 # Function to parse a table defining a gamma distribution and sample accordingly
 sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultMin = 1, defaultMax = Inf) {
-  
+
   distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
   distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
   distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
   distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-  
+
   # Calculate shape and rate from mean and sd
   # - Derivation from: https://math.stackexchange.com/questions/1810257/gamma-functions-mean-and-standard-deviation-through-shape-and-rate
   shape <- (distributionMean / distributionSD)^2
   rate  <- distributionMean / (distributionSD^2)
-  
+
   rgamma(numSamples, shape = shape, rate = rate) %>%
     round(0) %>%
     pmax(distributionMin) %>%
@@ -225,45 +225,47 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 sampleLocations <- function(season, cause, firezone, data) {
   # Convert firezone to ID value
   firezoneID <- FireZoneTable %>% filter(Name == firezone) %>% pull(ID)
-  
+
   # Determine the restricted fuel types for the given season, cause, firezone
   restrictedFuels <- IgnitionRestriction %>%
     filter(Season == season | is.na(Season), Cause == cause | is.na(Cause), FireZone == firezone | is.na(FireZone)) %>%
     pull(FuelType)
-  
+
   # Convert restricted fuels list to IDs, add NA as restricted fuel
   restrictedFuelIDs <- FuelTypeTable %>%
     filter(Name %in% restrictedFuels) %>%
     pull(ID) %>%
     c(NA)
-  
+
   # Mask the probabilistic ignition location map to only the current fire zone
   # and fuels that are not restricted
   maskedProbability <- ProbabilisticIgnitionLocation %>%
-    
+
     # Start by finding the relevant probabilistic ignition grid
     filter(Cause %in% c(cause, NA), Season %in% c(season, NA)) %>%
     pull(IgnitionGridFileName) %>%
-    
+
     # Warn if multiple probabilistic ignition grids are specified
     {if(length(.) > 1) {updateRunLog("Multiple probabilistic ignition grids specified for some combinations of season and cause. Using first applicable grid.", type = "warning"); .[1]} else .} %>%
-    
+
     # Use a uniform probability map if there is no valid grid
-    {if(length(.) > 0) rast(.) else rast(fuelsRaster, vals = 1)} %>% 
-    
+    {if(length(.) > 0) rast(.) else rast(fuelsRaster, vals = 1)} %>%
+
     # Check the probability map for consistency
     checkSpatialInput("Probabilistic Ignition Location", checkProjection = F) %>%
-    
+
     # Mask by the restrited fuels grid and firezone raster if present and firezone is not empty
     {if(!(is.null(fireZoneRaster) | is.na(firezone) | firezone == "")) mask(., fireZoneRaster, maskvalue = firezoneID, inverse = T) else .} %>%
     mask(fuelsRaster, maskvalue = restrictedFuelIDs)
-  
+
   # Sample cells from probability map
-  cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
-  longlat <- as.points(fuelsRaster, na.rm = F)[cells] %>%
-    project("EPSG:4326") %>%
-    crds
-  
+  cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0))
+  longlat <- xyFromCell(fuelsRaster,cells)%>%
+    data.frame %>%
+    st_as_sf(coords=c("x","y"), crs=st_crs(fuelsRaster)) %>%
+    st_transform("EPSG:4326") %>%
+    st_coordinates
+
   # Update SyncroSim progress bar
   progressBar()
   # Convert cells to row/col, format, and return
@@ -278,28 +280,28 @@ sampleLocations <- function(season, cause, firezone, data) {
 }
 
 updateRunLog("Finished preparing inputs in ", updateBreakpoint())
-  
+
 # Sample number of ignitions per iteration ----
 progressBar(type = "message", message = "Sampling iterations...")
 
 # If no distribution is specified
 if(is.na(distributionName)) {
   numIgnitions <- sample(rep(IgnitionsPerIteration$Mean, 2), numIterations, replace = T)
-  
+
 # If a normal distribution is requested
 } else if (distributionName == "Normal") {
   numIgnitions <- sampleNorm(IgnitionsPerIteration, numIterations)
-  
+
 # If a gamma distribution is requested
 } else if (distributionName == "Gamma") {
   numIgnitions <- sampleGamma(IgnitionsPerIteration, numIterations)
-  
+
 # Otherwise sample from a user distribution
 } else {
   ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
   numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
 }
-  
+
 saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
 
 # Prepend extra ignitions for resampling to vector of ignition counts if requested (to be assigned to iteration 0)
@@ -312,23 +314,23 @@ numIgnitions <- numIgnitions %>%
 # Update iterations and numIterations
 # - Note: assumes this transformer remains single-threaded
 iterations <- c(0, iterations)
-numIterations <- numIterations + 1 
+numIterations <- numIterations + 1
 
 # Initialize the SyncroSim progress bar
 progressBar("begin", totalSteps = nrow(IgnitionDistribution))
 progressBar(type = "message", message = "Sampling iterations...")
 
 # Build table of ignitions ----
-DeterminisiticIgnitionLocation <- 
+DeterminisiticIgnitionLocation <-
   # Create a row for each ignition in each iteration
   map2_dfr(
     numIgnitions,
     iterations,
-    ~ if(.x > 0) 
+    ~ if(.x > 0)
       tibble(
         Iteration = .y,
         FireID = seq(.x))) %>%
-  
+
   # Sample rows from the Ignition Distribution table to assign
   # a season, cause, and firezone to each ignition if the table is present
   { if(nrow(IgnitionDistribution) > 0) {
@@ -338,21 +340,21 @@ DeterminisiticIgnitionLocation <-
         cause = IgnitionDistribution$Cause[situation],
         firezone = IgnitionDistribution$FireZone[situation]) %>%
       dplyr::select(-situation)
-    
-  # If the Ignition Distribution table is not present, choose these values randomly 
+
+  # If the Ignition Distribution table is not present, choose these values randomly
     } else
       mutate(.,
         season =   sample(SeasonTable$Name,   nrow(.), replace = T),
         cause =    sample(CauseTable$Name,    nrow(.), replace = T),
         firezone = sample(FireZoneTable$Name, nrow(.), replace = T))
   } %>%
-  
+
   # Group the data by season, cause and firezone and send to
   # sampleLocations() to sample ignition location accordingly
   group_by(season, cause, firezone) %>%
   nest() %>%
   pmap_dfr(sampleLocations) %>%
-  
+
   # Clean up
   arrange(Iteration, FireID) %>%
   as.data.frame

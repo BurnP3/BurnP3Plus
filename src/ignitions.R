@@ -7,6 +7,7 @@ options(scipen = 999)
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(terra))
+suppressPackageStartupMessages(library(sf))
 
 checkPackageVersion <- function(packageString, minimumVersion){
   result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
@@ -26,7 +27,6 @@ checkPackageVersion <- function(packageString, minimumVersion){
 
 checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
 
@@ -92,7 +92,7 @@ if(nrow(ResampleOption) == 0) {
 
 ## Check raster inputs for consistency ----
 
-test.point <- vect(matrix(crds(fuelsRaster)[1,],ncol=2), crs = crs(fuelsRaster))
+test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
 # Ensure fuels crs can be converted to Lat / Long
 if(test.point %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
 tryCatch(test.point %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
@@ -259,10 +259,12 @@ sampleLocations <- function(season, cause, firezone, data) {
     mask(fuelsRaster, maskvalue = restrictedFuelIDs)
   
   # Sample cells from probability map
-  cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0)) 
-  longlat <- as.points(fuelsRaster, na.rm = F)[cells] %>%
-    project("EPSG:4326") %>%
-    crds
+  cells <- sample(ncell(maskedProbability), nrow(data), replace = T, prob = replace_na(maskedProbability[], 0))
+  longlat <- xyFromCell(fuelsRaster,cells)%>%
+    data.frame %>%
+    st_as_sf(coords=c("x","y"), crs=st_crs(fuelsRaster)) %>%
+    st_transform("EPSG:4326") %>%
+    st_coordinates
   
   # Update SyncroSim progress bar
   progressBar()
@@ -271,8 +273,8 @@ sampleLocations <- function(season, cause, firezone, data) {
     tibble(
       Iteration = data$Iteration,
       FireID = data$FireID,
-      Latitude = longlat[, "y"],
-      Longitude = longlat[, "x"],
+      Latitude = longlat[, "Y"],
+      Longitude = longlat[, "X"],
       Season = season,
       Cause = cause))
 }

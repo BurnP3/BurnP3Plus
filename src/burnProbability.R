@@ -26,7 +26,6 @@ checkPackageVersion <- function(packageString, minimumVersion){
 
 checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
 checkPackageVersion("data.table", "1.14.8")

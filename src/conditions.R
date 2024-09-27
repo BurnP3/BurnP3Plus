@@ -8,6 +8,7 @@ options(scipen = 999)
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(terra))
+suppressPackageStartupMessages(library(sf))
 
 checkPackageVersion <- function(packageString, minimumVersion){
   result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
@@ -27,7 +28,6 @@ checkPackageVersion <- function(packageString, minimumVersion){
 
 checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
 
@@ -169,17 +169,6 @@ uni <- function(df, colName) {
   return(df[colName] %>% unique %>% nrow)
 }
 
-# Function to convert from latlong to cell index
-cellFromLatLong <- function(x, lat, long) {
-  # Convert list of lat and long to SpatVector, reproject to source crs
-  points <- matrix(c(long, lat), ncol = 2) %>%
-    vect(crs = "EPSG:4326") %>%
-    project(x)
-  
-  # Get vector of cell ID's from points
-  return(cells(x, points)[, "cell"])
-}
-
 # Function to parse a table defining a normal distribution and sample accordingly
 sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
   
@@ -316,10 +305,15 @@ sampleWeather <- function(season, weatherzone, data) {
 }
 
 # Determine Fire Zone and Weather Zone for each ignition ----
-DeterministicIgnitionLocation$cell <- cellFromLatLong(
-  fuelsRaster, 
-  DeterministicIgnitionLocation$Latitude, 
-  DeterministicIgnitionLocation$Longitude)
+DeterministicIgnitionLocation$cell <- cellFromXY(
+  fuelsRaster,
+  xy = data.frame(
+    long=DeterministicIgnitionLocation$Longitude,
+    lat=DeterministicIgnitionLocation$Latitude) %>% 
+      st_as_sf(crs = "EPSG:4326",
+      coords = c("long","lat")) %>%
+      st_transform(crs = crs(fuelsRaster)) %>%
+      st_coordinates)
 
 if (!is.null(weatherZoneRaster)){
   DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%

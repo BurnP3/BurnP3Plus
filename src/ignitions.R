@@ -273,8 +273,8 @@ sampleLocations <- function(season, cause, firezone, data) {
     tibble(
       Iteration = data$Iteration,
       FireID = data$FireID,
-      Latitude = longlat[, "y"],
-      Longitude = longlat[, "x"],
+      Latitude = longlat[, "Y"],
+      Longitude = longlat[, "X"],
       Season = season,
       Cause = cause))
 }

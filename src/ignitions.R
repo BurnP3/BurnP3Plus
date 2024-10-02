@@ -90,6 +90,10 @@ if(nrow(ResampleOption) == 0) {
   saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
 }
 
+if(any(is.na(ProbabilisticIgnitionLocation$IgnitionGridFileName))) {
+  stop("Not all Probabilistic Ignition Grids specified in the Ignition Location datasheet.")
+}
+
 ## Check raster inputs for consistency ----
 
 test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))

@@ -323,7 +323,9 @@ if (!is.null(weatherZoneRaster)){
     ) %>%
     dplyr::select(-weatherzoneID)
 } else{
-  DeterministicIgnitionLocation$WeatherZone = WeatherZoneTable$Name
+  numIgnitions <- nrow(DeterministicIgnitionLocation)
+  weatherZoneSamples <- sample(WeatherZoneTable$Name, numIgnitions, replace = T)
+  DeterministicIgnitionLocation$WeatherZone <- weatherZoneSamples
 }
 
 if (!is.null(fireZoneRaster)){
@@ -334,7 +336,9 @@ if (!is.null(fireZoneRaster)){
     ) %>%
     dplyr::select(-firezoneID)
 } else{
-  DeterministicIgnitionLocation$FireZone = FireZoneTable$Name
+  numIgnitions <- nrow(DeterministicIgnitionLocation)
+  fireZoneSamples <- sample(FireZoneTable$Name, numIgnitions, replace = T)
+  DeterministicIgnitionLocation$FireZone <- fireZoneSamples
 }
 
 # Clean up

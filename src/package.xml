@@ -71,8 +71,8 @@
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" defaultValue="0" isVisible="False"/>
-		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
-		<column name="ElevationGridFileName" displayName="Elevation" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" allowDbNull="False"/>
+		<column name="ElevationGridFileName" displayName="Elevation [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
 		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
 		<column name="WeatherZoneGridFileName" displayName="Weather Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True" isVisible="False"/>

@@ -71,10 +71,10 @@
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" defaultValue="0" isVisible="False"/>
-		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" allowDbNull="False"/>
-		<column name="ElevationGridFileName" displayName="Elevation [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
-		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
-		<column name="WeatherZoneGridFileName" displayName="Weather Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True"/>
+		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" allowDbNull="False" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="ElevationGridFileName" displayName="Elevation [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WeatherZoneGridFileName" displayName="Weather Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True" isVisible="False"/>
 	</dataSheet>
 
@@ -109,7 +109,7 @@
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
-		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
 	</dataSheet>
 
 	<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">
@@ -195,22 +195,22 @@
 
 	<dataSheet name="WindGrid" displayName="Wind Grid" isSingleRow="True">
 		<column name="WindSpeed" displayName="Prevailing Wind Speed" dataType="Double" validationType="Decimal" validationCondition="Greater" formula1="0.0" format="0.0"/>
-		<column name="WindSpeedNorth" displayName="Wind Speed North" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedNorthEast" displayName="Wind Speed North East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedEast" displayName="Wind Speed East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedSouthEast" displayName="Wind Speed South East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedSouth" displayName="Wind Speed South" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedSouthWest" displayName="Wind Speed South West" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedWest" displayName="Wind Speed West" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindSpeedNorthWest" displayName="Wind Speed North West" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionNorth" displayName="Wind Direction North" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionNorthEast" displayName="Wind Direction North East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionEast" displayName="Wind Direction East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionSouthEast" displayName="Wind Direction South East" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionSouth" displayName="Wind Direction South" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionSouthWest" displayName="Wind Direction South West" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionWest" displayName="Wind Direction West" dataType="String" isExternalFile="True" isRaster="True"/>
-		<column name="WindDirectionNorthWest" displayName="Wind Direction North West" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="WindSpeedNorth" displayName="Wind Speed North" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedNorthEast" displayName="Wind Speed North East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedEast" displayName="Wind Speed East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedSouthEast" displayName="Wind Speed South East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedSouth" displayName="Wind Speed South" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedSouthWest" displayName="Wind Speed South West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedWest" displayName="Wind Speed West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindSpeedNorthWest" displayName="Wind Speed North West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionNorth" displayName="Wind Direction North" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionNorthEast" displayName="Wind Direction North East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionEast" displayName="Wind Direction East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionSouthEast" displayName="Wind Direction South East" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionSouth" displayName="Wind Direction South" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionSouthWest" displayName="Wind Direction South West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionWest" displayName="Wind Direction West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
+		<column name="WindDirectionNorthWest" displayName="Wind Direction North West" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
 	</dataSheet>
 
 	<dataSheet name="GreenUp" displayName="Green Up">
@@ -230,7 +230,7 @@
 
 	<dataSheet name="FireBreak" displayName="Fire Breaks">
 		<column name="Name" dataType="String"/>
-		<column name="FileName" displayName="File Name" dataType="String" isExternalFile="True" isRaster="True"/>
+		<column name="FileName" displayName="File Name" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif|All Files (*.*)|*.*"/>
 		<column name="AssociatedFiles" dataType="String" isExternalFile="True" isRaster="True" isVisible="False"/>
 	</dataSheet>
 

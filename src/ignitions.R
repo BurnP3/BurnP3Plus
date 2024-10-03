@@ -97,7 +97,7 @@ if(any(is.na(ProbabilisticIgnitionLocation$IgnitionGridFileName))) {
 # Check for ignition count distribution
 for (i in 1:nrow(IgnitionsPerIteration)){
   distName <- IgnitionsPerIteration$DistributionType[i]
-  if (is.null(distName)) next
+  if (is.na(distName)) next
   distValues <- DistributionValue %>% filter(Name == distName)
   if (nrow(distValues) == 0){
     stop(paste0("No values found in Distribution datasheet for Ignition Count distribution: ", distName))

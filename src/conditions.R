@@ -106,7 +106,7 @@ for (s in SeasonTable$Name){
 # Spread Event Days
 for (i in 1:nrow(FireDurationTable)){
   distName <- FireDurationTable$DistributionType[i]
-  if (is.null(distName)) next
+  if (is.na(distName)) next
   distValues <- DistributionValue %>% filter(Name == distName)
   if (nrow(distValues) == 0){
     stop(paste0("No values found in Distribution datasheet for Spread Event Days distribution: ", distName))
@@ -116,7 +116,7 @@ for (i in 1:nrow(FireDurationTable)){
 # Daily Burning Hours
 for (i in 1:nrow(HoursBurningTable)){
   distName <- HoursBurningTable$DistributionType[i]
-  if (is.null(distName)) next
+  if (is.na(distName)) next
   distValues <- DistributionValue %>% filter(Name == distName)
   if (nrow(distValues) == 0){
     stop(paste0("No values found in Distribution datasheet for Daily Burning Hours distribution: ", distName))

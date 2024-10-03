@@ -232,7 +232,6 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
-  browser()
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%

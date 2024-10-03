@@ -58,6 +58,7 @@ ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optiona
 ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T, lookupsAsFactors = F, returnInvisible = T)
 IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T, lookupsAsFactors = F, returnInvisible = T)
 IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution", optional = T, lookupsAsFactors = F, returnInvisible = T)
+DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T, returnInvisible = T) %>% unique
 
 # Import relevant rasters, allowing for missing values
 fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
@@ -102,6 +103,11 @@ for (i in 1:nrow(IgnitionsPerIteration)){
   if (nrow(distValues) == 0){
     stop(paste0("No values found in Distribution datasheet for Ignition Count distribution: ", distName))
   }
+}
+
+# Check if values in Deterministic Ignition Locations is empty
+if (nrow(DeterministicIgnitionLocation) > 0) {
+  updateRunLog("Values in Deterministic Ignition Location datasheet are overwritten.", type = "warning")
 }
 
 ## Check raster inputs for consistency ----
@@ -313,7 +319,12 @@ if(is.na(distributionName)) {
 # Otherwise sample from a user distribution
 } else {
   ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
-  numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+  
+  if (nrow(ignitionCountDistribution) == 1) {
+    numIgnitions <- sample(rep(IgnitionsPerIteration$Value, 2), numIterations, replace = T)
+  } else {
+    numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+  }
 }
   
 saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
@@ -374,7 +385,7 @@ DeterminisiticIgnitionLocation <-
   as.data.frame
 
 # Return output
-saveDatasheet(myScenario, DeterminisiticIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = T)
+saveDatasheet(myScenario, DeterminisiticIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = F)
 
 # Wrapup the SyncroSim progress bar
 progressBar("end")

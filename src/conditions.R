@@ -43,6 +43,7 @@ myScenario <- scenario()
 
 # Load remaining datasheets
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T, returnInvisible = T) %>% unique
+DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", optional = T, returnInvisible = T) %>% unique
 FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
@@ -123,6 +124,9 @@ for (i in 1:nrow(HoursBurningTable)){
   }
 }
 
+if (nrow(DeterministicBurnCondition) > 0) {
+  updateRunLog("Values in Deterministic Burn Conditions datasheet are overwritten.", type = "warning")
+}
 
 if(nrow(FireZoneTable) == 0)
   FireZoneTable <- data.frame(Name = "", ID = 0)
@@ -158,8 +162,8 @@ checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
 }
 
 # Check optional inputs
-checkSpatialInput(fireZoneRaster, "Fire Zone")
-checkSpatialInput(weatherZoneRaster, "Weather Zone")
+if (!is.null(fireZoneRaster)) checkSpatialInput(fireZoneRaster, "Fire Zone")
+if (!is.null(weatherZoneRaster)) checkSpatialInput(weatherZoneRaster, "Weather Zone")
 
 ## Function Definitions ----
 
@@ -228,6 +232,7 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
+  browser()
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
@@ -261,7 +266,12 @@ sampleFireDuration <- function(season, firezone, data){
   # Otherwise sample from a user defined distribution
   } else {
     fireDurationDistribution <- DistributionValue %>% filter(Name == fireDurationDistributionName)
-    fireDurations <- sample(fireDurationDistribution$Value, nrow(data), replace = T, prob = fireDurationDistribution$RelativeFrequency)
+    
+    if (nrow(fireDurationDistribution) == 1) {
+      fireDurations <- rep(fireDurationDistribution$Value, nrow(data))
+    } else {
+      fireDurations <- sample(fireDurationDistribution$Value, nrow(data), replace = T, prob = fireDurationDistribution$RelativeFrequency)
+    }
   }
   
   # Update SyncroSim progress bar
@@ -291,7 +301,12 @@ sampleFireDuration <- function(season, firezone, data){
         # Otherwise sample from a user defined distribution
         } else {
           hoursBurningDistribution <- DistributionValue %>% filter(Name == hoursBurningDistributionName)
-          sample(hoursBurningDistribution$Value, nrow(.), replace= T, prob = hoursBurningDistribution$RelativeFrequency)
+          
+          if (nrow(hoursBurningDistribution) == 1) {
+            rep(hoursBurningDistribution$Value, nrow(.))
+          } else {
+            sample(hoursBurningDistribution$Value, nrow(.), replace= T, prob = hoursBurningDistribution$RelativeFrequency)
+          }
         },
       firezone = firezone,
       season = season) %>%
@@ -399,7 +414,7 @@ DeterministicBurnConditions <- DeterministicIgnitionLocation %>%
   as.data.frame()
 
 # Save Output
-saveDatasheet(myScenario, DeterministicBurnConditions, "burnP3Plus_DeterministicBurnCondition", append = T)
+saveDatasheet(myScenario, DeterministicBurnConditions, "burnP3Plus_DeterministicBurnCondition", append = F)
 
 # Wrapup the SyncroSim progress bar
 progressBar("end")

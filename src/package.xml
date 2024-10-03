@@ -109,7 +109,7 @@
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
-		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
+		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif" allowDbNull="False"/>
 	</dataSheet>
 
 	<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">

@@ -29,6 +29,8 @@ checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
+checkPackageVersion("terra",      "1.5.21")
+checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
 options(scipen = 100)
@@ -106,7 +108,7 @@ for (i in 1:nrow(IgnitionsPerIteration)){
 }
 
 # Check if values in Deterministic Ignition Locations is empty
-if (nrow(DeterministicIgnitionLocation) > 0) {
+if (!all(is.na(DeterministicIgnitionLocation))) {
   updateRunLog("Values in Deterministic Ignition Location datasheet are overwritten.", type = "warning")
 }
 

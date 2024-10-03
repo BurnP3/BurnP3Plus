@@ -136,7 +136,7 @@
 	<dataSheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Mean" displayName="Daily Burning Hours" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
 		<column name="DistributionType" displayName="Daily Burning Hours Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
 		<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>

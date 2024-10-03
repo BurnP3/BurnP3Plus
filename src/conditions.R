@@ -102,6 +102,28 @@ for (s in SeasonTable$Name){
   }
 }
 
+# Check to ensure that distributions specified actually exist
+# Spread Event Days
+for (i in 1:nrow(FireDurationTable)){
+  distName <- FireDurationTable$DistributionType[i]
+  if (is.null(distName)) next
+  distValues <- DistributionValue %>% filter(Name == distName)
+  if (nrow(distValues) == 0){
+    stop(paste0("No values found in Distribution datasheet for Spread Event Days distribution: ", distName))
+  }
+}
+
+# Daily Burning Hours
+for (i in 1:nrow(HoursBurningTable)){
+  distName <- HoursBurningTable$DistributionType[i]
+  if (is.null(distName)) next
+  distValues <- DistributionValue %>% filter(Name == distName)
+  if (nrow(distValues) == 0){
+    stop(paste0("No values found in Distribution datasheet for Daily Burning Hours distribution: ", distName))
+  }
+}
+
+
 if(nrow(FireZoneTable) == 0)
   FireZoneTable <- data.frame(Name = "", ID = 0)
 if(nrow(WeatherZoneTable) == 0)

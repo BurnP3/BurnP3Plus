@@ -94,6 +94,16 @@ if(any(is.na(ProbabilisticIgnitionLocation$IgnitionGridFileName))) {
   stop("Not all Probabilistic Ignition Grids specified in the Ignition Location datasheet.")
 }
 
+# Check for ignition count distribution
+for (i in 1:nrow(IgnitionsPerIteration)){
+  distName <- IgnitionsPerIteration$DistributionType[i]
+  if (is.null(distName)) next
+  distValues <- DistributionValue %>% filter(Name == distName)
+  if (nrow(distValues) == 0){
+    stop(paste0("No values found in Distribution datasheet for Ignition Count distribution: ", distName))
+  }
+}
+
 ## Check raster inputs for consistency ----
 
 test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))

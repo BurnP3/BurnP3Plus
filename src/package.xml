@@ -238,6 +238,7 @@
 
 	<dataSheet name="OutputOption" displayName="Output Options" isSingleRow="True">
 		<column name="FireStatistics" dataType="Boolean" displayName="Fire Statistics Table"/>
+		<record columns="FireStatistics" values="-1"/>
 	</dataSheet>
 
 	<dataSheet name="OutputOptionSpatial" displayName="Spatial Output Options" isSingleRow="True">

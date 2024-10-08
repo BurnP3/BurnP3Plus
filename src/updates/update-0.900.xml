@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<update>
+<update comment="Legacy Update 9">
   <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFireStatistic">
     <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputFireStatistic</item>
 

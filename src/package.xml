@@ -142,6 +142,7 @@
 		<column name="DistributionSD" displayName="Daily Burning Hours SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMin" displayName="Daily Burning Hours Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMax" displayName="Daily Burning Hours Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<validation validationType="Unique" columns="Season"/>
 	</dataSheet>
 
 	<dataSheet name="IgnitionDistribution" displayName="Ignition Distribution">
@@ -471,5 +472,7 @@
 		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
 		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
 	</layout>
+
+	<updateProvider className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>
 
 </package>

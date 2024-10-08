@@ -323,7 +323,7 @@ if(is.na(distributionName)) {
   ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
   
   if (nrow(ignitionCountDistribution) == 1) {
-    numIgnitions <- sample(rep(IgnitionsPerIteration$Value, 2), numIterations, replace = T)
+    numIgnitions <- rep(IgnitionsPerIteration$Value, numIterations)
   } else {
     numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
   }

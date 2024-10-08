@@ -234,6 +234,7 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
+  
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
@@ -244,8 +245,14 @@ sampleFireDuration <- function(season, firezone, data){
   
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  filteredHoursBurningTable <- HoursBurningTable %>%
-    filter(Season == season | is.na(Season))
+  if (season %in% HoursBurningTable$Season){
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(Season == season)
+  } else {
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(Season == "All")
+  }
+
   
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)
@@ -316,6 +323,7 @@ sampleFireDuration <- function(season, firezone, data){
 
 # Define function to sample weather stream given season and weatherzone
 sampleWeather <- function(season, weatherzone, data) {
+  
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
     filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%

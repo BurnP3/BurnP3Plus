@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<update>
+<update comment="Legacy Update 7">
   <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_BatchOption">
     <item>CREATE TABLE burnP3Plus_BatchOption(BatchOptionID INTEGER PRIMARY KEY, BatchSize INTEGER)</item>
     <item>INSERT INTO burnP3Plus_BatchOption (BatchSize) VALUES (250)</item>

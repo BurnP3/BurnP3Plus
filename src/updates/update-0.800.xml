@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<update>
+<update comment="Legacy Update 8">
   <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputOptionSpatial">
     <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalBurnProbability INTEGER</item>
     <item>ALTER TABLE burnP3Plus_OutputOptionSpatial ADD COLUMN SeasonalRelativeBurnProbability INTEGER</item>

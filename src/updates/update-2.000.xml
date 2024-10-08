@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add All to Season column in Daily Burning Hours if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_HoursPerDayBurning">
+    <item> UPDATE burnP3Plus_HoursPerDayBurning SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>

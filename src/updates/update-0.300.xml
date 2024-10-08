@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<update>
+<update comment="Legacy Update 3">
   <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_GreenUp">
     <item>CREATE TABLE burnP3Plus_GreenUp(GreenUpID INTEGER PRIMARY KEY, ScenarioID INTEGER, Season INTEGER, GreenUp INTEGER)</item>
   </action>

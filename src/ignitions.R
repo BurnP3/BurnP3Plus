@@ -161,7 +161,7 @@ checkSpatialInput(fireZoneRaster, "Fire Zone")
 byDistribution <- any(!is.na(IgnitionsPerIteration$DistributionType))
 
 # If so, ensure only one distribution is specified
-if(byDistribution & !isDatasheetEmpty(IgnitionsPerIteration))
+if(byDistribution & nrow(IgnitionsPerIteration) > 1)
   stop("If sampling Ignitions per Iteration from a distribution, only one record is accepted.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
 
 # Identify the name and type of distribution

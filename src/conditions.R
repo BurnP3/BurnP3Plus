@@ -58,6 +58,17 @@ HoursBurningTable <- datasheet(myScenario, "burnP3Plus_HoursPerDayBurning", opti
 WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T, lookupsAsFactors = F)
 WeatherOptions <- datasheet(myScenario, "burnP3Plus_WeatherOption")
 
+# Create function to test if datasheets are empty
+isDatasheetEmpty <- function(ds){
+  if (nrow(ds) == 0) {
+    return(TRUE)
+  }
+  if (all(is.na(ds))) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
 # Import relevant rasters, allowing for missing values
 fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
 fireZoneRaster <- tryCatch(
@@ -68,17 +79,17 @@ weatherZoneRaster <- tryCatch(
   error = function(e) NULL)
 
 ## Handle empty values ----
-if(nrow(WeatherStream) == 0) {
+if(isDatasheetEmpty(WeatherStream)) {
   stop("Error: Please provide weather stream data to sample burning conditions.")
 }
 
-if(nrow(FireDurationTable) == 0) {
+if(isDatasheetEmpty(FireDurationTable)) {
   updateRunLog("No fire duration distribution provided, defaulting to 1 day fires.", type = "warning")
   FireDurationTable[1,"Mean"] <- 1
   saveDatasheet(myScenario, FireDurationTable, "burnP3Plus_FireDuration")
 }
 
-if(nrow(HoursBurningTable) == 0) {
+if(isDatasheetEmpty(HoursBurningTable)) {
   updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
   HoursBurningTable[1, "Season"] <- "All" 
   HoursBurningTable[1,"Mean"] <- 4
@@ -126,13 +137,13 @@ for (i in 1:nrow(HoursBurningTable)){
   }
 }
 
-if (!all(is.na(DeterministicBurnCondition))) {
+if (!isDatasheetEmpty(DeterministicBurnCondition)) {
   updateRunLog("Values in Deterministic Burn Conditions datasheet are overwritten.", type = "warning")
 }
 
-if(nrow(FireZoneTable) == 0)
+if(isDatasheetEmpty(FireZoneTable))
   FireZoneTable <- data.frame(Name = "", ID = 0)
-if(nrow(WeatherZoneTable) == 0)
+if(isDatasheetEmpty(WeatherZoneTable))
   WeatherZoneTable <- data.frame(Name = "", ID = 0)
 
 ## Check raster inputs for consistency ----
@@ -234,6 +245,7 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
+  
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
@@ -244,8 +256,14 @@ sampleFireDuration <- function(season, firezone, data){
   
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  filteredHoursBurningTable <- HoursBurningTable %>%
-    filter(Season == season | is.na(Season))
+  if (season %in% HoursBurningTable$Season){
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(Season == season)
+  } else {
+    filteredHoursBurningTable <- HoursBurningTable %>%
+      filter(Season == "All")
+  }
+
   
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType)
@@ -316,6 +334,7 @@ sampleFireDuration <- function(season, firezone, data){
 
 # Define function to sample weather stream given season and weatherzone
 sampleWeather <- function(season, weatherzone, data) {
+  
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
     filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%

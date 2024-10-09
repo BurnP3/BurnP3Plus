@@ -51,6 +51,17 @@ OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap", returnInvisib
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T)
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T) %>% arrange(Iteration, FireID)
 
+# Create function to test if datasheets are empty
+isDatasheetEmpty <- function(ds){
+  if (nrow(ds) == 0) {
+    return(TRUE)
+  }
+  if (all(is.na(ds))) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
 ## Setup files and folders ----
 
 # Create temp folder, ensure it is empty
@@ -69,7 +80,7 @@ burnProbabilityFilePrefix <- file.path(tempDir, "burnProbability")
 relativeBurnProbabilityFilePrefix <- file.path(tempDir, "relativeBurnProbability")
 
 ## Handle empty values ----
-if(nrow(OutputOptionsSpatial) == 0) {
+if(isDatasheetEmpty(OutputOptionsSpatial)) {
   updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.", type = "info")
   OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
   saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
@@ -357,7 +368,7 @@ if(saveBurnMaps) {
 
   # Start by setting up an empty template
   emptyTemplate <- NULL
-  if(nrow(OutputBurnMap > 0))
+  if(!isDatasheetEmpty(OutputBurnMap))
     emptyTemplate <- OutputBurnMap %>%
       pull(FileName) %>%
       pluck(1) %>%

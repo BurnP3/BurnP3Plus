@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.1.0">
 
 	<!--Library Datasheets-->
 
@@ -100,37 +100,41 @@
 		<column name="FireID" displayName="Fire ID" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
+		<validation validationType="Unique" columns="Iteration|FireID|Season|Cause"/>
 	</dataSheet>
 
 	<dataSheet name="ProbabilisticIgnitionLocation" displayName="Ignition Location">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
 		<column name="IgnitionGridFileName" displayName="Probabilistic Ignition Grid" dataType="String" isExternalFile="True" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif" allowDbNull="False"/>
+		<validation validationType="Unique" columns="Season|Cause"/>
 	</dataSheet>
 
 	<dataSheet name="IgnitionRestriction" displayName="Ignition Restrictions">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FuelType" displayName="Fuel Type" dataType="Integer" validationType="Datasheet" formula1="FuelType"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
 		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
+		<validation validationType="Unique" columns="Season|Cause|FireZone"/>
 	</dataSheet>
 
 	<dataSheet name="FireDuration" displayName="Spread Event Days">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
 		<column name="Mean" displayName="Fire Duration (Days)" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True" initOptionalVisible="True"/>
 		<column name="DistributionType" displayName="Fire Duration Distribution" dataType="Integer" validationType="Datasheet" formula1="Distribution" isOptional="True"/>
 		<column name="DistributionSD" displayName="Fire Duration SD" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMin" displayName="Fire Duration Min" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 		<column name="DistributionMax" displayName="Fire Duration Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
+		<validation validationType="Unique" columns="Season|FireZone"/>
 	</dataSheet>
 
 	<dataSheet name="HoursPerDayBurning" displayName="Daily Burning Hours">
@@ -148,14 +152,15 @@
 	<dataSheet name="IgnitionDistribution" displayName="Ignition Distribution">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" isVisible="False"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="True" isOptional="True" initOptionalVisible="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" allowDbNull="True" isOptional="True"/>
 		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" allowDbNull="True" isOptional="True"/>
 		<column name="RelativeLikelihood" displayName="Relative Likelihood" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
+		<validation validationType="Unique" columns="Season|Cause|FireZone"/>
 	</dataSheet>
 
 	<dataSheet name="WeatherStream" displayName="Daily Weather">
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
 		<column name="Temperature" dataType="Double" validationType="Decimal" format="0.0"/>
 		<column name="RelativeHumidity" displayName="Relative Humidity" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0"/>
@@ -168,6 +173,7 @@
 		<column name="InitialSpreadIndex" displayName="Initial Spread Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 		<column name="BuildupIndex" displayName="Build Up Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
 		<column name="FireWeatherIndex" displayName="Fire Weather Index" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.000"/>
+		<validation validationType="Unique" columns="Season|WeatherZone"/>
 	</dataSheet>
 
 	<dataSheet name="WeatherOption" displayName="Weather Sampling Options" isSingleRow="True">
@@ -215,18 +221,21 @@
 	</dataSheet>
 
 	<dataSheet name="GreenUp" displayName="Green Up">
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="GreenUp" displayName="Green Up" dataType="Boolean"/>
+		<validation validationType="Unique" columns="Season"/>
 	</dataSheet>
 
 	<dataSheet name="Curing" displayName="Curing">
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Curing" dataType="Integer" validationType="WholeNumber" validationCondition="Between" formula1="0" formula2="100" format="d"/>
+		<validation validationType="Unique" columns="Season"/>
 	</dataSheet>
 
 	<dataSheet name="FuelLoad" displayName="Grass Fuel Load">
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="FuelLoad" displayName="Grass Fuel Load" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0" format="0.0"/>
+		<validation validationType="Unique" columns="Season"/>
 	</dataSheet>
 
 	<dataSheet name="FireBreak" displayName="Fire Breaks">
@@ -270,7 +279,7 @@
 		<column name="FireID" displayName="Fire ID" dataType="Integer"/>
 		<column name="Latitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-90" formula2="90" format="0.0000"/>
 		<column name="Longitude" dataType="Double" validationType="Decimal" validationCondition="Between" formula1="-180" formula2="180" format="0.0000"/>
-		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" isOptional="True"/>
+		<column name="Season" dataType="Integer" validationType="Datasheet" formula1="Season" allowDbNull="False"/>
 		<column name="Cause" dataType="Integer" validationType="Datasheet" formula1="Cause" isOptional="True"/>
 		<column name="FireZone" displayName="Fire Zone" dataType="Integer" validationType="Datasheet" formula1="FireZone" isOptional="True"/>
 		<column name="WeatherZone" displayName="Weather Zone" dataType="Integer" validationType="Datasheet" formula1="WeatherZone" isOptional="True"/>
@@ -331,44 +340,65 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
-		<dataSheet name="RunControl" type="Input"/>
-		<dataSheet name="DistributionValue" type="Input"/>
-		<dataSheet name="IgnitionsPerIteration" type="Input"/>
-		<dataSheet name="FireResampleOption" type="Input"/>
-		<dataSheet name="ProbabilisticIgnitionLocation" type="Input"/>
-		<dataSheet name="IgnitionRestriction" type="Input"/>
-		<dataSheet name="IgnitionDistribution" type="Input"/>
-		<dataSheet name="LandscapeRasters" type="Input"/>
-		<dataSheet name="DeterministicIgnitionCount" type="Output"/>
-		<dataSheet name="DeterministicIgnitionLocation" type="Output"/>
+	<transformer 
+		name="generateIgnitions" 
+		displayName="1 - Sample Ignitions" 
+		programName="Rscript" 
+		programArguments="ignitions.R" 
+		configurationSheet="burnP3Plus_RunControl" 
+		condaEnv="burnP3Plus.yml" 
+		condaEnvVersion="1">
+			<dataSheet name="RunControl" type="Input"/>
+			<dataSheet name="DistributionValue" type="Input"/>
+			<dataSheet name="IgnitionsPerIteration" type="Input"/>
+			<dataSheet name="FireResampleOption" type="Input"/>
+			<dataSheet name="ProbabilisticIgnitionLocation" type="Input"/>
+			<dataSheet name="IgnitionRestriction" type="Input"/>
+			<dataSheet name="IgnitionDistribution" type="Input"/>
+			<dataSheet name="LandscapeRasters" type="Input"/>
+			<dataSheet name="DeterministicIgnitionCount" type="Output"/>
+			<dataSheet name="DeterministicIgnitionLocation" type="Output"/>
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
-		<dataSheet name="RunControl" type="Input"/>
-		<dataSheet name="DistributionValue" type="Input"/>
-		<dataSheet name="FireDuration" type="Input"/>
-		<dataSheet name="HoursPerDayBurning" type="Input"/>
-		<dataSheet name="WeatherStream" type="Input"/>
-		<dataSheet name="WeatherOption" type="Input"/>
-		<dataSheet name="LandscapeRasters" type="Input"/>
-		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
-		<dataSheet name="DeterministicBurnCondition" type="Output"/>
+	<transformer 
+		name="generateBurningConditions" 
+		displayName="2 - Sample Burning Conditions" 
+		programName="Rscript" 
+		programArguments="conditions.R" 
+		configurationSheet="burnP3Plus_RunControl" 
+		condaEnv="burnP3Plus.yml" 
+		condaEnvVersion="1">
+			<dataSheet name="RunControl" type="Input"/>
+			<dataSheet name="DistributionValue" type="Input"/>
+			<dataSheet name="FireDuration" type="Input"/>
+			<dataSheet name="HoursPerDayBurning" type="Input"/>
+			<dataSheet name="WeatherStream" type="Input"/>
+			<dataSheet name="WeatherOption" type="Input"/>
+			<dataSheet name="LandscapeRasters" type="Input"/>
+			<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+			<dataSheet name="DeterministicBurnCondition" type="Output"/>
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="1">
-		<dataSheet name="RunControl" type="Input"/>
-		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
-		<dataSheet name="DeterministicBurnCondition" type="Input"/>
-		<dataSheet name="OutputOptionSpatial" type="Input"/>
-		<dataSheet name="OutputFireStatistic" type="Both"/>
-		<dataSheet name="OutputAllPerim" type="Both"/>
-		<dataSheet name="OutputBurnMap" type="Both"/>
-		<dataSheet name="OutputBurnCount" type="Output"/>
-		<dataSheet name="OutputBurnProbability" type="Output"/>
-		<dataSheet name="OutputRelativeBurnProbability" type="Output"/>
+	<transformer 
+		name="burnProbability" 
+		displayName="4 - Summarize Burn Probability" 
+		programName="Rscript" 
+		programArguments="burnProbability.R" 
+		configurationSheet="burnP3Plus_RunControl" 
+		condaEnv="burnP3Plus.yml" 
+		condaEnvVersion="1">
+			<dataSheet name="RunControl" type="Input"/>
+			<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
+			<dataSheet name="DeterministicBurnCondition" type="Input"/>
+			<dataSheet name="OutputOptionSpatial" type="Input"/>
+			<dataSheet name="OutputFireStatistic" type="Both"/>
+			<dataSheet name="OutputAllPerim" type="Both"/>
+			<dataSheet name="OutputBurnMap" type="Both"/>
+			<dataSheet name="OutputBurnCount" type="Output"/>
+			<dataSheet name="OutputBurnProbability" type="Output"/>
+			<dataSheet name="OutputRelativeBurnProbability" type="Output"/>
 	</transformer>
 
 	<!--Export Transformers-->

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add All to Season column in DeterministicIgnitionLocation if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_DeterministicIgnitionLocation">
+    <item> UPDATE burnP3Plus_DeterministicIgnitionLocation SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in ProbabilisticIgnitionLocation if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_ProbabilisticIgnitionLocation">
+    <item> UPDATE burnP3Plus_ProbabilisticIgnitionLocation SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in IgnitionRestriction if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_IgnitionRestriction">
+    <item> UPDATE burnP3Plus_IgnitionRestriction SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in FireDuration if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_FireDuration">
+    <item> UPDATE burnP3Plus_FireDuration SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in IgnitionDistribution if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_IgnitionDistribution">
+    <item> UPDATE burnP3Plus_IgnitionDistribution SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in WeatherStream if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_WeatherStream">
+    <item> UPDATE burnP3Plus_WeatherStream SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in GreenUp if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_GreenUp">
+    <item> UPDATE burnP3Plus_GreenUp SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in Curing if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_Curing">
+    <item> UPDATE burnP3Plus_Curing SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in FuelLoad if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_FuelLoad">
+    <item> UPDATE burnP3Plus_FuelLoad SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>
+<update comment="Add All to Season column in OutputFireStatistic if no season provided">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFireStatistic">
+    <item> UPDATE burnP3Plus_OutputFireStatistic SET season = (SELECT SeasonID FROM burnP3Plus_Season WHERE Name = 'All') WHERE season IS NULL </item>
+  </action>
+</update>

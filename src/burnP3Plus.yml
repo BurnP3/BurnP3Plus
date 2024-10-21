@@ -1,0 +1,13 @@
+name: burnP3Plus_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - r-base=4.1.3
+  - r-rsyncrosim=2.0.0
+  - r-tidyverse=2.0.0
+  - r-terra=1.5_21
+  - r-codetools=0.2_19
+  - r-data.table=1.14.8
+  - r-dplyr=1.1.2
+  - r-sf=1.0_7

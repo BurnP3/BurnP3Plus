@@ -11,3 +11,5 @@ _site
 .jekyll-metadata
 vendor
 *.code-workspace
+.Rproj.user
+BurnP3Plus.Rproj

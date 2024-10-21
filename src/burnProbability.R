@@ -24,11 +24,13 @@ checkPackageVersion <- function(packageString, minimumVersion){
   }
 }
 
-checkPackageVersion("rsyncrosim", "1.5.0")
+checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
 checkPackageVersion("data.table", "1.14.8")
+checkPackageVersion("terra",      "1.5.21")
+checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
@@ -49,6 +51,17 @@ OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap", returnInvisib
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T)
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T) %>% arrange(Iteration, FireID)
 
+# Create function to test if datasheets are empty
+isDatasheetEmpty <- function(ds){
+  if (nrow(ds) == 0) {
+    return(TRUE)
+  }
+  if (all(is.na(ds))) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
 ## Setup files and folders ----
 
 # Create temp folder, ensure it is empty
@@ -67,7 +80,7 @@ burnProbabilityFilePrefix <- file.path(tempDir, "burnProbability")
 relativeBurnProbabilityFilePrefix <- file.path(tempDir, "relativeBurnProbability")
 
 ## Handle empty values ----
-if(nrow(OutputOptionsSpatial) == 0) {
+if(isDatasheetEmpty(OutputOptionsSpatial)) {
   updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs.", type = "info")
   OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
   saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
@@ -355,7 +368,7 @@ if(saveBurnMaps) {
 
   # Start by setting up an empty template
   emptyTemplate <- NULL
-  if(nrow(OutputBurnMap > 0))
+  if(!isDatasheetEmpty(OutputBurnMap))
     emptyTemplate <- OutputBurnMap %>%
       pull(FileName) %>%
       pluck(1) %>%
@@ -409,7 +422,7 @@ if(saveBurnMaps) {
 
     # Build up burn count raster file names
     burnCountFilenames <- names(burnCountRasters) %>%
-      map_chr(function(seasonName) str_c(burnCountFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonID), ".tif")) %>%
+      map_chr(function(seasonName) str_c(burnCountFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
       set_names(names(burnCountRasters))
 
     # Write out count rasters by season
@@ -433,7 +446,7 @@ if(saveBurnMaps) {
           FileName = burnCountFilenames,
           Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
           mutate(
-            Season = lookup(Season, SeasonTable$SeasonID, SeasonTable$Name)) %>%
+            Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
           as.data.frame(),
         "burnP3Plus_OutputBurnCount")
     
@@ -452,7 +465,7 @@ if(saveBurnMaps) {
 
       # Build up probabilty raster file names
       burnProbabilityFilenames <- names(burnProbabilityRasters) %>%
-        map_chr(function(seasonName) str_c(burnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonID), ".tif")) %>%
+        map_chr(function(seasonName) str_c(burnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
         set_names(names(burnProbabilityRasters))
 
       # Write out probability rasters by season
@@ -475,7 +488,7 @@ if(saveBurnMaps) {
             FileName = burnProbabilityFilenames,
             Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
             mutate(
-              Season = lookup(Season, SeasonTable$SeasonID, SeasonTable$Name)) %>%
+              Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
             as.data.frame(),
           "burnP3Plus_OutputBurnProbability")
       
@@ -487,7 +500,7 @@ if(saveBurnMaps) {
 
         # Build up relative probabilty raster file names
         relativeBurnProbabilityFilenames <- names(burnProbabilityFilenames) %>%
-          map_chr(function(seasonName) str_c(relativeBurnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonID), ".tif")) %>%
+          map_chr(function(seasonName) str_c(relativeBurnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
           set_names(names(burnProbabilityFilenames))
 
         # Calculate relative burn probabilities
@@ -504,7 +517,7 @@ if(saveBurnMaps) {
             FileName = relativeBurnProbabilityFilenames,
             Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
             mutate(
-              Season = lookup(Season, SeasonTable$SeasonID, SeasonTable$Name)) %>%
+              Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
             as.data.frame(),
           "burnP3Plus_OutputRelativeBurnProbability")
       }

@@ -25,10 +25,12 @@ checkPackageVersion <- function(packageString, minimumVersion){
   }
 }
 
-checkPackageVersion("rsyncrosim", "1.5.0")
+checkPackageVersion("rsyncrosim", "2.0.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
+checkPackageVersion("terra",      "1.5.21")
+checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
 options(scipen = 100)
@@ -58,6 +60,18 @@ ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optiona
 ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T, lookupsAsFactors = F, returnInvisible = T)
 IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", optional = T, lookupsAsFactors = F, returnInvisible = T)
 IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution", optional = T, lookupsAsFactors = F, returnInvisible = T)
+DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T, returnInvisible = T) %>% unique
+
+# Create function to test if datasheets are empty
+isDatasheetEmpty <- function(ds){
+  if (nrow(ds) == 0) {
+    return(TRUE)
+  }
+  if (all(is.na(ds))) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
 
 # Import relevant rasters, allowing for missing values
 fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
@@ -66,28 +80,47 @@ fireZoneRaster <- tryCatch(
   error = function(e) NULL)
 
 ## Handle empty values ----
-if(nrow(FuelTypeTable) == 0) {
+if(isDatasheetEmpty(FuelTypeTable)) {
   updateRunLog("No fuel table found! Using default Canadian Forest Service fuel codes.", type = "warning")
   FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv")) %>% as.data.frame()
   saveDatasheet(myScenario, FuelTypeTable, "burnP3Plus_FuelType")
 }
 
-if(nrow(RunControl) == 0) {
+if(isDatasheetEmpty(RunControl)) {
   updateRunLog("No iteration count provided, defaulting to 1 iteration.", type = "warning")
   RunControl[1,] <- c(1,1,0,0)
   saveDatasheet(myScenario, RunControl, "burnP3Plus_RunControl")
 }
 
-if(nrow(IgnitionsPerIteration) == 0) {
+if(isDatasheetEmpty(IgnitionsPerIteration)) {
   updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.", type = "info")
   IgnitionsPerIteration[1,"Mean"] <- 1
   saveDatasheet(myScenario, IgnitionsPerIteration, "burnP3Plus_IgnitionsPerIteration")
 }
 
-if(nrow(ResampleOption) == 0) {
+if(isDatasheetEmpty(ResampleOption)) {
   updateRunLog("No Minimum Fire Size chosen.\nDefaulting to a Minimum Fire Size of 1ha and drawing 10% extra fires for resampling.\nPlease see the Fire Resampling Options table for more details.", type = "info")
   ResampleOption[1,] <- c(1,0.1)
   saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
+}
+
+if(any(is.na(ProbabilisticIgnitionLocation$IgnitionGridFileName))) {
+  stop("Not all Probabilistic Ignition Grids specified in the Ignition Location datasheet.")
+}
+
+# Check for ignition count distribution
+for (i in 1:nrow(IgnitionsPerIteration)){
+  distName <- IgnitionsPerIteration$DistributionType[i]
+  if (is.na(distName) | distName == "Gamma" | distName == "Normal") next
+  distValues <- DistributionValue %>% filter(Name == distName)
+  if (nrow(distValues) == 0){
+    stop(paste0("No values found in Distribution datasheet for Ignition Count distribution: ", distName))
+  }
+}
+
+# Check if values in Deterministic Ignition Locations is empty
+if (!isDatasheetEmpty(DeterministicIgnitionLocation)) {
+  updateRunLog("Values in Deterministic Ignition Location datasheet are overwritten.", type = "warning")
 }
 
 ## Check raster inputs for consistency ----
@@ -144,7 +177,7 @@ if(byDistribution) {
 
   # If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
   if(!isAuto) {
-    if(nrow(distributionData) == 0)
+    if(isDatasheetEmpty(distributionData))
       stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
 
     if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
@@ -155,15 +188,15 @@ if(byDistribution) {
 iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
 proportionExtraIgnitions <- 0
-if (length(ResampleOption$ProportionExtraIgnition) > 0)
+if (!is.na(ResampleOption$ProportionExtraIgnition))
   proportionExtraIgnitions <- ResampleOption$ProportionExtraIgnition
 
 ## Handle empty tables ----
-if(nrow(FireZoneTable) == 0)
+if(isDatasheetEmpty(FireZoneTable))
   FireZoneTable <- data.frame(Name = "", ID = 0)
-if(nrow(CauseTable) == 0)
+if(isDatasheetEmpty(CauseTable))
   CauseTable <- data.frame(Name = "")
-if(nrow(SeasonTable) == 0)
+if(isDatasheetEmpty(SeasonTable))
   SeasonTable <- data.frame(Name = "")
 
 ## Function Definitions ----
@@ -299,7 +332,12 @@ if(is.na(distributionName)) {
 # Otherwise sample from a user distribution
 } else {
   ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
-  numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+  
+  if (nrow(ignitionCountDistribution) == 1) {
+    numIgnitions <- rep(IgnitionsPerIteration$Value, numIterations)
+  } else {
+    numIgnitions <- sample(ignitionCountDistribution$Value, numIterations, replace = T, prob = ignitionCountDistribution$RelativeFrequency)
+  }
 }
 
 saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
@@ -333,7 +371,7 @@ DeterminisiticIgnitionLocation <-
 
   # Sample rows from the Ignition Distribution table to assign
   # a season, cause, and firezone to each ignition if the table is present
-  { if(nrow(IgnitionDistribution) > 0) {
+  { if(!isDatasheetEmpty(IgnitionDistribution)) {
       mutate(.,
         situation = sample(nrow(IgnitionDistribution), nrow(.), replace = T, prob = IgnitionDistribution$RelativeLikelihood),
         season = IgnitionDistribution$Season[situation],
@@ -360,7 +398,7 @@ DeterminisiticIgnitionLocation <-
   as.data.frame
 
 # Return output
-saveDatasheet(myScenario, DeterminisiticIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = T)
+saveDatasheet(myScenario, DeterminisiticIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = F)
 
 # Wrapup the SyncroSim progress bar
 progressBar("end")

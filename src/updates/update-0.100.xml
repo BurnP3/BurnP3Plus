@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<update>
+<update comment="Legacy Update 1">
   <action code="Exec" condition="TableExists" criteria="burnP3Plus_Distribution">
     <item>ALTER TABLE burnP3Plus_Distribution ADD COLUMN IsAuto Integer</item>
     <item>INSERT INTO burnP3Plus_Distribution (ProjectID, Name, IsAuto) SELECT ProjectID, 'Normal', '-1' FROM core_Project</item>

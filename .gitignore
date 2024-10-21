@@ -2,6 +2,7 @@
 .vs
 .metadata
 .vscode
+.RData
 
 # Documentation
 _site

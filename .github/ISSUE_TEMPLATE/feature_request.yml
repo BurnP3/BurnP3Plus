@@ -1,6 +1,6 @@
-name: Burn-P3+ Feature Request
-description: Request a new feature in Burn-P3+
-title: "[Burn-P3+ FR]: "
+name: BurnP3+ Feature Request
+description: Request a new feature in BurnP3+
+title: "[BurnP3+ FR]: "
 labels: ["feature", "triage", "BurnP3Plus"]
 assignees:
   - badgeronabike

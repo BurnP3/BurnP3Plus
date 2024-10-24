@@ -1,6 +1,6 @@
-name: Burn-P3+ Bug Report
-description: File a Burn-P3+ bug report
-title: "[Burn-P3+ Bug]: "
+name: BurnP3+ Bug Report
+description: File a BurnP3+ bug report
+title: "[BurnP3+ Bug]: "
 labels: ["bug", "triage", "BurnP3Plus"]
 assignees:
   - badgeronabike

@@ -35,7 +35,7 @@ In this Quickstart tutorial, you will run the **BurnP3+** [*package*](https://do
 
 > An additional package to **BurnP3+** is also available: [burnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus/releases/){:target="_blank"}. Unlike the Cell2Fire fire growth model that is raster-based, Prometheus is vector-based and capable of executing fine-scale simulations. This degree of accuracy, however, is more computationally demanding in terms of memory use. Moreover, running a burnP3PlusPrometheus model requires the installation of [Prometheus 2021.12.03](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"}.
 
-To install the **BurnP3+** *package* and the burnP3PlusCell2Fire *package*, open SyncroSim Studio (**Start | SyncroSim Studio**) and select **File | Local Packages...**. 
+To install the **BurnP3+** *package* and the burnP3PlusCell2Fire *package*, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-0.png">
 
@@ -101,7 +101,7 @@ This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which is 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-5.png">
 
-This information can be found by selecting **File | Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** *package* is enabled.
+This information can be found by selecting **File > Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** *package* is enabled.
 
 Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*Project Datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all *scenarios* for a *project*. 
 

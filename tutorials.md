@@ -17,7 +17,7 @@ To follow along, this tutorial requires:
 
 Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts.
 
-To install the **BurnP3+** SyncroSim *package* and the **burnP3PlusPrometheus** *package*, open SyncroSim Studio (**Start | SyncroSim Studio**) and select **File | Local Packages...**.
+To install the **BurnP3+** SyncroSim *package* and the **burnP3PlusPrometheus** *package*, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-0.png">
 

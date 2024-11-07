@@ -37,17 +37,17 @@ To open the **Glacier National Park Example** template library in SyncroSim Stud
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.7.png">
 
-2.	Click on the **Download** icon to download the library file, called “*Glacier National Park Example.ssimbak*”.
+2. Click on the **Download** icon to download the library file, called “*Glacier National Park Example.ssimbak*”.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.8.png">
 
-3.	Start **SyncroSim Studio** by searching for it using the **Windows** toolbar and under the **File** menu, select **Open**.
+3. Start **SyncroSim Studio** by searching for it using the **Windows** toolbar and under the **File** menu, select **Open**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
 
-4.	From the File Browser, navigate to the recently downloaded “*Glacier National Park Example.ssimbak*” and select this file to open.
+4. From the File Browser, navigate to the recently downloaded “*Glacier National Park Example.ssimbak*” and select this file to open.
 
-5.	When prompted, you can accept the default **File name** and **Folder**, or optionally type in a new file name for the *library* and change the target folder using the **Browse...** button. Click **OK**.
+5. When prompted, you can accept the default **File name** and **Folder**, or optionally type in a new file name for the *library* and change the target folder using the **Browse...** button. Click **OK**.
 
 The new **Glacier National Park Example** *library* will be created and loaded into the **Library Explorer** window in SyncroSim Studio.
 

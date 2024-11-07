@@ -119,10 +119,10 @@ To view the model inputs for the *scenario*, double-click on **Baseline Burning 
 
 In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages: (1) Sample the number and locations of ignitions for each simulated burn season, or iteration; (2) Sample the burning conditions for each ignitions, which depend on when and where the ignitions occurred; (3) Simulate each fire deterministically using a fire growth model; and (4) Summarise the outputs of the fire growth model to calculate burn probability and other burn metrics. In this example, we will run the full pipeline:
 
--	Stage 1: Sample ignitions
--	Stage 2: Sample burn conditions
--	Stage 3: Grow fires
--	Stage 4: Summarize burn probability
+-	Stage 1: Sample Ignitions
+-	Stage 2: Sample Burning Conditions
+-	Stage 3: Grow Fires with Cell2Fire
+-	Stage 4: Summarize Burn Probability
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-8.png">
 

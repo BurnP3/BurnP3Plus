@@ -61,4 +61,6 @@ Now you are all set to follow along with the tutorial. This video will provide:
 * Options for how to configure the fire growth model
 * Instructions on how to run **BurnP3+** and vizualize outputs
 
+> **Note:** Please note that the demonstration video below was recorded using SyncroSim version 2. 
+
 <iframe width="600" height="378" src="https://www.youtube.com/embed/iDaHoUEM3Rw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

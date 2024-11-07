@@ -73,15 +73,15 @@ To open the **Cell2Fire** template library in SyncroSim Studio:
 
 1. Navigate to the Cell2Fire template library on [SyncroSim Cloud](https://cloud.syncrosim.com/) by selecting **Explore** from the top menu, searching for a library with the name “*Cell2Fire Example*”, and clicking on the library name.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.4.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.4.png">
 
 2.	Click on the **Download** icon to download the library file, called “*Cell2Fire-Example.ssimbak*”.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.5.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.5.png">
 
 3.	Start **SyncroSim Studio** by searching for it using the **Windows** toolbar and under the **File** menu, select **Open**.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
 
 4.	From the File Browser, navigate to the recently downloaded “*Cell2Fire-Example.ssimbak*” and select this file to open.
 

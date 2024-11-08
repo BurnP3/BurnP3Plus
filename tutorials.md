@@ -8,30 +8,50 @@ permalink: /tutorials
 
 ## Configuring models in **BurnP3+**
 
-This video tutorial covers how to configure models in the **BurnP3+** SyncroSim *Package*. 
+This video tutorial covers how to configure models in the **BurnP3+** SyncroSim *package*. 
 
 To follow along, this tutorial requires:
-* the SyncroSim software, version 2.4.42;
-* the **BurnP3+** SyncroSim *Package*; and
-* the burnP3PlusPrometheus *Add-on Package*
+* the SyncroSim software, version 3.0.9;
+* the **BurnP3+** SyncroSim *package*; and
+* the **burnP3PlusPrometheus** *package*
 
 Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts.
 
-To install the **BurnP3+** SyncroSim *Package* and the burnP3PlusPrometheus *Add-on Package*, open the SyncroSim Windows UI (**Start > Apps > SyncroSim**) and select **File > Packages...**.
+To install the **BurnP3+** SyncroSim *package* and the **burnP3PlusPrometheus** *package*, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-0.png">
 
-Click on the **Install...** button.
+Click on the **Install from Server...** button.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-1.png">
 
-Mark the checkboxes beside **burnP3Plus** and **burnP3PlusPrometheus**, and click **OK**.
+Mark the checkbox beside **burnP3Plus**, and click **OK**. Repeat this process for **burnP3PlusPrometheus**. For more details on installing **BurnP3+** *packages*, please see the [Getting Started](https://burnp3.github.io/BurnP3Plus/getting_started.html) page.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2-2.png">
 
-Next, you will create a SyncroSim *Library* from a remote template. To do so, select **File > New...** and choose **burnP3Plus** from the list of packages and the **Glacier Example** as the template *Library*. You can edit the **File name** and use the **Browse** button to select where you would like to save the *Library*. When you are ready, click **OK**.
+For this tutorial, we will use with a pre-built example library using the **BurnP3+** and **Prometheus** packages. This example uses the Glacier National Park landscape in British Columbia, Canada to demonstrate the basics of running BurnP3+ using the Prometheus fire growth model.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-3-2.png">
+To open the **Glacier National Park Example** template library in SyncroSim Studio:
+
+1. Navigate to the Glacier National Park Example template library on [SyncroSim Cloud](https://cloud.syncrosim.com/) by selecting **Explore** from the top menu, searching for a library with the name “*Glacier National Park Example*”, and clicking on the library name.
+
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.7.png">
+
+2. Click on the **Download** icon to download the library file, called “*Glacier National Park Example.ssimbak*”.
+
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.8.png">
+
+3. Start **SyncroSim Studio** by searching for it using the **Windows** toolbar and under the **File** menu, select **Open**.
+
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
+
+4. From the File Browser, navigate to the recently downloaded “*Glacier National Park Example.ssimbak*” and select this file to open.
+
+5. When prompted, you can accept the default **File name** and **Folder**, or optionally type in a new file name for the *library* and change the target folder using the **Browse...** button. Click **OK**.
+
+The new **Glacier National Park Example** *library* will be created and loaded into the **Library Explorer** window in SyncroSim Studio.
+
+<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-4.1.png">
 
 Now you are all set to follow along with the tutorial. This video will provide:
 
@@ -40,5 +60,7 @@ Now you are all set to follow along with the tutorial. This video will provide:
 * Instructions on how to sample from distributions in **BurnP3+** 
 * Options for how to configure the fire growth model
 * Instructions on how to run **BurnP3+** and vizualize outputs
+
+> **Note:** Please note that the demonstration video below was recorded using SyncroSim version 2.4, and BurnP3+ version 1.0. 
 
 <iframe width="600" height="378" src="https://www.youtube.com/embed/iDaHoUEM3Rw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

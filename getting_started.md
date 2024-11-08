@@ -29,9 +29,9 @@ This Quickstart tutorial will introduce you to the basics of working with **Burn
 
 <p id="step1"> <h2> <b>Step 1: Installing the BurnP3+ package</b> </h2> </p>
 
-Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.0.9). Download the latest version of SyncroSim [here](https://syncrosim.com/studio-download/){:target="_blank"} and follow the installation prompts. 
+Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.0.9). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
 
-In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} [SyncroSim *packages*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+Cell2Fire** package uses the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} fire growth model.
+In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} SyncroSim [*packages*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+Cell2Fire** package uses the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} fire growth model.
 
 > An additional package to **BurnP3+** is also available: [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus/releases/){:target="_blank"}. Unlike the Cell2Fire fire growth model that is raster-based, Prometheus is vector-based and capable of executing fine-scale simulations. This degree of accuracy, however, is more computationally demanding in terms of memory use. Moreover, running a BurnP3+Prometheus model requires the installation of [Prometheus 2021.12.03](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"}.
 

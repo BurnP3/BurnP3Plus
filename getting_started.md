@@ -13,7 +13,7 @@ title: Getting started
 
 ## **BurnP3+** Quickstart Tutorial
 
-This Quickstart tutorial will introduce you to the basics of working with **BurnP3+** in the SyncroSim Studio. The steps include:
+This Quickstart tutorial will introduce you to the basics of working with **BurnP3+** in SyncroSim Studio. The steps include:
 
 1. <a href="#step1"> Installing the <b>BurnP3+</b> package </a>
 2. <a href="#step2"> Creating a new <b>BurnP3+</b> <i>library</i> </a>
@@ -31,11 +31,11 @@ This Quickstart tutorial will introduce you to the basics of working with **Burn
 
 Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.0.9). Download the latest version of SyncroSim [here](https://syncrosim.com/studio-download/){:target="_blank"} and follow the installation prompts. 
 
-In this Quickstart tutorial, you will run the **BurnP3+** [*package*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"} with the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} model, which requires the [burnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} [*package*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}.
+In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} [SyncroSim *packages*](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+Cell2Fire** package uses the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} fire growth model.
 
-> An additional package to **BurnP3+** is also available: [burnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus/releases/){:target="_blank"}. Unlike the Cell2Fire fire growth model that is raster-based, Prometheus is vector-based and capable of executing fine-scale simulations. This degree of accuracy, however, is more computationally demanding in terms of memory use. Moreover, running a burnP3PlusPrometheus model requires the installation of [Prometheus 2021.12.03](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"}.
+> An additional package to **BurnP3+** is also available: [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus/releases/){:target="_blank"}. Unlike the Cell2Fire fire growth model that is raster-based, Prometheus is vector-based and capable of executing fine-scale simulations. This degree of accuracy, however, is more computationally demanding in terms of memory use. Moreover, running a BurnP3+Prometheus model requires the installation of [Prometheus 2021.12.03](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"}.
 
-To install the **BurnP3+** *package* and the burnP3PlusCell2Fire *package*, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**. 
+To install the **BurnP3+** and **BurnP3+Cell2Fire** packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-0.png">
 
@@ -63,15 +63,15 @@ Next, click on the **Install from Server...** button again to open the packages 
 
 <br>
 
-<p id="step2"> <h2> <b>Step 2: Opening a BurnP3+ <i>library</i></b> </h2> </p>
+<p id="step2"> <h2> <b>Step 2: Opening a BurnP3+ library</b> </h2> </p>
 
-Having installed **BurnP3+** and **burnP3PlusCell2Fire**, you are now ready to create your first SyncroSim *library*. A [*library*](https://docs.syncrosim.com/getting_started/overview.html#libraries){:target="_blank"} is a file (with extension .ssim) that contains all of your model inputs and outputs. 
+Having installed **BurnP3+** and **burnP3PlusCell2Fire**, you are now ready to create your first SyncroSim [*library*](https://docs.syncrosim.com/getting_started/overview.html#libraries){:target="_blank"}. A library is a file (with extension .ssim) that stores all the data and configurations associated with your model. 
 
-We will start with a pre-built example library using the **BurnP3+** and **Cell2Fire** packages. This example uses a synthetic landscape to demonstrate the basics of running BurnP3+ using the Cell2Fire fire growth model.
+We will start with a pre-built example library using the **BurnP3+** and **BurnP3+Cell2Fire** packages. This example uses a synthetic landscape to demonstrate the basics of running **BurnP3+** using the **Cell2Fire** fire growth model.
 
 To open the **Cell2Fire** template library in SyncroSim Studio:
 
-1. Navigate to the Cell2Fire template library on [SyncroSim Cloud](https://cloud.syncrosim.com/) by selecting **Explore** from the top menu, searching for a library with the name “*Cell2Fire Example*”, and clicking on the library name.
+1. Navigate to the Cell2Fire template library on [SyncroSim Cloud](https://cloud.syncrosim.com/){:target="_blank"} by selecting **Explore** from the top menu, searching for a library with the name “*Cell2Fire Example*”, and clicking on the library name.
 
     <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.4.png">
 
@@ -85,48 +85,50 @@ To open the **Cell2Fire** template library in SyncroSim Studio:
 
 4.	From the File Browser, navigate to the recently downloaded “*Cell2Fire-Example.ssimbak*” and select this file to open.
 
-5.	When prompted, you can accept the default **File name** and **Folder**, or optionally type in a new file name for the *library* and change the target folder using the **Browse...** button. Click **OK**.
+5.	When prompted, you can accept the default **File name** and **Folder**, or optionally use **Browse...** to choose a different file name and folder. Click **OK**.
 
 The new **Cell2Fire Example** *library* will be created and loaded into the **Library Explorer** window in SyncroSim Studio.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-4.png">
 
-The **Cell2Fire Example** *library* contains a *project* named **Definitions**, with one *scenario* named **Baseline Burning Hours**. This *library* template uses a synthetic landscape to demonstrate the basics of running **BurnP3+** using the Cell2Fire model as the fire growth model, and to assess the effects of burning conditions on fire risk across the landscape.
+The **Cell2Fire Example** library contains a [*project*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/getting_started/overview.html#scenarios){:target="_blank"} named **Baseline Burning Hours**.
 
 <br>
 
-<p id="step3"> <h2> <b>Step 3: Configuring the BurnP3+ <i>library</i></b> </h2> </p>
+<p id="step3"> <h2> <b>Step 3: Configuring the BurnP3+ library</b> </h2> </p>
 
-This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which has already been added a *package* in this template *library*.
+This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which has already been added as a package in this template library.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-5.png">
 
-This information can be found by selecting **File > Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** *package* has been added.
+This information can be found by selecting **File > Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** package has been added.
 
-Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all *scenarios* for a *project*. 
+Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all scenarios for a project. 
 
-Navigate to the **BurnP3+** tab, under the **Fuels** tab, click **Fuel Types**. Here, you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. For the purposes of this Quickstart tutorial, the *library* template was pre-loaded with a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
+Navigate to the **BurnP3+** tab, under the **Fuels** tab, click **Fuel Types**. Here, you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. This example library already contains a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-6.png">
 
-Next, under the **BurnP3+ Cell2Fire** tab, click on **Cell2Fire Crosswalk**. Here, each fuel type listed under the **Fuel Types** tab needs to be linked to one of the fuel codes recognized by Cell2Fire. In the case of these two fuel types, Cell2Fire recognizes the Canadian Forest Service Fuel Codes [C2](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"} and [S1](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"}.
+Next, under the **BurnP3+Cell2Fire** tab, click on **Cell2Fire Crosswalk**. Here, each fuel type listed under the **Fuel Types** tab needs to be linked to one of the fuel codes recognized by Cell2Fire. In the case of these two fuel types, Cell2Fire recognizes the Canadian Forest Service Fuel Codes [C2](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"} and [S1](https://cwfis.cfs.nrcan.gc.ca/background/fueltypes/c2){:target="_blank"}.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-7.png">
 
-Lastly, in the **Library Explorer** window, you will see one *scenario* named **Baseline Burning Hours**. Model inputs in SyncroSim are organized into *scenarios*. Each *scenario* is associated with [*scenario datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data that are specified for each *scenario*.
+Lastly, in the **Library Explorer** window, you will see one scenario named **Baseline Burning Hours**. Model inputs in SyncroSim are organized into scenarios. Each scenario is associated with [*scenario datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data that are specified for each scenario.
 
-To view the model inputs for the *scenario*, double-click on **Baseline Burning Hours**. 
+To view the model inputs for the scenario, double-click on **Baseline Burning Hours**. 
 
-In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages: (1) Sample the number and locations of ignitions for each simulated burn season, or iteration; (2) Sample the burning conditions for each ignitions, which depend on when and where the ignitions occurred; (3) Simulate each fire deterministically using a fire growth model; and (4) Summarise the outputs of the fire growth model to calculate burn probability and other burn metrics. In this example, we will run the full pipeline:
+In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages:
 
--	Stage 1: Sample Ignitions
--	Stage 2: Sample Burning Conditions
--	Stage 3: Grow Fires with Cell2Fire
--	Stage 4: Summarize Burn Probability
+-	**Stage 1: Sample Ignitions**: Sample the number and locations of ignitions for each simulated burn season, or iteration;
+-	**Stage 2: Sample Burning Conditions**: Sample the burning conditions for each ignitions, which depend on when and where the ignitions occurred;
+-	**Stage 3: Grow Fires with Cell2Fire**: Simulate each fire deterministically using a fire growth model; and
+-	**Stage 4: Summarize Burn Probability**: Summarise the outputs of the fire growth model to calculate burn probability and other burn metrics.
+
+In this example, we will run the full pipeline.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-8.png">
 
-In the **BurnP3+** tab, **Run Control** allows users to specify the number of iterations or Monte Carlo realizations to run. In this example, each *scenario* will run for **100 iterations**. Each iteration represents a stochastic simulation of a single fire season. Typically, **BurnP3+** should be run for tens of thousands of iterations.
+In the **BurnP3+** tab, **Run Control** allows users to specify the number of iterations or Monte Carlo realizations to run. In this example, each scenario will run for **100 iterations**. Each iteration represents a stochastic simulation of a single fire season. Typically, **BurnP3+** should be run for tens of thousands of iterations.
 
 The **Landscape Maps** contains the pre-loaded raster files for **Fuel** and **Elevation** (although this is an optional input).
 
@@ -148,15 +150,15 @@ Expand the **Sample Ignitions** node. The **Ignition Count** *datasheet* defines
 
 <p id="stage2"> <h3> <b><i>Stage 2: Sample Burning Conditions</i></b> </h3> </p>
 
-Navigate to the next node, **Sample Burning Conditions**. The **Spread Event Days** *datasheet* specifies the number of days uncontrolled fires are actively burning and spreading in a season. Similarly, for the purposes of this Quickstart tutorial, **Spread Event Days** was set to **1**.
+Navigate to the next node, **Sample Burning Conditions**. The **Spread Event Days** datasheet specifies the number of days uncontrolled fires are actively burning and spreading in a season. Similarly, for the purposes of this Quickstart tutorial, **Spread Event Days** was set to **1**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-11.1.png">
 
-The **Daily Burning Hours** *datasheet* defines the number of hours fires are actively burning per day. For the **Baseline Burning Hours** *scenario*, **Daily Burning Hours** was set to **4** for all **Seasons**.
+The **Daily Burning Hours** datasheet defines the number of hours fires are actively burning per day. For the **Baseline Burning Hours** *cenario, **Daily Burning Hours** was set to **4** for all **Seasons**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-12.png">
 
-The **Daily Weather** *datasheet* specifies weather variables for the landscape of interest. Each row corresponds to one day of weather data. The required variables are: temperature, relative humidity, wind speed, wind direction, precipitation, fine fuel moisture code, duff moisture code, drought code, initial spread index, buildup index, and fire weather index.
+The **Daily Weather** datasheet specifies weather variables for the landscape of interest. Each row corresponds to one day of weather data. The required variables are: temperature, relative humidity, wind speed, wind direction, precipitation, fine fuel moisture code, duff moisture code, drought code, initial spread index, buildup index, and fire weather index.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-13.png">
 
@@ -172,13 +174,13 @@ Finally, the **Output Options** node specifies which outputs will be generated a
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-14.png">
 
-Close the window for the **Baseline Burning Hours** *scenario*. 
+Close the window for the **Baseline Burning Hours** scenario. 
 
-Next, you will create a new *scenario* to compare the effects of **Daily Burning Hours** on fire risk. While you could create a new empty *scenario*, instead you will copy, paste, and modify the existing *scenario* to save time and reuse the model inputs. To do so, in the **Library Explorer** window, right-click on the current *scenario* (**Baseline Burning Hours**), and select **Copy** and **Paste** from the context menu.
+Next, you will create a new scenario to compare the effects of **Daily Burning Hours** on fire risk. While you could create a new empty scenario, instead you will copy, paste, and modify the existing scenario to save time and reuse the model inputs. To do so, in the **Library Explorer** window, right-click on the current scenario (**Baseline Burning Hours**), and select **Copy** and **Paste** from the context menu.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-15.png">
 
-Rename the *scenario* by right clicking the newly created *scenario*, selecting **Rename…** from the context menu, and typing **Extended Burning Hours**. Next, double click on the **Extended Burning Hours** *scenario* and navigate to the **Sample Burning Conditions** tab. Here, you will modify the input **Daily Burning Hours** from **4** to **6**.
+Rename the *scenario* by right clicking the newly created scenario, selecting **Rename…** from the context menu, and typing **Extended Burning Hours**. Next, double click on the **Extended Burning Hours** scenario and navigate to the **Sample Burning Conditions** tab. Here, you will modify the input **Daily Burning Hours** from **4** to **6**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-16.png">
 
@@ -186,19 +188,19 @@ Rename the *scenario* by right clicking the newly created *scenario*, selecting 
 
 <p id="step4"> <h2> <b>Step 4: Running the Model</b> </h2> </p>
 
-After reviewing the model inputs and creating a new *scenario*, you are now ready to run the model. 
+After reviewing the model inputs and creating a new scenario, you are now ready to run the model. 
 
 **Multiprocessing** is enabled to run 6 jobs in parallel. You can adjust the number of multiprocessing jobs according to the specifications of your computer. A good rule of thumb to follow is number of logical cores minus 1.
 
-Next, right-click on the **Baseline Burning Hours** *scenario*, and from the context menu select **Run**. If prompted to save your project, click **Yes**.
+Next, right-click on the **Baseline Burning Hours** scenario, and from the context menu select **Run**. If prompted to save your project, click **Yes**.
 
 <img align="middle" style="padding: 3px" width="500" src="assets/images/BurnP3Plus-screenshot-17.png">
 
-A **Run Monitor** window will appear, indicating the **Status** of the *scenario* as **Running**. At the bottom of the SyncroSim Studio window, an orange progress bar will provide further information during each stage of the pipeline. 
+A **Run Monitor** window will appear, indicating the **Status** of the scenario as **Running**. At the bottom of the SyncroSim Studio window, an orange progress bar will provide further information during each stage of the pipeline. 
 
-When, and if, the run is successful, you will see the **Status** of **Done** in the **Run Monitor**. If an error or warning has been issued, click on the **Run Log** link to see a report of problems. Make any required changes to your *scenario* and re-run it.
+When the run has completed you will see the **Status** of **Done** in the **Run Monitor**. If an error or warning has been issued, click on the **Run Log** link to see a report of problems. Make any required changes to your scenario and re-run it.
 
-Running a model in SyncroSim produces a *results scenario*, which contain the input *datafeeds* associated with the *parent scenario*, as well as output *datafeeds* for the *scenario* run. Each *result scenario* inherits the *parent scenario*’s name and receives a unique ID.
+Running a model in SyncroSim produces a [*results scenario*](https://docs.syncrosim.com/how_to_guides/modelrun_overview.html#results-scenarios){:target="_blank"}, which contain the input datasheets associated with the *parent scenario*, as well as output datasheets for the scenario run. Each results scenario inherits the parent scenario’s name and receives a unique ID.
 
 <img align="middle" style="padding: 3px" width="400" src="assets/images/BurnP3Plus-screenshot-18.png">
 
@@ -208,11 +210,11 @@ Repeat the same process to run the **Extended Burning Hours** *scenario*.
 
 <p id="step5"> <h2> <b>Step 5: Analyzing the Model Results</b> </h2> </p>
 
-To view the tabular results from each of your runs, double-click on one of your *results scenarios* and navigate to the last tab, **Output Fire Statistics**. Here, you can view the results and have the option to export the data by right-clicking anywhere on the spreadsheet, and selecting **Export All** from the context menu.
+To view the tabular results from each of your runs, double-click on one of your results scenarios and navigate to the last tab, **Output Fire Statistics**. Here, you can view the results and have the option to export the data by right-clicking anywhere on the spreadsheet, and selecting **Export All** from the context menu.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-19.png">
 
-Next, move to the results panel at the bottom left of the **Library Explorer** window. Under the **Charts** tab, double-click on **Burn Area by Fuel Type** to see the tabular results for area burned. 
+Next, move to the results panel at the bottom left of SyncroSim Studio. Under the **Charts** tab, double-click on **Burn Area by Fuel Type** to see the tabular results for area burned. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-20.png">
 
@@ -224,4 +226,4 @@ Lastly, under the **Maps** tab you can also find the **Input Maps** for fuel typ
 
 <img align="middle" style="padding: 3px" width="350" src="assets/images/BurnP3Plus-screenshot-22.png">
 
-> **Note:** Map legends can be customized by double-clicking on the bins. You can also add and remove a result scenario being charted or mapped by selecting a result scenario in the **Library Explorer** and then choosing either **Add to Results** or **Remove from Results** from context menu. Scenarios with results currently selected for analysis are highlighted in bold in the **Library Explorer**.
+> **Note:** Map legends can be customized by double-clicking on the bins. You can also add and remove a result scenario being charted or mapped by selecting a result scenario in the **Library Explorer** and then choosing either **Add to Results** or **Remove from Results** from the context menu. Scenarios with results currently selected for analysis have a red checkmark and are bolded in the **Library Explorer**.

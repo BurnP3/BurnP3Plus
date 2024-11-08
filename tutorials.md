@@ -8,16 +8,16 @@ permalink: /tutorials
 
 ## Configuring models in **BurnP3+**
 
-This video tutorial covers how to configure models in the **BurnP3+** SyncroSim *package*. 
+This video tutorial covers how to use the **BurnP3+** SyncroSim package to configure a wildfire probability model. 
 
 To follow along, this tutorial requires:
 * the SyncroSim software, version 3.0.9;
-* the **BurnP3+** SyncroSim *package*; and
-* the **burnP3PlusPrometheus** *package*
+* the **BurnP3+** SyncroSim package; and
+* the **BurnP3+Prometheus** SyncroSim package
 
 Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts.
 
-To install the **BurnP3+** SyncroSim *package* and the **burnP3PlusPrometheus** *package*, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**.
+To install the **BurnP3+** and **BurnP3+Prometheus** SyncroSim packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-0.png">
 
@@ -25,11 +25,11 @@ Click on the **Install from Server...** button.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-1.png">
 
-Mark the checkbox beside **burnP3Plus**, and click **OK**. Repeat this process for **burnP3PlusPrometheus**. For more details on installing **BurnP3+** *packages*, please see the [Getting Started](https://burnp3.github.io/BurnP3Plus/getting_started.html) page.
+Mark the checkbox beside **burnP3Plus**, and click **OK**. Repeat this process for **burnP3PlusPrometheus**. For more details on installing **BurnP3+** packages, please see the [Getting Started](https://burnp3.github.io/BurnP3Plus/getting_started.html) page.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2-2.png">
 
-For this tutorial, we will use with a pre-built example library using the **BurnP3+** and **Prometheus** packages. This example uses the Glacier National Park landscape in British Columbia, Canada to demonstrate the basics of running BurnP3+ using the Prometheus fire growth model.
+For this tutorial, we will use with a pre-built example library using the **BurnP3+** and **BurnP3+Prometheus** packages. This example uses the Glacier National Park landscape in British Columbia, Canada to demonstrate the basics of running **BurnP3+** using the **Prometheus** fire growth model.
 
 To open the **Glacier National Park Example** template library in SyncroSim Studio:
 
@@ -47,7 +47,7 @@ To open the **Glacier National Park Example** template library in SyncroSim Stud
 
 4. From the File Browser, navigate to the recently downloaded “*Glacier National Park Example.ssimbak*” and select this file to open.
 
-5. When prompted, you can accept the default **File name** and **Folder**, or optionally type in a new file name for the *library* and change the target folder using the **Browse...** button. Click **OK**.
+5. When prompted, you can accept the default **File name** and **Folder**, or optionally use **Browse...** to choose a new file name and folder. Click **OK**.
 
 The new **Glacier National Park Example** *library* will be created and loaded into the **Library Explorer** window in SyncroSim Studio.
 

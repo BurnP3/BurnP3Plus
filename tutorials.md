@@ -35,15 +35,15 @@ To open the **Glacier National Park Example** template library in SyncroSim Stud
 
 1. Navigate to the Glacier National Park Example template library on [SyncroSim Cloud](https://cloud.syncrosim.com/) by selecting **Explore** from the top menu, searching for a library with the name “*Glacier National Park Example*”, and clicking on the library name.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.7.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.7.png">
 
 2. Click on the **Download** icon to download the library file, called “*Glacier National Park Example.ssimbak*”.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.8.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.8.png">
 
 3. Start **SyncroSim Studio** by searching for it using the **Windows** toolbar and under the **File** menu, select **Open**.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-2.6.png">
 
 4. From the File Browser, navigate to the recently downloaded “*Glacier National Park Example.ssimbak*” and select this file to open.
 
@@ -61,6 +61,6 @@ Now you are all set to follow along with the tutorial. This video will provide:
 * Options for how to configure the fire growth model
 * Instructions on how to run **BurnP3+** and vizualize outputs
 
-> **Note:** Please note that the demonstration video below was recorded using SyncroSim version 2. 
+> **Note:** Please note that the demonstration video below was recorded using SyncroSim version 2.4, and BurnP3+ version 1.0. 
 
 <iframe width="600" height="378" src="https://www.youtube.com/embed/iDaHoUEM3Rw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

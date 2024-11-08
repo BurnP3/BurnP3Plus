@@ -63,7 +63,7 @@ Next, click on the **Install from Server...** button again to open the packages 
 
 <br>
 
-<p id="step2"> <h2> <b>Step 2: Creating a new BurnP3+ <i>library</i></b> </h2> </p>
+<p id="step2"> <h2> <b>Step 2: Opening a BurnP3+ <i>library</i></b> </h2> </p>
 
 Having installed **BurnP3+** and **burnP3PlusCell2Fire**, you are now ready to create your first SyncroSim *library*. A [*library*](https://docs.syncrosim.com/getting_started/overview.html#libraries){:target="_blank"} is a file (with extension .ssim) that contains all of your model inputs and outputs. 
 
@@ -97,13 +97,13 @@ The **Cell2Fire Example** *library* contains a *project* named **Definitions**, 
 
 <p id="step3"> <h2> <b>Step 3: Configuring the BurnP3+ <i>library</i></b> </h2> </p>
 
-This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which is already enabled as a *package* in this template *library*.
+This Quickstart tutorial demonstrates the Cell2Fire fire growth model, which has already been added a *package* in this template *library*.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-5.png">
 
-This information can be found by selecting **File > Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** *package* is enabled.
+This information can be found by selecting **File > Library Datafeeds** and navigating to the **General** tab. Under **Packages**, you'll find that the **burnP3PlusCell2Fire** *package* has been added.
 
-Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*Project Datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all *scenarios* for a *project*. 
+Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datafeeds*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all *scenarios* for a *project*. 
 
 Navigate to the **BurnP3+** tab, under the **Fuels** tab, click **Fuel Types**. Here, you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. For the purposes of this Quickstart tutorial, the *library* template was pre-loaded with a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
 
@@ -168,7 +168,7 @@ Under the **Fire Growth Model Options** tab, all settings are optional. However,
 
 Finally, the **Output Options** node specifies which outputs will be generated after running the scenario. The **Tabular** output option is set to **Yes**. However, in this example, there is no seasonal stratification; therefore the seasonal maps in the **Spatial** node are set to **No**. Additionally, the **Burn Perimeters** are also set to **No** because this option is not provided by Cell2Fire.
 
-> **Note:** If all rows in the **Spatial Output Options** Datafeed are left blank, **BurnP3+** will default to generating all spatial outputs. However, if only some rows are set to return spatial outputs, the model will only return outputs for the specified rows. 
+> **Note:** If all rows in the **Spatial Output Options** datafeed are left blank, **BurnP3+** will default to generating all spatial outputs. However, if only some rows are set to return spatial outputs, the model will only return outputs for the specified rows. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-14.png">
 
@@ -198,7 +198,7 @@ A **Run Monitor** window will appear, indicating the **Status** of the *scenario
 
 When, and if, the run is successful, you will see the **Status** of **Done** in the **Run Monitor**. If an error or warning has been issued, click on the **Run Log** link to see a report of problems. Make any required changes to your *scenario* and re-run it.
 
-Running a model in SyncroSim produces *scenario results*, which contain the input *datafeeds* associated with the parent *scenario*, as well as output *datafeeds* for the *scenario* run. Each *scenario result* inherits the parent *scenario*’s name and receives a unique ID.
+Running a model in SyncroSim produces a *results scenario*, which contain the input *datafeeds* associated with the *parent scenario*, as well as output *datafeeds* for the *scenario* run. Each *result scenario* inherits the *parent scenario*’s name and receives a unique ID.
 
 <img align="middle" style="padding: 3px" width="400" src="assets/images/BurnP3Plus-screenshot-18.png">
 
@@ -208,7 +208,7 @@ Repeat the same process to run the **Extended Burning Hours** *scenario*.
 
 <p id="step5"> <h2> <b>Step 5: Analyzing the Model Results</b> </h2> </p>
 
-To view the tabular results from each of your runs, double-click on one of your *scenario results* and navigate to the last tab, **Output Fire Statistics**. Here, you can view the results and have the option to export the data by right-clicking anywhere on the spreadsheet, and selecting **Export All** from the context menu.
+To view the tabular results from each of your runs, double-click on one of your *results scenarios* and navigate to the last tab, **Output Fire Statistics**. Here, you can view the results and have the option to export the data by right-clicking anywhere on the spreadsheet, and selecting **Export All** from the context menu.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-19.png">
 
@@ -224,4 +224,4 @@ Lastly, under the **Maps** tab you can also find the **Input Maps** for fuel typ
 
 <img align="middle" style="padding: 3px" width="350" src="assets/images/BurnP3Plus-screenshot-22.png">
 
-> **Note:** Map legends can be customized by double-clicking on the bins. You can also add and remove scenario results being charted or mapped by selecting a scenario result in the **Library Explorer** and then choosing either **Add to Results** or **Remove from Results** from context menu. Scenarios with results currently selected for analysis are highlighted in bold in the **Library Explorer**.
+> **Note:** Map legends can be customized by double-clicking on the bins. You can also add and remove a result scenario being charted or mapped by selecting a result scenario in the **Library Explorer** and then choosing either **Add to Results** or **Remove from Results** from context menu. Scenarios with results currently selected for analysis are highlighted in bold in the **Library Explorer**.

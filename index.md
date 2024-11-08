@@ -9,7 +9,7 @@ permalink: /
 <img align="right" style="padding: 13px" width="180" src="assets/images/logo/burnP3Plus-sticker.png">
 [![GitHub release](https://img.shields.io/github/v/release/BurnP3/BurnP3Plus.svg?style=for-the-badge&color=d68a06)](https://GitHub.com/BurnP3/BurnP3Plus/releases/)    <a href="https://github.com/BurnP3/BurnP3Plus"><img align="middle" style="padding: 1px" width="30" src="assets/images/logo/github-trans2.png"> <br>
 
-### **BurnP3+** is an open-source [SyncroSim](https://syncrosim.com/){:target="_blank"} base package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. **BurnP3+** is funded, developed and maintained by the [Canadian Forest Service](https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/the-canadian-forest-service/about-canadian-forest-service/17545){:target="_blank"}. <br>
+### **BurnP3+** is an open-source [SyncroSim](https://syncrosim.com/){:target="_blank"} package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. **BurnP3+** is funded, developed and maintained by the [Canadian Forest Service](https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/the-canadian-forest-service/about-canadian-forest-service/17545){:target="_blank"}. <br>
 
 <br>
 
@@ -19,7 +19,7 @@ permalink: /
 
 **BurnP3+** was developed to improve scalability to larger landscapes and number of scenarios, allow for cross-compatibility among platforms (Windows and Linux) and interfaces (SyncroSim Studio, command line, R and Python), and increase flexibility in model structure through the implementation of modules. With these enhancements, **BurnP3+** extends the success of Burn-P3 as a decision-support tool in land management and a framework for scientific inquiry ([Parisien *et al.* 2019](https://www.fs.usda.gov/research/treesearch/60727){:target="_blank"}).
 
-Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. **BurnP3+** now provides two options as fire growth model packages: [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} enables users to grow fires with [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}; and [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. The Canadian Forest Service plans to develop additional fire growth packages for **BurnP3+**. Alternatively, users also have the option to develop their own fire growth models and SycnroSim packages. <br>
+Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. **BurnP3+** now provides two fire growth models: [BurnP3+ Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} enables users to grow fires with [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}; and [BurnP3+ Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. The Canadian Forest Service plans to develop additional fire growth packages for **BurnP3+**. Alternatively, users also have the option to develop their own fire growth models as SyncroSim packages. <br>
 
 **BurnP3+** users can load model inputs, export model outputs and view spatial and graphical result summaries via various SyncroSim interfaces, including the SyncroSim Studio, the [rsyncrosim](https://syncrosim.github.io/rsyncrosim/){:target="_blank"} package for [R](https://www.r-project.org/){:target="_blank"} and the [pysyncrosim](https://pysyncrosim.readthedocs.io/en/latest/index.html){:target="_blank"} package for [Python](https://www.python.org/){:target="_blank"}. <br>
 
@@ -29,9 +29,9 @@ Burn-P3 utilized a single deterministic fire growth model called [Prometheus](ht
 
 The **BurnP3+ SyncroSim Package** requires the SyncroSim software, [version 3.0.9](https://syncrosim.com/download/){:target="_blank"}. <br>
 
-If using the Cell2Fire fire growth model, you will also need to install the [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
+If using the Cell2Fire fire growth model, you will also need to install [BurnP3+ Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
 
-If using the Prometheus fire growth model, you will need to install both [Prometheus](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"} (version 2021.12.03) and the [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
+If using the Prometheus fire growth model, you will need to install both [Prometheus](https://firegrowthmodel.ca/pages/prometheus_software_e.html){:target="_blank"} (version 2021.12.03) and [BurnP3+ Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
 
 > Instructions for installing the above requirements for **BurnP3+** are provided on the [Getting Started](https://burnp3.github.io/BurnP3Plus/getting_started.html) page. <br>
 

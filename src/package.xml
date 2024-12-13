@@ -23,7 +23,7 @@
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 		<column name="JulianDay" displayName="Median Julian Day" dataType="Integer" validationCondition="Between" formula1="1" formula2="364" defaultValue="182" allowDbNull="False" />
-		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False" defaultValue="0"/>
 		<record columns="Name|JulianDay|IsAuto" values="All|182|-1"/>
 	</dataSheet>
 
@@ -49,7 +49,7 @@
 	<dataSheet name="Distribution" displayName="Distributions" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False" defaultValue="0"/>
 		<record columns="Name|IsAuto" values="Normal|-1"/>
 		<record columns="Name|IsAuto" values="Gamma|-1"/>
 	</dataSheet>

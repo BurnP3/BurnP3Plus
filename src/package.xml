@@ -22,7 +22,7 @@
 	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False"  defaultValue="0"/>
 		<record columns="Name|IsAuto" values="All|-1"/>
 	</dataSheet>
 
@@ -48,7 +48,7 @@
 	<dataSheet name="Distribution" displayName="Distributions" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="IsAuto" dataType="Integer" isVisible="False"/>
+		<column name="IsAuto" dataType="Integer" isVisible="False" defaultValue="0"/>
 		<record columns="Name|IsAuto" values="Normal|-1"/>
 		<record columns="Name|IsAuto" values="Gamma|-1"/>
 	</dataSheet>

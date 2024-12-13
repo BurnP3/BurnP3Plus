@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.1.0">
 
 	<!--Library Datasheets-->
 
@@ -22,8 +22,9 @@
 	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="IsAuto" dataType="Integer" isVisible="False"  defaultValue="0"/>
-		<record columns="Name|IsAuto" values="All|-1"/>
+		<column name="JulianDay" displayName="Median Julian Day" dataType="Integer" validationCondition="Between" formula1="1" formula2="364" defaultValue="182" allowDbNull="False" />
+		<column name="IsAuto" dataType="Integer" isVisible="False" defaultValue="0"/>
+		<record columns="Name|JulianDay|IsAuto" values="All|182|-1"/>
 	</dataSheet>
 
 	<dataSheet name="Cause" displayName="Causes" displayMember="Name" dataScope="Project">

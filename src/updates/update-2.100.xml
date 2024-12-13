@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add median date to season, default to July 1st">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_Season">
+    <item> ALTER TABLE burnP3Plus_Season ADD COLUMN JulianDay Integer</item>
+    <item> UPDATE burnP3Plus_Season SET JulianDay = 182 WHERE JulianDay IS NULL </item>
+  </action>
+</update>

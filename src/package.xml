@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.0.0">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.1.0">
 
 	<!--Library Datasheets-->
 
@@ -22,8 +22,9 @@
 	<dataSheet name="Season" displayName="Seasons" displayMember="Name" autoGroup="True" filter="IsAuto IS NULL OR IsAuto=0" dataScope="Project">
 		<column name="Name" dataType="String"/>
 		<column name="Description" dataType="String" isOptional="True"/>
-		<column name="IsAuto" dataType="Integer" isVisible="False"  defaultValue="0"/>
-		<record columns="Name|IsAuto" values="All|-1"/>
+		<column name="JulianDay" displayName="Median Julian Day" dataType="Integer" validationCondition="Between" formula1="1" formula2="364" defaultValue="182" allowDbNull="False" />
+		<column name="IsAuto" dataType="Integer" isVisible="False" defaultValue="0"/>
+		<record columns="Name|JulianDay|IsAuto" values="All|182|-1"/>
 	</dataSheet>
 
 	<dataSheet name="Cause" displayName="Causes" displayMember="Name" dataScope="Project">
@@ -322,7 +323,7 @@
 	</dataSheet>
 
 	<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
-		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
+		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="FireID" dataType="Integer"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
 		<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" includeExtensions="shp|shx|dbf|prj" externalFileFilter="ShapeFiles (*.shp)|*.shp"/>
@@ -376,6 +377,7 @@
 	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" isExport="True" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"></transformer>
 	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" isExport="True" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"></transformer>
 	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" isExport="True" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"></transformer>
+	<transformer name="FirePerimeters" displayName="Burn Perimeters by Iteration and FireID" isExport="True" dataSheet="OutputFirePerimeter" column="FileName" isFolderExport="True"></transformer>
 	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" isExport="True" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"></transformer>
 
 	<!--Layouts-->
@@ -384,6 +386,7 @@
 	<layout type="Export">
 		<group name="Export">
 			<item name="BurnRasterMap" displayName="Burn Maps"/>
+			<item name="FirePerimeters" displayName="Individual Fire Burn Perimeters"/>
 			<item name="AllPerimRasterMap" displayName="Individual Fire Burn Maps"/>
 			<item name="BurnCountRasterMap" displayName="Burn Count Map"/>
 			<item name="BurnProbabilityRasterMap" displayName="Burn Probability Map"/>

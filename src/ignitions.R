@@ -123,6 +123,16 @@ if (!isDatasheetEmpty(DeterministicIgnitionLocation)) {
   updateRunLog("Values in Deterministic Ignition Location datasheet are overwritten.", type = "warning")
 }
 
+# If the ignition distribution table is used but one or more season, cause, or firezone are defined but not explicitly listed,
+# these values will be randomly assigned to each ignition with equal probability. Warn users if this behaviour is used.
+if (!isDatasheetEmpty(IgnitionDistribution)) {
+  if (
+    (!isDatasheetEmpty(SeasonTable)   & any(is.na(IgnitionDistribution$Season))) |
+    (!isDatasheetEmpty(CauseTable)    & any(is.na(IgnitionDistribution$Cause))) |
+    (!isDatasheetEmpty(FireZoneTable) & any(is.na(IgnitionDistribution$FireZone))))
+      updateRunLog("One or more of Season, Cause, and Fire Zone are defined at the project scope but not completely described by the Ignition Distribution table. Unspecified values will be drawn randomly where appropriate.", type = "warning")
+}
+
 ## Check raster inputs for consistency ----
 
 test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
@@ -379,13 +389,23 @@ DeterminisiticIgnitionLocation <-
         firezone = IgnitionDistribution$FireZone[situation]) %>%
       dplyr::select(-situation)
 
-  # If the Ignition Distribution table is not present, choose these values randomly
+  # If the Ignition Distribution table is not present, set these values as empty strings to be filled in the next step
     } else
       mutate(.,
-        season =   sample(SeasonTable$Name,   nrow(.), replace = T),
-        cause =    sample(CauseTable$Name,    nrow(.), replace = T),
-        firezone = sample(FireZoneTable$Name, nrow(.), replace = T))
+        season =   NA_character_,
+        cause =    NA_character_,
+        firezone = NA_character_)
   } %>%
+
+  # If any season, cause, or firezones values are blank, replace with a random sample from the appropriate table of definitions, 
+  # - Note that values could be NA or "", so we first standardize all to NA then correct
+  mutate(.,
+     season =   na_if(as.character(season), ""),
+     firezone = na_if(as.character(firezone), ""),
+     cause =    na_if(as.character(cause), ""),
+     season =   coalesce(season,   sample(SeasonTable$Name,   length(season),   replace = T)),
+     cause =    coalesce(cause,    sample(CauseTable$Name,    length(cause),    replace = T)),
+     firezone = coalesce(firezone, sample(FireZoneTable$Name, length(firezone), replace = T))) %>%
 
   # Group the data by season, cause and firezone and send to
   # sampleLocations() to sample ignition location accordingly

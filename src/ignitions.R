@@ -51,7 +51,7 @@ FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F, returnInvisible = T)
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(IsAuto != -1)
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 
 # Load relevant ignition datasheets
@@ -207,7 +207,7 @@ if(isDatasheetEmpty(FireZoneTable))
 if(isDatasheetEmpty(CauseTable))
   CauseTable <- data.frame(Name = "")
 if(isDatasheetEmpty(SeasonTable))
-  SeasonTable <- data.frame(Name = "")
+  SeasonTable <- data.frame(Name = "All")
 
 ## Function Definitions ----
 

@@ -148,9 +148,10 @@ if(isDatasheetEmpty(WeatherZoneTable))
 
 ## Check raster inputs for consistency ----
 
+test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
 # Ensure fuels crs can be converted to Lat / Long
-if(fuelsRaster %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
-tryCatch(fuelsRaster %>% project("EPSG:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
+if(test.point %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
+tryCatch(test.point %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
 
 # Define function to check input raster for consistency
 checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {

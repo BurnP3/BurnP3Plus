@@ -338,6 +338,9 @@ sampleWeather <- function(season, weatherzone, data) {
     filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%
     dplyr::select(-Season, -WeatherZone)
 
+  if (nrow(localWeather) == 0)
+    stop("Could not find any daily weather records for the Season \"", season, "\" and Weather Zone \"", weatherzone, "\". Please add daily weather records as needed or check ignition distribution if this combination is invalid.")
+
   # Sample rows of the weather stream randomly
   weatherIndex <- sample(nrow(localWeather), nrow(data), replace = T)
 

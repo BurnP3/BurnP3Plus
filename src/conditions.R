@@ -34,7 +34,6 @@ checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
-options(scipen = 100)
 progressBar(type = "message", message = "Preparing inputs...")
 
 # Initialize first breakpoint for timing code

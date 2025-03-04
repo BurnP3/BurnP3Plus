@@ -51,7 +51,7 @@ FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F, returnInvisible = T)
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(IsAuto != -1)
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 
 # Load relevant ignition datasheets
@@ -132,6 +132,25 @@ if (!isDatasheetEmpty(IgnitionDistribution)) {
     (!isDatasheetEmpty(FireZoneTable) & any(is.na(IgnitionDistribution$FireZone))))
       updateRunLog("One or more of Season, Cause, and Fire Zone are defined at the project scope but not completely described by the Ignition Distribution table. Unspecified values will be drawn randomly where appropriate.", type = "warning")
 }
+
+# Fill missing season values
+
+# Define function to fill missing season values and save changes back to library
+fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
+  datasheet <- datasheet %>%
+    mutate(
+      Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
+      Season = replace_na(Season, "All"))
+
+  if (update_library)
+    saveDatasheet(myScenario, datasheet, datasheet_name)
+
+  return(datasheet)
+}
+
+ProbabilisticIgnitionLocation <- fill_season(ProbabilisticIgnitionLocation, "burnP3Plus_ProbabilisticIgnitionLocation", TRUE)
+IgnitionRestriction <- fill_season(IgnitionRestriction, "burnP3Plus_IgnitionRestriction", TRUE)
+IgnitionDistribution <- fill_season(IgnitionDistribution, "burnP3Plus_IgnitionDistribution", TRUE)
 
 ## Check raster inputs for consistency ----
 
@@ -271,7 +290,10 @@ sampleLocations <- function(season, cause, firezone, data) {
 
   # Determine the restricted fuel types for the given season, cause, firezone
   restrictedFuels <- IgnitionRestriction %>%
-    filter(Season == season | is.na(Season), Cause == cause | is.na(Cause), FireZone == firezone | is.na(FireZone)) %>%
+    filter(
+      Season == season | is.na(Season) | Season == "All",
+      Cause == cause | is.na(Cause),
+      FireZone == firezone | is.na(FireZone)) %>%
     pull(FuelType)
 
   # Convert restricted fuels list to IDs, add NA as restricted fuel
@@ -285,7 +307,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   maskedProbability <- ProbabilisticIgnitionLocation %>%
 
     # Start by finding the relevant probabilistic ignition grid
-    filter(Cause %in% c(cause, NA), Season %in% c(season, NA)) %>%
+    filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
     pull(IgnitionGridFileName) %>%
 
     # Warn if multiple probabilistic ignition grids are specified
@@ -381,10 +403,11 @@ DeterminisiticIgnitionLocation <-
 
   # Sample rows from the Ignition Distribution table to assign
   # a season, cause, and firezone to each ignition if the table is present
+  # - "All" season is explicitly set to NA to be resampled from defined seasons if possible
   { if(!isDatasheetEmpty(IgnitionDistribution)) {
       mutate(.,
         situation = sample(nrow(IgnitionDistribution), nrow(.), replace = T, prob = IgnitionDistribution$RelativeLikelihood),
-        season = IgnitionDistribution$Season[situation],
+        season = IgnitionDistribution$Season[situation] %>% na_if("All"),
         cause = IgnitionDistribution$Cause[situation],
         firezone = IgnitionDistribution$FireZone[situation]) %>%
       dplyr::select(-situation)
@@ -415,6 +438,7 @@ DeterminisiticIgnitionLocation <-
 
   # Clean up
   arrange(Iteration, FireID) %>%
+  fill_season() %>%
   as.data.frame
 
 # Return output

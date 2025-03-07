@@ -141,7 +141,7 @@ fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
       Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
       Season = replace_na(Season, "All"))
 
-  if (update_library & (nrow(datasheet) > 0))
+  if (update_library & !isDatasheetEmpty(datasheet))
     saveDatasheet(myScenario, datasheet, datasheet_name)
 
   return(datasheet)

@@ -95,28 +95,6 @@ if(isDatasheetEmpty(HoursBurningTable)) {
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }
 
-# TODO: Replace with generic check + fill for missing combinations
-
-# If HoursBurningTable set to "All", then all seasons in the SeasonTable
-# not specified in the HoursBurningTable should also have that value
-if (!"All" %in% HoursBurningTable$Season && !is.na(HoursBurningTable$Season[1])){
-  HoursBurningTable <- HoursBurningTable %>%
-    add_row(Season = c("All"), Mean = c(4))
-}
-
-for (s in SeasonTable$Name){
-
-  if (!s %in% HoursBurningTable$Season){
-    msg <- paste0("No hours burning per day distribution provided for season ", s,
-                  ". Defaulting to either 'All' or 4 hours of burning per burn day.")
-    updateRunLog(msg, type = "info")
-    newRow <- HoursBurningTable[HoursBurningTable$Season == "All", ]
-    newRow$Season <- s
-    HoursBurningTable <- HoursBurningTable %>%
-      add_row(newRow)
-  }
-}
-
 # Check to ensure that distributions specified actually exist
 # Spread Event Days
 for (i in 1:nrow(FireDurationTable)){
@@ -276,6 +254,7 @@ sampleFireDuration <- function(season, firezone, data){
 
   fireDurationDistributionName <- filteredFireDurationTable %>%
     pull(DistributionType) %>%
+    {if(length(.) == 0) {stop("No spread event days distribution set for the \"", season, "\" Season and the \"", firezone, "\" Fire Zone. Please check the Spread Event Days table for missing combinations of Season and Fire Zone.")} else .} %>%
     {if(length(.) > 1 & !all(is.na(.))) {updateRunLog("Multiple fire duration distributions applicable for one or more combinations of season and fire zone. Using first applicable distribution.", type = "warning"); .[1]} else .}
 
   # Determine hours burning per day distribution type to use
@@ -290,6 +269,7 @@ sampleFireDuration <- function(season, firezone, data){
 
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType) %>%
+    {if(length(.) == 0) {stop("No daily burning hours distribution set for the \"", season, "\" Season and the \"", firezone, "\" Fire Zone. Please check the Daily Burning Hours table for missing combinations of Season and Fire Zone.")} else .} %>%
     {if(length(.) > 1 & !all(is.na(.))) {updateRunLog("Multiple hours burning distributions applicable for one or more seasons. Using first applicable distribution.", type = "warning"); .[1]} else .}
 
   # Sample fire durations

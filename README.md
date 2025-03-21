@@ -13,7 +13,7 @@ Follow the instructions below to install the latest **BurnP3+** code from this G
 
 1. Clone this **BurnP3Plus** repository 
 
-    - The BurnP3Plus repository can be cloned using either the command prompt or GitHub Desktop. For detailed instructions, see the official GitHub guide here: [Cloning a repository]("https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository").
+    - The BurnP3Plus repository can be cloned using either the command prompt or GitHub Desktop. For detailed instructions, see the official GitHub guide here: [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository).
 
     - Cloning the repository will create a folder named **BurnP3Plus** in your current directory containing all repository files.
 
@@ -23,7 +23,7 @@ Follow the instructions below to install the latest **BurnP3+** code from this G
 
 2. Install the **BurnP3Plus** package from folder in SyncroSim Studio 
 
-    - Open [SyncroSim Studio]("https://syncrosim.com/download/").
+    - Open [SyncroSim Studio](https://syncrosim.com/download/).
 
     -  Navigate to **File > Local Packages**. 
 
@@ -43,6 +43,6 @@ Follow the instructions below to install the latest **BurnP3+** code from this G
 
 <br>
 
-> _**NOTE**: If you modify the package version number in the src/package.xml file of the folder, or you pull a more recent version of the package folder from the GitHub repository, you may run into an error when you try to open your BurnP3+ library. See [this forum post]("https://community.syncrosim.com/forums/topic/syncrosim-package-version-mismatch/") for more information on how to handle this error._
+> _**NOTE**: If you modify the package version number in the src/package.xml file of the folder, or you pull a more recent version of the package folder from the GitHub repository, you may run into an error when you try to open your BurnP3+ library. See [this forum post](https://community.syncrosim.com/forums/topic/syncrosim-package-version-mismatch/) for more information on how to handle this error._
 
 <br>

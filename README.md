@@ -7,13 +7,13 @@
 
 **BurnP3+** is funded, developed and maintained by the [Canadian Forest Service](https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/the-canadian-forest-service/about-canadian-forest-service/17545).
 
-## Installing a BP3+ package from folder
+## Installing a BurnP3+ package from folder
 
-Follow the instructions below to install the latest BurnP3Plus code from this GitHub repository as a package in SyncroSim Studio.
+Follow the instructions below to install the latest **BurnP3+** code from this GitHub repository as a package in SyncroSim Studio. The same instructions can also be used to install any of the **BurnP3+** fire growth transformer packages ([BurnP3+ Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire), [BurnP3+ Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus), and [BurnP3+ FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR)). 
 
-1. Clone the **BurnP3Plus** repository 
+1. Clone this **BurnP3Plus** repository 
 
-    - The BurnP3Plus repository can be cloned using both the command prompt and desktop. For detailed instructions, see the official GitHub guide here: <a href = "https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository" target = "_blank">Cloning a repository</a>.
+    - The BurnP3Plus repository can be cloned using either the command prompt or GitHub Desktop. For detailed instructions, see the official GitHub guide here: [Cloning a repository]("https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository").
 
     - Cloning the repository will create a folder named **BurnP3Plus** in your current directory containing all repository files.
 
@@ -23,7 +23,7 @@ Follow the instructions below to install the latest BurnP3Plus code from this Gi
 
 2. Install the **BurnP3Plus** package from folder in SyncroSim Studio 
 
-    - Open <a href = "https://syncrosim.com/download/" target = "_blank">SyncroSim Studio</a>.
+    - Open [SyncroSim Studio]("https://syncrosim.com/download/").
 
     -  Navigate to **File > Local Packages**. 
 
@@ -43,6 +43,6 @@ Follow the instructions below to install the latest BurnP3Plus code from this Gi
 
 <br>
 
-> _**NOTE**: If you modify the package version number in the src/package.xml file of the folder, or you pull a more recent version of the package folder from the GitHub repository, you may run into an error when you try to open your BurnP3+ library. See <a href = "https://community.syncrosim.com/forums/topic/syncrosim-package-version-mismatch/" target = "_blank">this forum post</a> for more information on how to handle this error._
+> _**NOTE**: If you modify the package version number in the src/package.xml file of the folder, or you pull a more recent version of the package folder from the GitHub repository, you may run into an error when you try to open your BurnP3+ library. See [this forum post]("https://community.syncrosim.com/forums/topic/syncrosim-package-version-mismatch/") for more information on how to handle this error._
 
 <br>

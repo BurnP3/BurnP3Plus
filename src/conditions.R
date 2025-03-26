@@ -440,7 +440,6 @@ DeterministicBurnConditions <- DeterministicIgnitionLocation %>%
 
   # Clean up
   arrange(Iteration, FireID, BurnDay) %>%
-  fill_season() %>%
   as.data.frame()
 
 # Save Output

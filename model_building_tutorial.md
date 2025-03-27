@@ -374,7 +374,7 @@ Now, we will create a new scenario and add the **Ignitions and Burn Conditions -
 
 17. Click on **Spatial**. Set all map output options to *Yes* **except** the **Burn Perimeters**, and **Output Individual Burn Maps** which should be set to *No*.
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-61.png">
+<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-62.png">
 
 18. Close the scenario properties and **Save**.
 
@@ -389,7 +389,7 @@ b.	How many fires were discarded because they didn’t reach the minimum fire si
 c.	The percentage of fires that were above the minimum fire size; and <br>
 d.	The percentage of extra simulated fires that were used to make up for the discarded fires. 
 
-<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-62.png">
+<!--<img align="middle" style="padding: 3px" width="600" src="assets/images/BurnP3Plus-screenshot-63.png">
 
 
 

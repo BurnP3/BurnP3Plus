@@ -34,7 +34,6 @@ checkPackageVersion("terra",      "1.5.21")
 checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
-options(scipen = 100)
 progressBar(type = "message", message = "Preparing inputs...")
 
 # Initialize first breakpoint for timing code
@@ -96,26 +95,6 @@ if(isDatasheetEmpty(HoursBurningTable)) {
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }
 
-# If HoursBurningTable set to "All", then all seasons in the SeasonTable
-# not specified in the HoursBurningTable should also have that value
-if (!"All" %in% HoursBurningTable$Season && !is.na(HoursBurningTable$Season[1])){
-  HoursBurningTable <- HoursBurningTable %>%
-    add_row(Season = c("All"), Mean = c(4))
-}
-
-for (s in SeasonTable$Name){
-
-  if (!s %in% HoursBurningTable$Season){
-    msg <- paste0("No hours burning per day distribution provided for season ", s,
-                  ". Defaulting to either 'All' or 4 hours of burning per burn day.")
-    updateRunLog(msg, type = "info")
-    newRow <- HoursBurningTable[HoursBurningTable$Season == "All", ]
-    newRow$Season <- s
-    HoursBurningTable <- HoursBurningTable %>%
-      add_row(newRow)
-  }
-}
-
 # Check to ensure that distributions specified actually exist
 # Spread Event Days
 for (i in 1:nrow(FireDurationTable)){
@@ -145,6 +124,26 @@ if(isDatasheetEmpty(FireZoneTable))
   FireZoneTable <- data.frame(Name = "", ID = 0)
 if(isDatasheetEmpty(WeatherZoneTable))
   WeatherZoneTable <- data.frame(Name = "", ID = 0)
+
+# Fill missing season values
+
+# Define function to fill missing season values and optionally save changes back to library
+fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
+  datasheet <- datasheet %>%
+    mutate(
+      Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
+      Season = replace_na(Season, "All"))
+
+  if (update_library)
+    saveDatasheet(myScenario, datasheet, datasheet_name)
+
+  return(datasheet)
+}
+
+DeterministicIgnitionLocation <- fill_season(DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", TRUE)
+FireDurationTable <- fill_season(FireDurationTable, "burnP3Plus_FireDuration", TRUE)
+HoursBurningTable <- fill_season(HoursBurningTable, "burnP3Plus_HoursPerDayBurning", TRUE)
+WeatherStream <- fill_season(WeatherStream, "burnP3Plus_WeatherStream", TRUE)
 
 ## Check raster inputs for consistency ----
 
@@ -249,10 +248,14 @@ sampleFireDuration <- function(season, firezone, data){
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
-    filter(Season == season | is.na(Season), FireZone == firezone | is.na(FireZone))
+    filter(
+      Season == season | is.na(Season) | Season == "All",
+      FireZone == firezone | is.na(FireZone))
 
   fireDurationDistributionName <- filteredFireDurationTable %>%
-    pull(DistributionType)
+    pull(DistributionType) %>%
+    {if(length(.) == 0) {stop("No spread event days distribution set for the \"", season, "\" Season and the \"", firezone, "\" Fire Zone. Please check the Spread Event Days table for missing combinations of Season and Fire Zone.")} else .} %>%
+    {if(length(.) > 1 & !all(is.na(.))) {updateRunLog("Multiple fire duration distributions applicable for one or more combinations of season and fire zone. Using first applicable distribution.", type = "warning"); .[1]} else .}
 
   # Determine hours burning per day distribution type to use
   # This is a function of season only
@@ -261,17 +264,19 @@ sampleFireDuration <- function(season, firezone, data){
       filter(Season == season)
   } else {
     filteredHoursBurningTable <- HoursBurningTable %>%
-      filter(Season == "All")
+      filter(Season == "All" | is.na(Season))
   }
 
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
-    pull(DistributionType)
+    pull(DistributionType) %>%
+    {if(length(.) == 0) {stop("No daily burning hours distribution set for the \"", season, "\" Season and the \"", firezone, "\" Fire Zone. Please check the Daily Burning Hours table for missing combinations of Season and Fire Zone.")} else .} %>%
+    {if(length(.) > 1 & !all(is.na(.))) {updateRunLog("Multiple hours burning distributions applicable for one or more seasons. Using first applicable distribution.", type = "warning"); .[1]} else .}
 
   # Sample fire durations
 
   # If no distribution is specified
   if(is.na(fireDurationDistributionName)) {
-    fireDurations <- rep(filteredFireDurationTable$Mean, nrow(data))
+    fireDurations <- sample(rep(filteredFireDurationTable$Mean, 2), nrow(data), replace = T)
 
     # If sampling form a normal distribution
   } else if (fireDurationDistributionName == "Normal") {
@@ -306,7 +311,7 @@ sampleFireDuration <- function(season, firezone, data){
       HoursBurning =
         # If no distribution is provided
         if (is.na(hoursBurningDistributionName)) {
-          rep(filteredHoursBurningTable$Mean, nrow(.))
+          sample(rep(filteredHoursBurningTable$Mean, 2), nrow(.), replace = T)
 
           # If sampling from a normal distribution
         } else if (hoursBurningDistributionName == "Normal") {
@@ -336,7 +341,9 @@ sampleWeather <- function(season, weatherzone, data) {
   
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
-    filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%
+    filter(
+      Season == season | is.na(Season) | Season == "All",
+      WeatherZone == weatherzone | is.na(WeatherZone)) %>%
     dplyr::select(-Season, -WeatherZone)
 
   if (nrow(localWeather) == 0)

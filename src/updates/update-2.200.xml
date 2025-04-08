@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add order to weather">
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_WeatherStream">
+    <item> ALTER TABLE burnP3Plus_WeatherStream ADD COLUMN "Order" Integer</item>
+  </action>
+</update>

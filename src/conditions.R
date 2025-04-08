@@ -104,7 +104,6 @@ if (!"All" %in% HoursBurningTable$Season && !is.na(HoursBurningTable$Season[1]))
 }
 
 for (s in SeasonTable$Name){
-
   if (!s %in% HoursBurningTable$Season){
     msg <- paste0("No hours burning per day distribution provided for season ", s,
                   ". Defaulting to either 'All' or 4 hours of burning per burn day.")
@@ -114,6 +113,11 @@ for (s in SeasonTable$Name){
     HoursBurningTable <- HoursBurningTable %>%
       add_row(newRow)
   }
+}
+
+# Make sure order is fully populated if sampling sequentially
+if(WeatherOptions$SampleSequentially & any(is.na(WeatherStream$Order))) {
+  stop("Weather can't be sample sequentially if the weather stream is not sorted using the Order column. Please update the weather stream to include this variable or update the Weather Sampling Options to not sample sequentially.")
 }
 
 # Check to ensure that distributions specified actually exist
@@ -336,8 +340,11 @@ sampleWeather <- function(season, weatherzone, data) {
   
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
-    filter(Season == season | is.na(Season), WeatherZone == weatherzone | is.na(WeatherZone)) %>%
-    dplyr::select(-Season, -WeatherZone)
+    filter(
+      Season == season | is.na(Season) | Season == "All",
+      WeatherZone == weatherzone | is.na(WeatherZone)) %>%
+    dplyr::select(-Season, -WeatherZone) %>%
+    dplyr::arrange(Order)
 
   # Sample rows of the weather stream randomly
   weatherIndex <- sample(nrow(localWeather), nrow(data), replace = T)

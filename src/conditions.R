@@ -95,6 +95,11 @@ if(isDatasheetEmpty(HoursBurningTable)) {
   saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
 }
 
+# Make sure order is fully populated if sampling sequentially
+if(WeatherOptions$SampleSequentially & any(is.na(WeatherStream$Order))) {
+  stop("Weather can't be sample sequentially if the weather stream is not sorted using the Order column. Please update the weather stream to include this variable or update the Weather Sampling Options to not sample sequentially.")
+}
+
 # Check to ensure that distributions specified actually exist
 # Spread Event Days
 for (i in 1:nrow(FireDurationTable)){
@@ -344,7 +349,8 @@ sampleWeather <- function(season, weatherzone, data) {
     filter(
       Season == season | is.na(Season) | Season == "All",
       WeatherZone == weatherzone | is.na(WeatherZone)) %>%
-    dplyr::select(-Season, -WeatherZone)
+    dplyr::select(-Season, -WeatherZone) %>%
+    dplyr::arrange(Order)
 
   if (nrow(localWeather) == 0)
     stop("Could not find any daily weather records for the Season \"", season, "\" and Weather Zone \"", weatherzone, "\". Please add daily weather records as needed or check ignition distribution if this combination is invalid.")

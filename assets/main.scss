@@ -58,3 +58,124 @@ a {
 .footer-col-3 {
     width: calc(25% - (30px / 2));
 }
+
+// Sidebar box
+.sidenav {
+    width: 18%;
+    position: fixed;
+    top: 80px;
+    right: 0px;
+    background: #f1f1f1;
+    padding: 12px 12px;
+    display: inline-block;
+}
+/* Link */
+.sidenav a {
+    padding: 3px 3px 3px 12px;
+    text-decoration: none;
+    font-size: 12px;
+    color: #000;
+    display: block;
+}
+/* Link on focus */
+.sidenav a:focus {
+    font-weight: 700;
+    background-color:#fff;
+    color: #000;
+}
+/* Link on hover */
+.sidenav a:hover {
+    background-color:#fff;
+    color: #000;
+}
+/* Link when selected (active page) */
+.selected {
+    font-weight: 700;
+    background-color:#fff;
+    color: #000;
+}
+/* Remove sidebar on small screens */
+@media screen and (max-width: 1130px) {
+    .sidenav {display: none;}
+}
+/* Lists */
+.sidenav li {
+    padding: 6px 6px 6px 12px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: #000;
+    display: block;
+}
+
+
+// Indented text
+.indentation {
+ margin-left: 2rem;
+ margin-bottom: 1rem; 
+}
+
+// List with no bullet icon
+.no-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+// Spacer smaller than <br>
+.spacer {
+    height: 12px;
+}
+
+// Drop-down menu
+/* Dropdown button */
+.dropbtn {
+    background-color: none;
+    color: #000000;
+    padding: 12px;
+    font: inherit;
+    font-size: larger;
+    border: none;
+    cursor: pointer;
+} 
+
+/* Dropdown container */
+.dropdown {
+    float: left;
+    line-height: 54px;
+    margin-left: 12px;
+}
+
+/* Dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}  
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    font: inherit;
+    color: black;
+    padding: 0px 12px;
+    text-decoration: none;
+    display: block;
+} 
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #f1f1f1
+} 
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #e6e6e6;
+}

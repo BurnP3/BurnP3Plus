@@ -35,10 +35,24 @@ permalink: reference/batch-burns
 
 # **Batch Burns**
 
+**Datasheet internal name:** burnP3Plus_BatchOption
+
+The **Batch Burns** node is a *library datasheet*.
+
+In SyncroSim Studio, it can be accessed by right-clicking on the **BurnP3+** library name in the *explorer* panel (top-left), selecting **Open** from the context menu, navigating to the BurnP3+ tab to open **Batch Burns** window.
+
 <br>
 
 
 ### **Batch Size (ignitions)**
+
+**Column internal name:** BatchSize
+
+This option is used by **BurnP3+** to determine how many fires should be run at a time (per job) by the model. Note that the number of fires being run per job is unrelated to the number of fires per iteration; it is simply for computing efficiency. Larger batch sizes allow the models to run more efficiently, but smaller batch sizes help limit the size of temporary files on disk. 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Default*: 250
 
 
 <br>

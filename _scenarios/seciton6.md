@@ -30,6 +30,13 @@ permalink: reference/prometheus-scenario
         {% else %}
             <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
             <a href="#heading01"> &emsp;&emsp;&emsp;Fire Behaviour Prediction (FBP) System Spatial Outputs</a>
+            <a href="#heading02"> &emsp;&emsp;&emsp;Output Rate of Spread Map</a>
+            <a href="#heading03"> &emsp;&emsp;&emsp;Output Fire Intensity Map</a>
+            <a href="#heading04"> &emsp;&emsp;&emsp;Output Spread Direction Map</a>
+            <a href="#heading05"> &emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
+            <a href="#heading06"> &emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
+            <a href="#heading07"> &emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
+            <a href="#heading08"> &emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -127,5 +134,327 @@ If set to *Yes* a total fuel consumption map will be created, and if set to *No*
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Default*: No
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Boolean
+
+<br>
+
+<p id="heading02"> <h2><b>Output Rate of Spread Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputRateOfSpreadMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading03"> <h2><b>Output Fire Intensity Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputFireIntensityMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading04"> <h2><b>Output Spread Direction Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputSpreadDirectionMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading05"> <h2><b>Output Surface Fuel Consumption Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputSurfaceFuelConsumptionMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading06"> <h2><b>Output Crown Fraction Burned Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputCrownFractionBurnedMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading07"> <h2><b>Output Crown Fraction Consumed Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputCrownFractionConsumedMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading08"> <h2><b>Output Total Fuel Consumption Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusPrometheus_OutputTotalFuelConsumptionMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
 
 <br>

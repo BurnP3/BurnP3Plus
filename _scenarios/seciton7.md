@@ -30,6 +30,9 @@ permalink: reference/fire-star-scenario
         {% else %}
             <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
             <a href="#heading01"> &emsp;&emsp;&emsp;Fire Behaviour Prediction (FBP) Outputs</a>
+            <a href="#heading02"> &emsp;&emsp;&emsp;Output Rate of Spread Map</a>
+            <a href="#heading03"> &emsp;&emsp;&emsp;Output Fire Intensity Map</a>
+            <a href="#heading04"> &emsp;&emsp;&emsp;Output Spread Direction Map</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -71,5 +74,143 @@ Describes the predicted direction of fire spread.
 If set to *Yes* a fire spread direction map will be created, and if set to *No* a fire spread direction map will not be created. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Boolean
+
+<br>
+
+<p id="heading02"> <h2><b>Output Rate of Spread Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusFireSTARR_OutputRateOfSpreadMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading03"> <h2><b>Output Fire Intensity Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusFireSTARR_OutputFireIntensityMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading04"> <h2><b>Output Spread Direction Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3PlusFireSTARR_OutputSpreadDirectionMap
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map’s iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map’s timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map’s ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map’s file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map’s band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
 
 <br>

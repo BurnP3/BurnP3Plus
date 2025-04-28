@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Tutorials
-permalink: /tutorials
+permalink: /configuring_models_tutorial
 ---
 
 # Configuring models in **BurnP3+**

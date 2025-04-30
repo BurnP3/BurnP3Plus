@@ -3,7 +3,6 @@ native_proj_lib <- Sys.getenv("PROJ_LIB")
 Sys.unsetenv("PROJ_LIB")
 options(scipen = 999)
 
-
 # Check and load packages ----
 library(rsyncrosim)
 suppressPackageStartupMessages(library(tidyverse))
@@ -26,7 +25,7 @@ checkPackageVersion <- function(packageString, minimumVersion){
   }
 }
 
-checkPackageVersion("rsyncrosim", "2.0.0")
+checkPackageVersion("rsyncrosim", "2.1.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
@@ -446,6 +445,7 @@ DeterministicBurnConditions <- DeterministicIgnitionLocation %>%
 
   # Clean up
   arrange(Iteration, FireID, BurnDay) %>%
+  dplyr::select(-Order) %>% 
   as.data.frame()
 
 # Save Output

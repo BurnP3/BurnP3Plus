@@ -25,7 +25,7 @@ checkPackageVersion <- function(packageString, minimumVersion){
   }
 }
 
-checkPackageVersion("rsyncrosim", "2.0.0")
+checkPackageVersion("rsyncrosim", "2.1.0")
 checkPackageVersion("tidyverse",  "2.0.0")
 checkPackageVersion("dplyr",      "1.1.2")
 checkPackageVersion("codetools",  "0.2.19")
@@ -141,7 +141,7 @@ fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
       Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
       Season = replace_na(Season, "All"))
 
-  if (update_library)
+  if (update_library & (nrow(datasheet) > 0))
     saveDatasheet(myScenario, datasheet, datasheet_name)
 
   return(datasheet)

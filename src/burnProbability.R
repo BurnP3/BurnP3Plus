@@ -53,7 +53,7 @@ FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", look
 AllPerim <- datasheet(myScenario, "burnP3Plus_OutputAllPerim", returnInvisible = T)
 OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap", returnInvisible = T)
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T, optional = T) %>% mutate(BurnPerimeter = as.character(BurnPerimeter))
-OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T) %>% mutate(Variable = as.character(Variable))
+OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable))
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T, optional = T) %>% arrange(Iteration, FireID)
 OutputFirePerimeter <- datasheet(myScenario, "burnP3Plus_OutputFirePerimeter", returnInvisible = T, optional = T)
 
@@ -607,15 +607,6 @@ if (saveFBPMaps) {
   outputComponentsToKeep <- outputComponentsToKeepDisplayName %>%
     lookup(FBPVariableTable$DisplayName, FBPVariableTable$Name)
   
-  # Build a named list of functions to apply for each statistic
-  # - Except for the percentile functions, which could vary by FBP variable
-  # - Not sure why explicit function wrapping is needed for min and max, but terra doesn't export it
-  fbpSummaryFunctions <- list(
-    "Average" = mean,
-    "Minimum" = min,
-    "Maximum" = max,
-    "Median"  = median)
-  
   # Iterate over FBP variables to keep
   for (component in outputComponentsToKeep) {
     # Connect to per-fire raw outputs for this variable
@@ -633,33 +624,49 @@ if (saveFBPMaps) {
     OutputFBPSummary <- data.frame()
     
     # Iterate over summary statistics
-    for (statistic in (FBPStatisticTable$Name %>% str_replace(" ", ""))) {
+    for (statistic_display_name in FBPStatisticTable$Name) {
+      statistic <- statistic_display_name %>% str_replace(" ", "") # Percentile1, Percentile2, and Percentile3 all have spaces in their display names, but not in keys
+
       # Skip if this statistic is not requested for this FBP variable
       if (is.na(componentOutputOptions[statistic]) | !as.logical(componentOutputOptions[[statistic]]))
         next
-
-      # For the percentile functions, read in the percentile to use and construct the corresponding function
-      if (str_detect(statistic, "Percentile"))
-        fbpSummaryFunctions[[statistic]] <- function(x, ...) terra::quantile(x, probs = componentOutputOptions[[statistic]] / 100, ...)
       
-      # Generate file name and datasheet entry
-      fbpSummaryFileName <- str_c(fbpSummaryFilePrefix, "-", component, "-", statistic, ".tif")
-      OutputFBPSummary <- rbind(OutputFBPSummary,
-        data.frame(
-          Summary = statistic,
-          Iteration = 0,
-          Timestep = 0,
-          FileName = fbpSummaryFileName))
-
       # Apply the statistic to the corresponding FBP raster stack and save to disk
-      fbpStack %>%
-        app(
-          fbpSummaryFunctions[[statistic]],
-          na.rm = T,
+      fbpSummaryMap <- NA
+      if(statistic == "Average") {
+        fbpSummaryMap <- mean(fbpStack, na.rm = T)
+      } else if(statistic == "Minimum") {
+        fbpSummaryMap <- min(fbpStack, na.rm = T)
+      } else if(statistic == "Maximum") {
+        fbpSummaryMap <- max(fbpStack, na.rm = T)
+      } else if(statistic == "Median") {
+        fbpSummaryMap <- median(fbpStack, na.rm = T)
+      } else {
+        updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
+      }
+
+      # If a summary map was created
+      if("SpatRaster" %in% class(fbpSummaryMap)) {
+        # Generate file name and datasheet entry
+        fbpSummaryFileName <- str_c(fbpSummaryFilePrefix, "-", component, "-", statistic, ".tif")
+        OutputFBPSummary <- rbind(
+          OutputFBPSummary,
+          data.frame(
+            Summary = statistic_display_name,
+            Iteration = 0,
+            Timestep = 0,
+            FileName = fbpSummaryFileName))
+
+        # Save summary map
+        terra::writeRaster(
+          x = fbpSummaryMap,
           filename = fbpSummaryFileName,
-          wopt = list(filetype = "GTiff",
-                      gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")),
-          overwrite = T)
+          overwrite = T,
+          filetype = "GTiff",
+          gdal = c("COMPRESS=LZW",
+                   "TFW=YES"),
+          NAflag = -9999)
+      }
       
       progressBar()
     }

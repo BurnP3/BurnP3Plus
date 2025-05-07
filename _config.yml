@@ -6,7 +6,7 @@ email: info@burnp3plus.ca
 header_pages:
   - index.md
   - getting_started.md
-  - tutorials.md
+  - configuring_models_tutorial.md
   - reference.md
 collections:
   scenarios:

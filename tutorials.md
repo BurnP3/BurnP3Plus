@@ -1,7 +1,9 @@
 ---
 layout: default
 title: Tutorials
-permalink: /tutorials
+
+[//]: # (permalink: /tutorials)
+
 description: "List of tutorials for BurnP3+ SyncroSim"
 ---
 

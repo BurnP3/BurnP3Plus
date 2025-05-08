@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add GeoPackages and FBP outputs">
+	<!--Setup for storing daily burn perimeters-->
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_FirePerimeterOption">
+    <item>CREATE TABLE burnP3Plus_FirePerimeterOption (FirePerimeterOptionID INTEGER PRIMARY KEY, ProjectID INTEGER, Name TEXT)</item>
+    <item>INSERT INTO burnP3Plus_FirePerimeterOption (ProjectID, Name) SELECT ProjectID, 'No' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FirePerimeterOption (ProjectID, Name) SELECT ProjectID, 'Final' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FirePerimeterOption (ProjectID, Name) SELECT ProjectID, 'Daily' FROM core_Project</item>
+  </action>
+
+	<!--Clear the burn perimeter options to avoid conflicts with past boolean data-->
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputOptionSpatial">
+    <item> UPDATE burnP3Plus_OutputOptionSpatial SET BurnPerimeter=NULL </item>
+  </action>
+
+	<!--Drop and rebuild burn perimeter table to accept GeoPackage files-->
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFirePerimeter">
+    <item> DROP TABLE burnP3Plus_OutputFirePerimeter </item>
+    <item> CREATE TABLE burnP3Plus_OutputFirePerimeter (
+            OutputFirePerimeterID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            FileName              TEXT,
+            Description           TEXT) </item>
+  </action>
+
+  <!--Add tables to store FBP spatial output options-->
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_FBPOutputVariable">
+    <item>CREATE TABLE burnP3Plus_FBPOutputVariable (FBPOutputVariableID INTEGER PRIMARY KEY, ProjectID INTEGER, Name TEXT, DisplayName TEXT)</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'RateOfSpread', 'Rate of Spread Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'FireIntensity', 'Fire Intensity Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'SpreadDirection', 'Spread Direction Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'SurfaceFuelConsumption', 'Surface Fuel Consumption Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'CrownFractionBurned', 'Crown Fraction Burned Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'CrownFractionConsumed', 'Crown Fraction Consumed Map' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputVariable (ProjectID, Name, DisplayName) SELECT ProjectID, 'TotalFuelConsumption', 'Total Fuel Consumption Map' FROM core_Project</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_FBPOutputStatistic">
+    <item>CREATE TABLE burnP3Plus_FBPOutputStatistic (FBPOutputStatisticID INTEGER PRIMARY KEY, ProjectID INTEGER, Name TEXT)</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Average' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Minimum' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Maximum' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Median' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Percentile 1' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Percentile 2' FROM core_Project</item>
+    <item>INSERT INTO burnP3Plus_FBPOutputStatistic (ProjectID, Name) SELECT ProjectID, 'Percentile 3' FROM core_Project</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputOptionFBPSpatial">
+    <item>CREATE TABLE burnP3Plus_OutputOptionFBPSpatial (
+      OutputOptionFBPSpatialID  INTEGER PRIMARY KEY,
+		  ScenarioID   INTEGER,
+		  Variable     INTEGER,
+		  Average      INTEGER,
+		  Minimum      INTEGER,
+		  Maximum      INTEGER,
+		  Median       INTEGER,
+		  Percentile1  DOUBLE,
+		  Percentile2  DOUBLE,
+		  Percentile3  DOUBLE,
+		  Individual   INTEGER)</item>
+  </action>
+
+  <!--Add tables to store individual FBP spatial outputs-->
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputRateOfSpreadMap">
+    <item>CREATE TABLE burnP3Plus_OutputRateOfSpreadMap (
+      OutputRateOfSpreadMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputFireIntensityMap">
+    <item>CREATE TABLE burnP3Plus_OutputFireIntensityMap (
+      OutputFireIntensityMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputSpreadDirectionMap">
+    <item>CREATE TABLE burnP3Plus_OutputSpreadDirectionMap (
+      OutputSpreadDirectionMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputSurfaceFuelConsumptionMap">
+    <item>CREATE TABLE burnP3Plus_OutputSurfaceFuelConsumptionMap (
+      OutputSurfaceFuelConsumptionMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputCrownFractionBurnedMap">
+    <item>CREATE TABLE burnP3Plus_OutputCrownFractionBurnedMap (
+      OutputCrownFractionBurnedMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputCrownFractionConsumedMap">
+    <item>CREATE TABLE burnP3Plus_OutputCrownFractionConsumedMap (
+      OutputCrownFractionConsumedMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputTotalFuelConsumptionMap">
+    <item>CREATE TABLE burnP3Plus_OutputTotalFuelConsumptionMap (
+      OutputTotalFuelConsumptionMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+		  Iteration  INTEGER,
+		  FireID     INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <!--Add tables to store FBP summary outputs-->
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputRateOfSpreadSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputRateOfSpreadSummaryMap (
+      OutputRateOfSpreadSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputFireIntensitySummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputFireIntensitySummaryMap (
+      OutputFireIntensitySummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputSpreadDirectionSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputSpreadDirectionSummaryMap (
+      OutputSpreadDirectionSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputSurfaceFuelConsumptionSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputSurfaceFuelConsumptionSummaryMap (
+      OutputSurfaceFuelConsumptionSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputCrownFractionBurnedSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputCrownFractionBurnedSummaryMap (
+      OutputCrownFractionBurnedSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputCrownFractionConsumedSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputCrownFractionConsumedSummaryMap (
+      OutputCrownFractionConsumedSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputTotalFuelConsumptionSummaryMap">
+    <item>CREATE TABLE burnP3Plus_OutputTotalFuelConsumptionSummaryMap (
+      OutputTotalFuelConsumptionSummaryMapID INTEGER PRIMARY KEY,
+		  ScenarioID INTEGER,
+			Summary    INTEGER,
+		  Iteration  INTEGER,
+		  Timestep   INTEGER,
+		  FileName   TEXT,
+		  Band       INTEGER)</item>
+  </action>
+  
+  <!-- Add OriginalFireID to OutputFireStatistic Table for easier joining to old data -->
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFireStatistic">
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_OutputFireStatistic</item>
+
+    <item> DROP TABLE burnP3Plus_OutputFireStatistic </item>
+
+    <item> CREATE TABLE burnP3Plus_OutputFireStatistic (
+            OutputFireStatisticID INTEGER PRIMARY KEY,
+            ScenarioID            INTEGER,
+            Iteration             INTEGER,
+            Timestep              INTEGER,
+            FireID                INTEGER,
+            Latitude              DOUBLE,
+            Longitude             DOUBLE,
+            Season                INTEGER,
+            Cause                 INTEGER,
+            FireZone              INTEGER,
+            WeatherZone           INTEGER,
+            FuelType              INTEGER,
+            FireDuration          INTEGER,
+            HoursBurning          INTEGER,
+            Area                  DOUBLE,
+            ResampleStatus        TEXT,
+            OriginalFireID        INTEGER) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputFireStatistic (
+            ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            Latitude,
+            Longitude,
+            Season,
+            Cause,
+            FireZone,
+            WeatherZone,
+            FuelType,
+            FireDuration,
+            HoursBurning,
+            Area,
+            ResampleStatus)
+      SELECT ScenarioID,
+            Iteration,
+            Timestep,
+            FireID,
+            Latitude,
+            Longitude,
+            Season,
+            Cause,
+            FireZone,
+            WeatherZone,
+            FuelType,
+            FireDuration,
+            HoursBurning,
+            Area,
+            ResampleStatus
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+
+    <item> CREATE INDEX burnP3Plus_OutputFireStatistic_Index ON burnP3Plus_OutputFireStatistic (ScenarioID) </item>
+  </action>
+
+</update>

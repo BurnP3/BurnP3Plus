@@ -312,6 +312,7 @@ saveFBPMaps <- length(outputComponentsToKeepDisplayName) > 0
 
 # Placeholder for list of iterations that did not meet ignition targets
 incompleteIterations <- integer(0)
+firesToReplace <- data.frame()
 
 # Decide if any resampling is required
 requiresResample <- OutputFireStatistic %>%

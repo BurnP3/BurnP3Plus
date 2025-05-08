@@ -322,6 +322,7 @@
 		<column name="HoursBurning" displayName="Hours Burning" dataType="Integer"/>
 		<column name="Area" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0"/>
 		<column name="ResampleStatus" displayName="Resample Status" dataType="String"/>
+		<column name="OriginalFireID" displayName="Original Fire ID of Resampled Ignition" dataType="Integer" isOptional="True"/>
 	</dataSheet>
 
 	<dataSheet name="OutputBurnProbability" displayName="Output Burn Probability">
@@ -514,8 +515,8 @@
 	<!--Summarize Burn Probability Transformer-->
 	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="2">
 		<dataSheet name="RunControl" type="Input"/>
-		<dataSheet name="DeterministicIgnitionLocation" type="Input"/>
-		<dataSheet name="DeterministicBurnCondition" type="Input"/>
+		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
+		<dataSheet name="DeterministicBurnCondition" type="Both"/>
 		<dataSheet name="OutputOptionSpatial" type="Input"/>
 		<dataSheet name="OutputOptionFBPSpatial" type="Input"/>
 		<dataSheet name="OutputFireStatistic" type="Both"/>

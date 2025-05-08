@@ -48,6 +48,7 @@ myScenario <- scenario()
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T, returnInvisible = T)
 RunControl <- datasheet(myScenario, "burnP3Plus_RunControl", returnInvisible = T)
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
+DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookupsAsFactors = F, optional = T, returnInvisible = T)
 FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", lookupsAsFactors = F, optional = T, returnInvisible = T)
 AllPerim <- datasheet(myScenario, "burnP3Plus_OutputAllPerim", returnInvisible = T)
@@ -172,6 +173,17 @@ dir.move <- function(source, target) {
 }
 
 ### Update functions ----
+# Function to reassign Iterations and FireIDs from resampling
+updateResampledFireIDs <- function(data, firesToReplace) {
+  data %>%
+    left_join(firesToReplace) %>%
+    mutate(
+      Iteration = if_else(!is.na(NewIteration), NewIteration, Iteration),
+      FireID    = if_else(!is.na(NewFireID), NewFireID, FireID)) %>%
+    dplyr::select(-NewIteration, -NewFireID) %>%
+    arrange(Iteration, FireID)
+}
+
 # Function to add reassigned extra fires to existing burn maps
 updateBurnMap <- function(NewIteration, data, OutputBurnMap, AllPerim, DeterministicIgnitionLocation) {
   # Initialize a temp file name
@@ -342,17 +354,18 @@ if(requiresResample) {
 
   # Update output fire statistics table
   OutputFireStatistic <- OutputFireStatistic %>%
-    left_join(firesToReplace) %>%
+    mutate(OriginalFireID = if_else(ResampleStatus == "Extra", FireID, NA)) %>%
+    updateResampledFireIDs(firesToReplace) %>%
     mutate(
+      OriginalFireID = if_else(Iteration == 0, NA, OriginalFireID), # Extra fires that are not resampled don't require original fire id values
       ResampleStatus = case_when(
-        !is.na(NewIteration) ~ str_c("Reassigned: It ", NewIteration, ", FID ", NewFireID),
-        ResampleStatus == "Extra" ~ "Not Used",
-        TRUE ~ ResampleStatus
-      ))
+        ResampleStatus == "Extra" & Iteration == 0 ~ "Not Used",
+        ResampleStatus == "Extra" & Iteration != 0  ~ "Reassigned",
+        TRUE ~ ResampleStatus))
 
   saveDatasheet(
     myScenario,
-    OutputFireStatistic %>% select(-starts_with("New")),
+    OutputFireStatistic,
     "burnP3Plus_OutputFireStatistic",
     append = FALSE)
 
@@ -362,7 +375,7 @@ if(requiresResample) {
                  "\nPlease increase the 'Proportion of Extra Ignition to Sample' in the Fire Resampling Options or decrease the 'Minimum Fire Size'.",
                  "\nPlease see the Fire Statistics table for details on specific iterations, fires, and burn conditions. Incomplete iterations will not be included in summary burn maps\n", type = "warning") 
 
-  # Update burn maps if any extra fires were reassigned
+  ## Update burn maps if any extra fires were reassigned ----
   if(nrow(firesToReplace) > 0 & saveBurnMaps) {
     # Move burn maps to temp folder
     OutputBurnMap %>%
@@ -382,11 +395,25 @@ if(requiresResample) {
     # Save back to SyncroSim
     saveDatasheet(myScenario, OutputBurnMap, "burnP3Plus_OutputBurnMap", append = F)
 
-    # TODO: 
-    # - Update batching to handle iteration zero as independent batch
-    # - Consider updating All Perim map iteration / timestep after reassignment
-    # - Consider updating deterministic table Iteration / FireIDs after reassignment
-    # - Update Prometheus burn trans
+    ## Update All Perim maps to match new assignments ----
+    if (OutputOptionsSpatial$AllPerim) {
+      AllPerim <- updateResampledFireIDs(AllPerim, firesToReplace) %>%
+        mutate(Timestep = FireID) # Used for plotting Individual Burn Perims in SSim UI
+      saveDatasheet(myScenario, AllPerim, "burnP3Plus_OutputAllPerim")
+    } else { # Otherwise remove any records and maps to avoid confusion
+      rsyncrosim::delete(myScenario, datasheet = "burnP3Plus_OutputAllPerim", force = T)
+    }
+
+    # Note that Burn Perimeters and Individual FBP Maps are reassigned in their respective sections below
+  }
+
+  if(nrow(firesToReplace) > 0 ) {
+    ## Update Deterministic Input tables ----
+    DeterministicIgnitionLocation <- updateResampledFireIDs(DeterministicIgnitionLocation, firesToReplace)
+    saveDatasheet(myScenario, DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation")
+
+    DeterministicBurnCondition <- updateResampledFireIDs(DeterministicBurnCondition, firesToReplace)
+    saveDatasheet(myScenario, DeterministicBurnCondition, "burnP3Plus_DeterministicBurnCondition")
   }
 }
 
@@ -569,11 +596,13 @@ if(saveBurnMaps) {
 }
 
 # Consolidate fire perimeter geopackages if necessary
-if (saveBurnPerimeters != "No" & nrow(OutputFirePerimeter) > 1) {
+if (saveBurnPerimeters != "No") {
   # Append geopackages one by one to new geopackage path
   # - layer name is used on read to ensure all inputs are the same variable type (final or daily) as expected in output
+  # - also reassign fire ids and iterations if extra fires were resampled
   for (f in OutputFirePerimeter$FileName) {
-    st_read(f, layer = geopackage_layer_name) %>%
+    st_read(f, layer = geopackage_layer_name, quiet = T) %>%
+      {if(nrow(firesToReplace) > 0) updateResampledFireIDs(., firesToReplace) else .} %>%
       st_write(
         dsn = geopackage_path,
         layer = geopackage_layer_name,
@@ -611,7 +640,18 @@ if (saveFBPMaps) {
   for (component in outputComponentsToKeep) {
     # Connect to per-fire raw outputs for this variable
     componentDatasheet <- datasheet(myScenario, str_c("burnP3Plus_Output", component, "Map"))
+
+    # Reassign iteration and fire IDs from resampling if needed
+    if(nrow(firesToReplace) > 0) {
+      componentDatasheet <- updateResampledFireIDs(componentDatasheet, firesToReplace)
+    } 
+      
+    # Load stack of relevant FBP rasters
     fbpStack <- componentDatasheet %>%
+      left_join(OutputFireStatistic %>% dplyr::select(Iteration, FireID, ResampleStatus), by = c("Iteration", "FireID")) %>%
+      dplyr::filter(
+        ResampleStatus %in% c("Kept", "Reassigned"), # Discards unused extra fires and fire below minimum fire size
+        !Iteration %in% incompleteIterations) %>%    # Discards fires from incomplete iterations
       pull(FileName) %>%
       rast()
     
@@ -675,8 +715,13 @@ if (saveFBPMaps) {
     saveDatasheet(myScenario, OutputFBPSummary, str_c("burnP3Plus_Output", component, "SummaryMap"), append = FALSE)
 
     # Clear out raw FBP maps if not needed
-    if(is.na(componentOutputOptions$Individual) | !componentOutputOptions$Individual)
+    if(is.na(componentOutputOptions$Individual) | !componentOutputOptions$Individual) {
       rsyncrosim::delete(myScenario, datasheet = str_c("burnP3Plus_Output", component, "Map"), force = T)
+      
+    # Otherwise save any updated iteration / fire id reassignments from resampling back to the library
+    } else {
+      saveDatasheet(myScenario, componentDatasheet, str_c("burnP3Plus_Output", component, "Map"))
+    }
   }
 
   updateRunLog("Finished summarizing FBP outputs in ", updateBreakpoint(), "\n\n")

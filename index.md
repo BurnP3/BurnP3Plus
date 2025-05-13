@@ -88,4 +88,4 @@ Leonardo Frid (Author) <a href="https://orcid.org/0000-0002-5489-2337" target="_
 
 ## Citation 
 
-<a href="https://doi.org/10.5281/zenodo.10293565"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10293565.svg" alt="DOI"></a>
+<a href="https://doi.org/10.5281/zenodo.10895277"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10895277.svg" alt="DOI"></a>

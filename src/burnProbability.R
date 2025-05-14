@@ -597,7 +597,7 @@ if(saveBurnMaps) {
 }
 
 # Consolidate fire perimeter geopackages if necessary
-if (saveBurnPerimeters != "No") {
+if (saveBurnPerimeters) {
   # Append geopackages one by one to new geopackage path
   # - layer name is used on read to ensure all inputs are the same variable type (final or daily) as expected in output
   # - also reassign fire ids and iterations if extra fires were resampled

@@ -480,8 +480,11 @@ if(saveBurnMaps) {
     # Sum layers by season
     # - note the use of `terraOptions` above to set max memory use
     for(thisSeason in names(burnCountRasters)) {
-      burnCountRasters[[thisSeason]] <- sum(burnMapRasters[[thisSeason]])
-      progressBar()
+      for(thisLayer in seq(nlyr(burnMapRasters[[thisSeason]]))) {
+        progressBar()
+        burnCountRasters[[thisSeason]] <- burnCountRasters[[thisSeason]] + burnMapRasters[[thisSeason]][[thisLayer]]
+        # Update progress bar
+      }
     }
     
     # Reclassify NaN to NA for consistency with other layers
@@ -675,13 +678,27 @@ if (saveFBPMaps) {
       # Apply the statistic to the corresponding FBP raster stack and save to disk
       fbpSummaryMap <- NA
       if(statistic == "Average") {
-        fbpSummaryMap <- app(fbpStack, mean, na.rm = T)
+
+        fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
+        for(thisLayer in seq(nlyr(fbpStack))) {
+          fbpSummaryMap <- sum(fbpSummaryMap, thisLayer, na.rm = T)
+        }
+        fbpSummaryMap <- fbpSummaryMap / nlyr(fbpStack)
+
       } else if(statistic == "Minimum") {
-        fbpSummaryMap <- app(fbpStack, min, na.rm = T)
+
+        fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
+        for(thisLayer in seq(nlyr(fbpStack))) {
+          fbpSummaryMap <- min(fbpSummaryMap, thisLayer, na.rm = T)
+        }
+
       } else if(statistic == "Maximum") {
-        fbpSummaryMap <- app(fbpStack, max, na.rm = T)
-      } else if(statistic == "Median") {
-        fbpSummaryMap <- app(fbpStack, median, na.rm = T)
+
+        fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
+        for(thisLayer in seq(nlyr(fbpStack))) {
+          fbpSummaryMap <- max(fbpSummaryMap, thisLayer, na.rm = T)
+        }
+
       } else {
         updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
       }

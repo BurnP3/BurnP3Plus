@@ -613,7 +613,7 @@ if (saveBurnPerimeters != "No") {
 
   OutputFirePerimeter <-
     tibble(
-      FileName = geopackage_path %>% normalizePath(),
+      FileName = geopackage_path %>% normalizePath(mustWork = F),
       Description = 
         str_c(
           OutputOptionsSpatial$BurnPerimeter,

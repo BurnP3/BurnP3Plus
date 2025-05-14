@@ -675,13 +675,13 @@ if (saveFBPMaps) {
       # Apply the statistic to the corresponding FBP raster stack and save to disk
       fbpSummaryMap <- NA
       if(statistic == "Average") {
-        fbpSummaryMap <- mean(fbpStack, na.rm = T)
+        fbpSummaryMap <- app(fbpStack, mean, na.rm = T)
       } else if(statistic == "Minimum") {
-        fbpSummaryMap <- min(fbpStack, na.rm = T)
+        fbpSummaryMap <- app(fbpStack, min, na.rm = T)
       } else if(statistic == "Maximum") {
-        fbpSummaryMap <- max(fbpStack, na.rm = T)
+        fbpSummaryMap <- app(fbpStack, max, na.rm = T)
       } else if(statistic == "Median") {
-        fbpSummaryMap <- median(fbpStack, na.rm = T)
+        fbpSummaryMap <- app(fbpStack, median, na.rm = T)
       } else {
         updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
       }

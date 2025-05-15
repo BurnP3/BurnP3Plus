@@ -681,7 +681,7 @@ if (saveFBPMaps) {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
         for(thisLayer in seq(nlyr(fbpStack))) {
-          fbpSummaryMap <- sum(fbpSummaryMap, thisLayer, na.rm = T)
+          fbpSummaryMap <- sum(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
         fbpSummaryMap <- fbpSummaryMap / nlyr(fbpStack)
 
@@ -689,14 +689,14 @@ if (saveFBPMaps) {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
         for(thisLayer in seq(nlyr(fbpStack))) {
-          fbpSummaryMap <- min(fbpSummaryMap, thisLayer, na.rm = T)
+          fbpSummaryMap <- min(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 
       } else if(statistic == "Maximum") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
         for(thisLayer in seq(nlyr(fbpStack))) {
-          fbpSummaryMap <- max(fbpSummaryMap, thisLayer, na.rm = T)
+          fbpSummaryMap <- max(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 
       } else {

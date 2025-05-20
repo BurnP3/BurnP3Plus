@@ -465,7 +465,8 @@ if(saveBurnMaps) {
     discard(is.null)
   
   # Check that there are outputs to summarize
-  if(length(burnMapRasters) > 0) {
+  # Need burn count raster if the average FBP map is chosen
+  if((length(burnMapRasters) > 0) | saveFBPMaps) {
     
     # Initialize the SyncroSim progress bar
     progressBar("begin", totalSteps = length(burnMapRasters))
@@ -680,22 +681,22 @@ if (saveFBPMaps) {
       if(statistic == "Average") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in seq(nlyr(fbpStack))) {
+        for(thisLayer in 2:nlyr(fbpStack)) {
           fbpSummaryMap <- sum(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
-        fbpSummaryMap <- fbpSummaryMap / nlyr(fbpStack)
+        fbpSummaryMap <- fbpSummaryMap / burnCountRasters[["All"]] # Divide by burn count instead of number of layers
 
       } else if(statistic == "Minimum") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in seq(nlyr(fbpStack))) {
+        for(thisLayer in 2:nlyr(fbpStack)) {
           fbpSummaryMap <- min(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 
       } else if(statistic == "Maximum") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in seq(nlyr(fbpStack))) {
+        for(thisLayer in 2:nlyr(fbpStack)) {
           fbpSummaryMap <- max(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 

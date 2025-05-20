@@ -681,7 +681,7 @@ if (saveFBPMaps) {
       if(statistic == "Average") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in 2:nlyr(fbpStack)) {
+        for(thisLayer in seq(nlyr(fbpStack))) {
           fbpSummaryMap <- sum(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
         fbpSummaryMap <- fbpSummaryMap / burnCountRasters[["All"]] # Divide by burn count instead of number of layers
@@ -689,14 +689,14 @@ if (saveFBPMaps) {
       } else if(statistic == "Minimum") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in 2:nlyr(fbpStack)) {
+        for(thisLayer in seq(nlyr(fbpStack))) {
           fbpSummaryMap <- min(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 
       } else if(statistic == "Maximum") {
 
         fbpSummaryMap <- rast(fbpStack[[1]], vals = NA_real_)
-        for(thisLayer in 2:nlyr(fbpStack)) {
+        for(thisLayer in seq(nlyr(fbpStack))) {
           fbpSummaryMap <- max(fbpSummaryMap, fbpStack[[thisLayer]], na.rm = T)
         }
 

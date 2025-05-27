@@ -292,9 +292,9 @@
 		<column name="Minimum" dataType="Boolean"/>
 		<column name="Maximum" dataType="Boolean"/>
 		<column name="Median" dataType="Boolean"/>
-		<column name="Percentile1" dataType="Double" displayName="Percentile 1" validationCondition="Between" formula1="0" formula2="100" format="0.0" isVisible="False"/>
-		<column name="Percentile2" dataType="Double" displayName="Percentile 2" validationCondition="Between" formula1="0" formula2="100" format="0.0" isVisible="False"/>
-		<column name="Percentile3" dataType="Double" displayName="Percentile 3" validationCondition="Between" formula1="0" formula2="100" format="0.0" isVisible="False"/>
+		<column name="Percentile1" dataType="Double" displayName="Percentile 1" validationCondition="Between" formula1="0" formula2="100" format="0.0"/>
+		<column name="Percentile2" dataType="Double" displayName="Percentile 2" validationCondition="Between" formula1="0" formula2="100" format="0.0"/>
+		<column name="Percentile3" dataType="Double" displayName="Percentile 3" validationCondition="Between" formula1="0" formula2="100" format="0.0"/>
 		<column name="Individual" dataType="Boolean" displayName="Raw Output Per Fire"/>
 	</dataSheet>
 
@@ -517,6 +517,7 @@
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 		<dataSheet name="DeterministicBurnCondition" type="Both"/>
+		<dataSheet name="LandscapeRasters" type="Input"/>
 		<dataSheet name="OutputOptionSpatial" type="Input"/>
 		<dataSheet name="OutputOptionFBPSpatial" type="Input"/>
 		<dataSheet name="OutputFireStatistic" type="Both"/>

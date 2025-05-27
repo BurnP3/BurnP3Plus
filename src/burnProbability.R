@@ -35,7 +35,6 @@ checkPackageVersion("sf",         "1.0.7")
 
 # Setup ----
 progressBar(type = "message", message = "Preparing inputs...")
-terraOptions(memmax = 2)
 
 # Initialize first breakpoint for timing code
 currentBreakPoint <- proc.time()
@@ -425,6 +424,15 @@ updateRunLog("\nBurn Summary:\n",
                round(sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic) * 100, 0), "% of simulated fires were above the minimum fire size.\n",
                round(sum(OutputFireStatistic$ResampleStatus == "Not Used") / max(1, nrow(OutputFireStatistic %>% filter(Iteration == 0))) * 100, 0), "% of extra simulated fires not used because target ignition counts were already met.\n")
 
+# Set terra memory use options if neeeded ----
+# The latest version of `terra` available on conda for windows does not respect memmax properly
+# - Instead, we split each spatial task into as many steps as rows in the output
+# - Fewer steps can occassionally be marginally faster, but some intermediate values calues significant memory usage. Maybe this is when single step spans multiple tiles?
+if(saveBurnMaps | saveFBPMaps) {
+  row_count <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]]) %>%
+    nrow
+  terraOptions(steps = row_count)
+}
 
 # Summarize fires ----
 if(saveBurnMaps) {
@@ -478,7 +486,6 @@ if(saveBurnMaps) {
       set_names(names(burnMapRasters))
     
     # Sum layers by season
-    # - note the use of `terraOptions` above to set max memory use
     for(thisSeason in names(burnCountRasters)) {
       burnCountRasters[[thisSeason]] <- sum(burnMapRasters[[thisSeason]])
       progressBar()
@@ -686,6 +693,8 @@ if (saveFBPMaps) {
         fbpSummaryMap <- max(fbpStack, na.rm = T)
       } else if(statistic == "Median") {
         fbpSummaryMap <- median(fbpStack, na.rm = T)
+      } else if (str_detect(statistic, "Percentile")) {
+        fbpSummaryMap <- quantile(fbpStack, componentOutputOptions[[statistic]] / 100, na.rm = T)
       } else {
         updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
       }

@@ -726,7 +726,7 @@ if (saveFBPMaps) {
       
     # Otherwise save any updated iteration / fire id reassignments from resampling back to the library
     } else {
-      saveDatasheet(myScenario, componentDatasheet, str_c("burnP3Plus_Output", component, "Map"))
+      saveDatasheet(myScenario, componentDatasheet %>% mutate(Timestep = FireID), str_c("burnP3Plus_Output", component, "Map"))
     }
   }
 

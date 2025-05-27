@@ -642,6 +642,10 @@ if (saveFBPMaps) {
     # Connect to per-fire raw outputs for this variable
     componentDatasheet <- datasheet(myScenario, str_c("burnP3Plus_Output", component, "Map"))
 
+    # Skip if there are no outputs for the component
+    if (isDatasheetEmpty(componentDatasheet))
+      next
+
     # Reassign iteration and fire IDs from resampling if needed
     if(nrow(firesToReplace) > 0) {
       componentDatasheet <- updateResampledFireIDs(componentDatasheet, firesToReplace)
@@ -713,7 +717,8 @@ if (saveFBPMaps) {
     }
 
     # Save summary outputs for this FBP variable
-    saveDatasheet(myScenario, OutputFBPSummary, str_c("burnP3Plus_Output", component, "SummaryMap"), append = FALSE)
+    if(!isDatasheetEmpty(OutputFBPSummary))
+      saveDatasheet(myScenario, OutputFBPSummary, str_c("burnP3Plus_Output", component, "SummaryMap"), append = FALSE)
 
     # Clear out raw FBP maps if not needed
     if(is.na(componentOutputOptions$Individual) | !componentOutputOptions$Individual) {

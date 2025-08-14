@@ -65,6 +65,8 @@ Cell2Fire model at [https://doi.org/10.3389/ffgc.2021.692706](https://doi.org/10
 Cell2Fire package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
 Prometheus model at [https://firegrowthmodel.ca/pages/prometheus_overview_e.html](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. <br>
 Prometheus package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
+FireSTARR model at [https://github.com/CWFMF/FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"}. <br>
+FireSTARR package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusFireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"}. <br>
 Burn-P3 software at [https://firegrowthmodel.ca/pages/burnp3_overview_e.html](https://firegrowthmodel.ca/pages/burnp3_overview_e.html){:target="_blank"}. <br>
 Burn-P3 documentation at [https://cfs.nrcan.gc.ca/publications?id=25627](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}. <br>
 **BurnP3+** discord channel at [https://discord.gg/76QzY8eAYr](https://discord.gg/76QzY8eAYr){:target="_blank"}. <br>

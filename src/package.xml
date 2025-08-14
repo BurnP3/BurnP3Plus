@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.4.1" minSyncroSimVersion="3.1.0">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.5.0" minSyncroSimVersion="3.1.0">
 
 	<!--Library Datasheets-->
 
@@ -365,12 +365,22 @@
 		<column name="Band" displayName="Band" dataType="Integer" allowDbNull="True" isOptional="True"/>
 	</dataSheet>
 
+	<dataSheet name="OutputAllPerimTabular" displayName="Output Individual Burn Tables">
+		<column name="FileName" displayName="Burn Table" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" externalFileFilter="Parquet (*.parquet)|*.parquet"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+	</dataSheet>
+
 	<dataSheet name="OutputFirePerimeter" displayName="Output Fire Perimeters">
 		<column name="FileName" displayName="Burn Perimeter" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" externalFileFilter="GeoPackage (*.gpkg)|*.gpkg"/>
 		<column name="Description" dataType="String" isOptional="True"/>
 	</dataSheet>
 
 	<!--Output Datasheets - Fire Behaviour Prediction System Spatial Outputs-->
+	<dataSheet name="OutputFBPTabular" displayName="Output FBP Tables">
+		<column name="FileName" displayName="FBP Table" dataType="String" allowDbNull="False" isExternalFile="True" isRaster="False" externalFileFilter="Parquet (*.parquet)|*.parquet"/>
+		<column name="Description" dataType="String" isOptional="True"/>
+	</dataSheet>
+
 	<dataSheet name="OutputRateOfSpreadMap" displayName="Output Rate of Spread Map">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -486,7 +496,7 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="2">
+	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="IgnitionsPerIteration" type="Input"/>
@@ -500,7 +510,7 @@
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="2">
+	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="FireDuration" type="Input"/>
@@ -513,7 +523,7 @@
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="2">
+	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 		<dataSheet name="DeterministicBurnCondition" type="Both"/>
@@ -522,11 +532,13 @@
 		<dataSheet name="OutputOptionFBPSpatial" type="Input"/>
 		<dataSheet name="OutputFireStatistic" type="Both"/>
 		<dataSheet name="OutputAllPerim" type="Both"/>
+		<dataSheet name="OutputAllPerimTabular" type="Both"/>
 		<dataSheet name="OutputBurnMap" type="Both"/>
 		<dataSheet name="OutputBurnCount" type="Output"/>
 		<dataSheet name="OutputBurnProbability" type="Output"/>
 		<dataSheet name="OutputRelativeBurnProbability" type="Output"/>
 		<dataSheet name="OutputFirePerimeter" type="Both"/>
+		<dataSheet name="burnP3Plus_OutputFBPTabular" type="Both"/>
 		<dataSheet name="burnP3Plus_OutputRateOfSpreadMap" type="Both"/>
 		<dataSheet name="burnP3Plus_OutputFireIntensityMap" type="Both"/>
 		<dataSheet name="burnP3Plus_OutputSpreadDirectionMap" type="Both"/>
@@ -661,8 +673,8 @@
 		<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
 		<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
 		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
-		<item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/>
-		<group name="FBPSummaryMap" displayName="FBP Summary Outputs">
+		<!-- <item name="AllPerimMap" displayName ="Individual Fire Burn Maps" dataSheet="OutputAllPerim" column="FileName"/> -->
+		<group name="FBPSummaryMap" displayName="Summarized FBP Outputs">
 			<item name="RosSummary" displayName="Rate of Spread" dataSheet="OutputRateOfSpreadSummaryMap" column="FileName" filter="Summary"/>
 			<item name="FiSummary" displayName="Fire Intensity" dataSheet="OutputFireIntensitySummaryMap" column="FileName" filter="Summary"/>
 			<item name="SdSummary" displayName="Spread Direction" dataSheet="OutputSpreadDirectionSummaryMap" column="FileName" filter="Summary"/>
@@ -671,7 +683,7 @@
 			<item name="CfcSummary" displayName="Crown Fraction Consumed" dataSheet="OutputCrownFractionConsumedSummaryMap" column="FileName" filter="Summary"/>
 			<item name="TfcSummary" displayName="Total Fuel Consumption" dataSheet="OutputTotalFuelConsumptionSummaryMap" column="FileName" filter="Summary"/>
 		</group>
-		<group name="FBPMap" displayName="FBP Raw Outputs">
+		<!-- <group name="FBPMap" displayName="FBP Raw Outputs">
 			<item name="Ros" displayName="Rate of Spread" dataSheet="OutputRateOfSpreadMap" column="FileName"/>
 			<item name="Fi" displayName="Fire Intensity" dataSheet="OutputFireIntensityMap" column="FileName"/>
 			<item name="Sd" displayName="Spread Direction" dataSheet="OutputSpreadDirectionMap" column="FileName"/>
@@ -679,7 +691,7 @@
 			<item name="Cfb" displayName="Crown Fraction Burned" dataSheet="OutputCrownFractionBurnedMap" column="FileName"/>
 			<item name="Cfc" displayName="Crown Fraction Consumed" dataSheet="OutputCrownFractionConsumedMap" column="FileName"/>
 			<item name="Tfc" displayName="Total Fuel Consumption" dataSheet="OutputTotalFuelConsumptionMap" column="FileName"/>
-		</group>
+		</group> -->
 	</layout>
 
 	<updateProvider className="SyncroSim.Core.XMLUpdateProvider" classAssembly="SyncroSim.Core"/>

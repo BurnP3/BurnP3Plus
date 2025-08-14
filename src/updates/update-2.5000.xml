@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Add tabular FBP output tables">
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputFBPTabular">
+    <item>CREATE TABLE burnP3Plus_OutputFBPTabular (
+      OutputFBPTabularID INTEGER PRIMARY KEY,
+		  ScenarioID         INTEGER,
+      FileName           TEXT,
+      Description        TEXT) </item>
+  </action>
+
+  <action code="Exec" condition="TableNotExists" criteria="burnP3Plus_OutputAllPerimTabular">
+    <item>CREATE TABLE burnP3Plus_OutputAllPerimTabular (
+      OutputAllPerimTabularID INTEGER PRIMARY KEY,
+		  ScenarioID         INTEGER,
+      FileName           TEXT,
+      Description        TEXT) </item>
+  </action>
+
+</update>

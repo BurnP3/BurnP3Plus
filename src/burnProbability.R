@@ -463,10 +463,9 @@ if(requiresResample) {
     #   AllPerim <- updateResampledFireIDs(AllPerim, firesToReplace) %>%
     #     mutate(Timestep = FireID) # Used for plotting Individual Burn Perims in SSim UI
     #   saveDatasheet(myScenario, AllPerim, "burnP3Plus_OutputAllPerim")
-    } else { # Otherwise remove any records and maps to avoid confusion
-      rsyncrosim::delete(myScenario, datasheet = "burnP3Plus_OutputAllPerimTabular", force = T)
+    } #else { # Otherwise remove any records and maps to avoid confusion
     #   rsyncrosim::delete(myScenario, datasheet = "burnP3Plus_OutputAllPerim", force = T)
-    }
+    #}
 
     # Note that Burn Perimeters and Individual FBP Maps are reassigned in their respective sections below
   }

@@ -321,6 +321,7 @@ summarizeFBPFromTabular <- function(data, summaryFunction, outputFileName, templ
       filename = outputFileName,
       overwrite = T,
       filetype = "GTiff",
+      datatype = "FLT4S",
       gdal = c("COMPRESS=LZW",
                "TFW=YES"),
       NAflag = -9999)

@@ -773,15 +773,30 @@ if (saveFBPMaps) {
       # Apply the statistic to the corresponding FBP raster stack and save to disk
       summaryFunction <- NA
       if(statistic == "Average") {
-        summaryFunction <- mean
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- mean(as.numeric(x), na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else if(statistic == "Minimum") {
-        summaryFunction <- min
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- min(as.numeric(x), na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else if(statistic == "Maximum") {
-        summaryFunction <- max
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- max(as.numeric(x), na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else if(statistic == "Median") {
-        summaryFunction <- median
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- median(as.numeric(x), na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else if (str_detect(statistic, "Percentile")) {
-        summaryFunction <- function(x, ...) quantile(x, componentOutputOptions[[statistic]] / 100, ...)
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- quantile(x, componentOutputOptions[[statistic]] / 100, na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else {
         updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
       }

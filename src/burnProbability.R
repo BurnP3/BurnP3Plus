@@ -793,7 +793,10 @@ if (saveFBPMaps) {
           if (is.na(m)) NA_real_ else m
         }
       } else if (str_detect(statistic, "Percentile")) {
-        summaryFunction <- function(x, ...) quantile(x, componentOutputOptions[[statistic]] / 100, ...)
+        summaryFunction <- function(x, na.rm = TRUE) {
+          m <- quantile(x, componentOutputOptions[[statistic]] / 100, na.rm = na.rm)
+          if (is.na(m)) NA_real_ else m
+        }
       } else {
         updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
       }

@@ -727,8 +727,11 @@ if (saveFBPMaps) {
   outputComponentsToKeep <- outputComponentsToKeepDisplayName %>%
     lookup(FBPVariableTable$DisplayName, FBPVariableTable$Name)
   
-  fbpTableColumns <- open_dataset(fbpTablePath) %>%
-    colnames
+  # Coerce to data.frame before extracting colnames to avoid bug in conda with extracting colnames
+  # - Subset the data.table from open_dataset to limit memory use when extracting colnames
+  fbpTableColumns <- open_dataset(fbpTablePath)[1,] %>%
+    as.data.frame() %>%
+    colnames()
 
   firesToSummarize <- OutputFireStatistic %>%
     dplyr::filter(

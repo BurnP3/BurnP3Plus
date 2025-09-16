@@ -3,8 +3,22 @@ channels:
   - conda-forge
 dependencies:
   - _r-mutex=1.0.1=anacondar_1
+  - aws-c-auth=0.8.0=hb2b962f_7
+  - aws-c-cal=0.8.0=hf66253b_1
+  - aws-c-common=0.10.0=h2466b09_0
+  - aws-c-compression=0.3.0=hf66253b_1
+  - aws-c-event-stream=0.5.0=h907c6a8_4
+  - aws-c-http=0.9.0=hed6649f_5
+  - aws-c-io=0.15.1=h78a6df4_1
+  - aws-c-mqtt=0.11.0=h3a9949c_5
+  - aws-c-s3=0.7.0=h78ddd45_7
+  - aws-c-sdkutils=0.2.1=hf66253b_0
+  - aws-checksums=0.2.0=hf66253b_1
+  - aws-crt-cpp=0.29.3=h6fcbaa3_2
+  - aws-sdk-cpp=1.11.407=h9c33ea8_9
   - bzip2=1.0.8=h2466b09_7
-  - ca-certificates=2025.1.31=h56e8100_0
+  - c-ares=1.34.5=h2466b09_0
+  - ca-certificates=2025.8.3=h4c7d964_0
   - cairo=1.18.0=h91e5215_2
   - font-ttf-dejavu-sans-mono=2.37=hab24e00_0
   - font-ttf-inconsolata=3.000=h77eed37_0
@@ -19,23 +33,45 @@ dependencies:
   - harfbuzz=8.5.0=h81778c3_0
   - icu=73.2=h63175ca_0
   - intel-openmp=2024.2.1=h57928b3_1083
+  - krb5=1.21.3=hdf4eb48_0
   - lerc=4.0.0=h63175ca_0
+  - libabseil=20240722.0=cxx17_h4eb7d71_4
+  - libarrow=14.0.2=hbd6f440_52_cpu
+  - libarrow-acero=14.0.2=hac47afa_52_cpu
+  - libarrow-dataset=14.0.2=hac47afa_52_cpu
+  - libarrow-substrait=14.0.2=hcd1cebd_52_cpu
   - libblas=3.9.0=31_h641d27c_mkl
+  - libbrotlicommon=1.1.0=h2466b09_3
+  - libbrotlidec=1.1.0=h2466b09_3
+  - libbrotlienc=1.1.0=h2466b09_3
+  - libcrc32c=1.1.2=h0e60522_0
+  - libcurl=8.14.1=h88aaa65_0
   - libdeflate=1.23=h9062f6e_0
+  - libevent=2.1.12=h3671451_1
   - libexpat=2.7.0=he0c23c2_0
   - libffi=3.4.6=h537db12_1
   - libglib=2.84.1=h7025463_0
+  - libgoogle-cloud=2.30.0=h07d40e7_1
+  - libgoogle-cloud-storage=2.30.0=he5eb982_1
+  - libgrpc=1.67.1=h7aa3b8a_0
   - libhwloc=2.11.2=default_hc8275d1_1000
   - libiconv=1.18=h135ad9c_1
   - libintl=0.22.5=h5728263_3
   - libjpeg-turbo=3.0.0=hcfcfb64_1
   - liblapack=3.9.0=31_h1aa476e_mkl
   - liblzma=5.8.1=h2466b09_0
+  - libparquet=14.0.2=h59f2d37_52_cpu
   - libpng=1.6.47=had7236b_0
+  - libprotobuf=5.28.2=hcaed137_0
+  - libre2-11=2024.07.02=h4eb7d71_2
+  - libssh2=1.11.1=h9aa295b_0
+  - libthrift=0.21.0=hbe90ef8_0
   - libtiff=4.7.0=h797046b_3
   - libudunits2=2.2.28=hfda9870_3
+  - libutf8proc=2.8.0=hb602f4b_1
   - libxml2=2.13.7=h442d1da_1
   - libzlib=1.3.1=h2466b09_2
+  - lz4-c=1.9.4=hcfcfb64_0
   - m2w64-bwidget=1.9.10=2
   - m2w64-bzip2=1.0.6=6
   - m2w64-expat=2.1.1=2
@@ -69,11 +105,13 @@ dependencies:
   - m2w64-zlib=1.2.8=10
   - mkl=2024.2.2=h66d3029_15
   - msys2-conda-epoch=20160418=1
-  - openssl=3.5.0=ha4e3fda_0
+  - openssl=3.5.0=ha4e3fda_1
+  - orc=2.0.2=h34659fe_2
   - pandoc=2.19.2=h57928b3_2
   - pcre2=10.44=h3d7b363_2
   - pixman=0.44.2=had0cd8c_0
   - pthreads-win32=2.9.1=h2466b09_4
+  - r-arrow=14.0.1=r41h57928b3_0
   - r-askpass=1.2.0=r41h6d2157b_0
   - r-assertthat=0.2.1=r41hc72bb7e_3
   - r-backports=1.5.0=r41h6c66454_0
@@ -199,7 +237,10 @@ dependencies:
   - r-xfun=0.45=r41he75b88d_0
   - r-xml2=1.3.3=r41ha856d6a_2
   - r-yaml=2.3.8=r41h6d2157b_0
+  - re2=2024.07.02=haf4117d_2
+  - snappy=1.2.1=h500f7fa_1
   - tbb=2021.13.0=h62715c5_1
+  - tzdata=2025b=h78e105d_0
   - ucrt=10.0.22621.0=h57928b3_1
   - vc=14.3=h2b53caa_26
   - vc14_runtime=14.42.34438=hfd919c2_26

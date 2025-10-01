@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Consolidate tabular outputs">
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFBPTabular">
+
+    <item>CREATE TABLE burnP3Plus_OutputRawTabular (
+      OutputRawTabularID INTEGER PRIMARY KEY,
+		  ScenarioID         INTEGER,
+      FileName           TEXT,
+      Description        TEXT) </item>
+
+    <item> INSERT INTO burnP3Plus_OutputRawTabular (
+      ScenarioID,
+      FileName,
+      Description)
+      SELECT ScenarioID,
+             FileName,
+             Description
+      FROM burnP3Plus_OutputFBPTabular </item>
+
+    <item> DROP TABLE burnP3Plus_OutputFBPTabular </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputAllPerimTabular">
+    <item> DROP TABLE burnP3Plus_OutputAllPerimTabular </item>
+  </action>
+
+</update>

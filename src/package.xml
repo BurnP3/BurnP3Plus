@@ -516,6 +516,14 @@
 		<dataSheet name="DeterministicBurnCondition" type="Output"/>
 	</transformer>
 
+	<transformer name="mergeBurns" displayName="3.5 - Merge Burn Scenarios" isRunnable="True" programName="Rscript" programArguments="merge.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	  <dataSheet name="DeterministicIgnitionLocation" type="Both"/>
+	  <dataSheet name="DeterministicBurnCondition" type="Both"/>
+	  <dataSheet name="burnP3Plus_OutputFireStatistic" type="Both"/>
+	  <dataSheet name="burnP3Plus_OutputFirePerimeter" type="Both"/>
+	  <dataSheet name="burnP3Plus_OutputRawTabular" type="Both"/>
+	</transformer>
+
 	<!--Summarize Burn Probability Transformer-->
 	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
 		<dataSheet name="RunControl" type="Input"/>

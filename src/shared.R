@@ -220,6 +220,7 @@ consolidateTabularOutputs <- function() {
     rawTableTempPath %>%
       arrow::open_dataset(format = "arrow") %>%
       dplyr::select(-BatchID) %>%
+      arrange(Iteration, FireID, CellID) %>%
       arrow::write_parquet(rawTablePath)
 
     OutputRawTabular <- data.frame(
@@ -282,12 +283,7 @@ consolidateVectorOutputs <- function() {
     OutputFirePerimeter <-
       tibble(
         FileName = geopackage_path %>% normalizePath(),
-        Description = 
-          str_c(
-            OutputOptionsSpatial$BurnPerimeter,
-            " burn perimeters", 
-            ifelse(runContext$isParallel, str_c(" - Job ", runContext$jobIndex), ""))
-      ) %>%
+        Description = getPerimeterType(geopackage_path)) %>%
       as.data.frame()
   
     if(file.exists(geopackage_path))
@@ -295,6 +291,37 @@ consolidateVectorOutputs <- function() {
   
     updateRunLog("Finished collecting burn perimeters in ", updateBreakpoint())
   }
+}
+
+# Function to identify perimeter types (final, daily, mixed) present in a geopackage and return a description
+getPerimeterType <- function(geopackage_path) {
+  # A suffix to the description is added based on the current job number
+  jobSuffix <- ifelse(runContext$isParallel, str_c(" - Job ", runContext$jobIndex), "")
+
+  # Extract layer names
+  perimeterTypesPresent <- st_layers(geopackage_path)$name
+
+  # Handle empty geopackages, but should not happen
+  if (length(perimeterTypesPresent) == 0) {
+    updateRunLog("No fire perimeter layers found!", type = "warning")
+    return("")
+  }
+  
+  # Include a warning for mixed perimeter types.
+  if (length(perimeterTypesPresent) > 1) {
+    updateRunLog("Found a mix of burn perimeter output types! Both will be retained in separate layers.", type = "warning")
+    return(str_c("Mixed burn perimeters", jobSuffix))
+  }
+
+  # Handle base cases
+  if (str_detect(perimeterTypesPresent, "final"))
+    return(str_c("Final burn perimeters", jobSuffix))
+
+  if (str_detect(perimeterTypesPresent, "daily"))
+    return(str_c("Daily burn perimeters", jobSuffix))
+  
+  # If a single unknown layer is present, this is an error
+  stop("Found unexpected layer names in the Fire Perimeters geopackage")
 }
 
 ## Functions for sampling fire growth inputs ----
@@ -516,7 +543,7 @@ generateSharedTempFilePaths <- function(transformerName) {
   # Note geopackage recommends `_` for word separation in table, feature, etc names
   geopackage_layer_name <<-
     str_c(
-      str_to_lower(OutputOptionsSpatial$BurnPerimeter),
+      str_to_lower(if(exists("OutputOptionsSpatial")) OutputOptionsSpatial$BurnPerimeter else "mixed"),
       "_burn_perimeters"
     )
 

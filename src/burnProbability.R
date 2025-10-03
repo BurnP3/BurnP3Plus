@@ -513,26 +513,26 @@ if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
   progressBar(type = "message", message = "Consolidating vector outputs...")
 
   # Append geopackages one by one to new geopackage path
-  # - layer name is used on read to ensure all inputs are the same variable type (final or daily) as expected in output
   # - also reassign fire ids and iterations if extra fires were resampled
   for (f in OutputFirePerimeter$FileName) {
-    st_read(f, layer = geopackage_layer_name, quiet = T) %>%
-      {if(nrow(firesToReplace) > 0) updateResampledFireIDs(., firesToReplace) else .} %>%
-      st_write(
-        dsn = geopackage_path,
-        layer = geopackage_layer_name,
-        quiet = TRUE,
-        append = TRUE)
+    # There are situations where both daily and final perimeters could exist in the same package. Handle those cases here.
+    layer_names <- st_layers(f)$name
+
+    for(layer in layer_names) {
+      st_read(f, layer = layer, quiet = T) %>%
+        {if(nrow(firesToReplace) > 0) updateResampledFireIDs(., firesToReplace) else .} %>%
+        st_write(
+          dsn = geopackage_path,
+          layer = layer,
+          quiet = TRUE,
+          append = TRUE)
+    }
   }
 
   OutputFirePerimeter <-
     tibble(
       FileName = geopackage_path %>% normalizePath(mustWork = F),
-      Description = 
-        str_c(
-          OutputOptionsSpatial$BurnPerimeter,
-          " burn perimeters")
-    ) %>%
+      Description = getPerimeterType(geopackage_path)) %>%
     as.data.frame()
 
   saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)

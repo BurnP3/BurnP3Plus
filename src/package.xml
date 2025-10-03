@@ -500,7 +500,6 @@
 		<dataSheet name="IgnitionRestriction" type="Input"/>
 		<dataSheet name="IgnitionDistribution" type="Input"/>
 		<dataSheet name="LandscapeRasters" type="Input"/>
-		<dataSheet name="DeterministicIgnitionCount" type="Output"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Output"/>
 	</transformer>
 
@@ -523,6 +522,7 @@
 		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 		<dataSheet name="DeterministicBurnCondition" type="Both"/>
 		<dataSheet name="LandscapeRasters" type="Input"/>
+		<dataSheet name="OutputOption" type="Input"/>
 		<dataSheet name="OutputOptionSpatial" type="Input"/>
 		<dataSheet name="OutputOptionFBPSpatial" type="Input"/>
 		<dataSheet name="burnP3Plus_OutputRawTabular" type="Both"/>
@@ -642,7 +642,6 @@
 		</group>
 		<group name="Advanced" displayName="Advanced">
 			<group name="DeterministicInputs" displayName="Deterministic Inputs">
-				<item name="DeterministicIgnitionCount"/>
 				<item name="DeterministicIgnitionLocation"/>
 				<item name="DeterministicBurnCondition"/>
 			</group>

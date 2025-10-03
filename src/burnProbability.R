@@ -1,49 +1,15 @@
-# Clean global environment variables
-native_proj_lib <- Sys.getenv("PROJ_LIB")
-Sys.unsetenv("PROJ_LIB")
-options(scipen = 999)
-
-# Check and load packages ----
-library(rsyncrosim)
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(terra))
-suppressPackageStartupMessages(library(sf))
-suppressPackageStartupMessages(library(data.table))
-suppressPackageStartupMessages(library(arrow))
-
-checkPackageVersion <- function(packageString, minimumVersion){
-  result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
-  if (result < 0) {
-    updateRunLog("The R package ", packageString, " (", 
-         as.character(packageVersion(packageString)), 
-         ") does not meet the minimum requirements (", minimumVersion, 
-         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.", 
-         type = "warning")
-  } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (", 
-                 as.character(packageVersion(packageString)), 
-                 ") than BurnP3+ was built against (", 
-                 minimumVersion, ").", type = "info")
-  }
-}
-
-checkPackageVersion("rsyncrosim", "2.1.0")
-checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("dplyr",      "1.1.2")
-checkPackageVersion("codetools",  "0.2.19")
-checkPackageVersion("data.table", "1.14.8")
-checkPackageVersion("terra",      "1.5.21")
-checkPackageVersion("sf",         "1.0.7")
-
 # Setup ----
-progressBar(type = "message", message = "Preparing inputs...")
+Sys.unsetenv("PROJ_LIB")
+library(rsyncrosim)
 
-# Initialize first breakpoint for timing code
-currentBreakPoint <- proc.time()
+# Find location of shared function definitions and source
+getSharedDefinitionsPath <- function() {
+  sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
+  return(sharedDefinitionsPath)
+}
+source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----
-
-myScenario <- scenario()
 
 # Load relevant datasheets
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T, returnInvisible = T)
@@ -52,129 +18,34 @@ DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_Deterministic
 DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookupsAsFactors = F, optional = T, returnInvisible = T)
 FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", lookupsAsFactors = F, optional = T, returnInvisible = T)
+OutputOptions <- datasheet(myScenario, "burnP3Plus_OutputOption", returnInvisible = T, optional = T)
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T, optional = T) %>% mutate(BurnPerimeter = as.character(BurnPerimeter))
 OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable))
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T, optional = T) %>% arrange(Iteration, FireID)
 OutputRawTabular <- datasheet(myScenario, "burnP3Plus_OutputRawTabular", optional = T, returnInvisible = T)
 OutputFirePerimeter <- datasheet(myScenario, "burnP3Plus_OutputFirePerimeter", returnInvisible = T, optional = T)
 
-# Create function to test if datasheets are empty
-isDatasheetEmpty <- function(ds){
-  if (nrow(ds) == 0) {
-    return(TRUE)
-  }
-  if (all(is.na(ds))) {
-    return(TRUE)
-  }
-  return(FALSE)
-}
-
 ## Handle empty values ----
-if(isDatasheetEmpty(OutputOptionsSpatial)) {
-  updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs and final burn perimeters.", type = "info")
-  OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
-  OutputOptionsSpatial$BurnPerimeter <- "Final"
-  saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
-} else if (any(is.na(OutputOptionsSpatial))) {
-  updateRunLog("Missing one or more spatial output options. Defaulting to keeping unspecified spatial outputs.", type = "info")
-  OutputOptionsSpatial <- OutputOptionsSpatial %>%
-    replace(is.na(.), TRUE)
-  OutputOptionsSpatial$BurnPerimeter <- replace(OutputOptionsSpatial$BurnPerimeter, OutputOptionsSpatial$BurnPerimeter == TRUE, "Final")
-  saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
-}
+validateAndParseData$DeterminsiticIgnitions()
+validateAndParseData$DeterminsiticBurnConditions()
+validateAndParseData$OutputOptions()
+validateAndParseData$FBPOutputOptions()
 
-if (!isDatasheetEmpty(OutputOptionFBPSpatial)) {
-  # Fill missing values for all but Percentile outputs, which are left as NA to indicate non-use
-  OutputOptionFBPSpatial <- OutputOptionFBPSpatial %>%
-    mutate(across(
-      any_of(c("Average", "Minimum", "Maximum", "Median", "Individual")),
-      \(x) replace_na(x, FALSE)))
-  
-  saveDatasheet(myScenario, OutputOptionFBPSpatial, "burnP3Plus_OutputOptionFBPSpatial")
-
-  # Parse table to determine which outputs should be generated
-  outputComponentsToKeepDisplayName <- OutputOptionFBPSpatial %>%
-    dplyr::filter(any(Average, Minimum, Maximum, Median, Individual, as.logical(c(Percentile1, Percentile2, Percentile3)))) %>%
-    pull(Variable)
-} else {
-  # Set flags to not save FBP outputs
-  outputComponentsToKeepDisplayName <- character(0)
-}
-  
 ## Setup files and folders ----
 
-# Create temp folder, ensure it is empty
-tempDir <- ssimEnvironment()$TempDirectory %>%
-  str_replace_all("\\\\", "/") %>%
-  file.path("summary")
-fbpIndividualDir <- file.path(tempDir, "fbpIndividual")
-allPerimDir <- file.path(tempDir, "allPerim")
-burnMapDir <- file.path(tempDir, "burnMap")
+generateSharedTempFilePaths("summary")
 
-# Create path for geopackage for storing vector outputs
-geopackage_path <- file.path(tempDir, "burn-perimeters.gpkg")
-# Note geopackage recommends `_` for word separation in table, feature, etc names
-geopackage_layer_name <-
-  str_c(
-    str_to_lower(OutputOptionsSpatial$BurnPerimeter),
-    "_burn_perimeters"
-  )
-
-# Create path for parquet files to hold tabular per-fire burn metrics
-rawTablePath <- file.path(tempDir, "raw-tabular.parquet")
-
-unlink(tempDir, recursive = T, force = T)
-dir.create(tempDir, showWarnings = F)
-unlink(fbpIndividualDir, recursive = T, force = T)
-dir.create(fbpIndividualDir, showWarnings = F)
-unlink(allPerimDir, recursive = T, force = T)
-dir.create(allPerimDir, showWarnings = F)
-unlink(burnMapDir, recursive = T, force = T)
-dir.create(burnMapDir, showWarnings = F)
+fbpIndividualDir <- generateTempSubDir("fbpIndividual")
+allPerimDir      <- generateTempSubDir("allPerim")
+burnMapDir       <- generateTempSubDir("burnMap")
 
 # Generate filename prefixes for potential outputs
-burnCountFilePrefix <- file.path(tempDir, "burnCount")
-burnProbabilityFilePrefix <- file.path(tempDir, "burnProbability")
-relativeBurnProbabilityFilePrefix <- file.path(tempDir, "relativeBurnProbability")
-fbpSummaryFilePrefix <- file.path(tempDir, "fbpSummary")
+burnCountFilePrefix               <- file.path(gridOutputFolder, "burnCount")
+burnProbabilityFilePrefix         <- file.path(gridOutputFolder, "burnProbability")
+relativeBurnProbabilityFilePrefix <- file.path(gridOutputFolder, "relativeBurnProbability")
+fbpSummaryFilePrefix              <- file.path(gridOutputFolder, "fbpSummary")
 
 ## Function definitions ----
-
-### Convenience and conversion functions ----
-
-# Function to time code by returning a clean string of time since this function was last called
-updateBreakpoint <- function() {
-  # Calculate time since last breakpoint
-  newBreakPoint <- proc.time()
-  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
-  
-  # Update current breakpoint
-  currentBreakPoint <<- newBreakPoint
-  
-  # Return cleaned elapsed time
-  if (elapsed < 60) {
-    return(str_c(round(elapsed), " seconds"))
-  } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), " minutes"))
-  } else
-    return(str_c(round(elapsed / 60 / 60, 1), " hours"))
-}
-
-# Define a function to facilitate recoding values using a lookup table
-lookup <- function(x, old, new) dplyr::recode(x, !!!set_names(new, old))
-
-# Function to move a folder while minimizing temporary space on disk
-# - Not currently set up for recursive folders
-dir.move <- function(source, target) {
-  # Ensure traget exists
-  dir.create(target, showWarnings = F)
-
-  # Move files one at a time
-  for(f in list.files(source, full.names = T)) {
-    file.copy(f, file.path(target, basename(f)))
-    unlink(f, force = T)
-  }
-}
 
 ### Update functions ----
 # Function to reassign Iterations and FireIDs from resampling
@@ -515,26 +386,6 @@ summarizeRelativeBurnProbability <- function(season, burnProbabilityFileName, ou
 }
 
 # Extract relevant parameters ----
-# Decide whether or not to save spatial summary outputs
-# Set a flag to decide whether or not to handle secondary outputs
-saveFBPMaps <- length(outputComponentsToKeepDisplayName) > 0
-
-saveBurnMaps <- any(OutputOptionsSpatial$BurnCount, OutputOptionsSpatial$SeasonalBurnCount,
-                    OutputOptionsSpatial$BurnProbability, OutputOptionsSpatial$SeasonalBurnProbability,
-                    OutputOptionsSpatial$RelativeBurnProbability, OutputOptionsSpatial$SeasonalRelativeBurnProbability)
-
-summaryBurnMapCount <- case_when(
-  OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability ~ 3,
-  OutputOptionsSpatial$BurnProbability         | OutputOptionsSpatial$SeasonalBurnProbability         ~ 2,
-  OutputOptionsSpatial$BurnCount               | OutputOptionsSpatial$SeasonalBurnCount               ~ 1,
-  TRUE                                                                                                ~ 0)
-
-# Decide whether or not to save seasonal spatial summary outputs
-saveSeasonalBurnMaps <- any(OutputOptionsSpatial$SeasonalBurnProbability,
-                            OutputOptionsSpatial$SeasonalRelativeBurnProbability,
-                            OutputOptionsSpatial$SeasonalBurnCount)
-
-saveBurnPerimeters <- OutputOptionsSpatial$BurnPerimeter != "No"
 
 updateRunLog("Finished preparing inputs in ", updateBreakpoint())
 

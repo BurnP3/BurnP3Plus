@@ -1,251 +1,40 @@
-# Clean global environment variables
-native_proj_lib <- Sys.getenv("PROJ_LIB")
-Sys.unsetenv("PROJ_LIB")
-options(scipen = 999)
-
-# Check and load packages ----
-library(rsyncrosim)
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(terra))
-suppressPackageStartupMessages(library(sf))
-
-checkPackageVersion <- function(packageString, minimumVersion){
-  result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
-  if (result < 0) {
-    updateRunLog("The R package ", packageString, " (",
-                 as.character(packageVersion(packageString)),
-                 ") does not meet the minimum requirements (", minimumVersion,
-                 ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.",
-                 type = "warning")
-  } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (",
-                 as.character(packageVersion(packageString)),
-                 ") than BurnP3+ was built against (",
-                 minimumVersion, ").", type = "info")
-  }
-}
-
-checkPackageVersion("rsyncrosim", "2.1.0")
-checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("dplyr",      "1.1.2")
-checkPackageVersion("codetools",  "0.2.19")
-checkPackageVersion("terra",      "1.5.21")
-checkPackageVersion("sf",         "1.0.7")
-
 # Setup ----
-progressBar(type = "message", message = "Preparing inputs...")
+Sys.unsetenv("PROJ_LIB")
+library(rsyncrosim)
 
-# Initialize first breakpoint for timing code
-currentBreakPoint <- proc.time()
+# Find location of shared function definitions and source
+getSharedDefinitionsPath <- function() {
+  sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
+  return(sharedDefinitionsPath)
+}
+source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----
-myScenario <- scenario()
 
-# Load remaining datasheets
+# Load relevant datasheets
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T, returnInvisible = T) %>% unique
 DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", optional = T, returnInvisible = T) %>% unique
-FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
-
-# Load weather and burn condition table
 FireDurationTable <- datasheet(myScenario, "burnP3Plus_FireDuration", optional = T, lookupsAsFactors = F, returnInvisible = T)
 HoursBurningTable <- datasheet(myScenario, "burnP3Plus_HoursPerDayBurning", optional = T, lookupsAsFactors = F, returnInvisible = T)
 WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T, lookupsAsFactors = F)
 WeatherOptions <- datasheet(myScenario, "burnP3Plus_WeatherOption")
 
-# Create function to test if datasheets are empty
-isDatasheetEmpty <- function(ds){
-  if (nrow(ds) == 0) {
-    return(TRUE)
-  }
-  if (all(is.na(ds))) {
-    return(TRUE)
-  }
-  return(FALSE)
-}
-
 # Import relevant rasters, allowing for missing values
-fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
-fireZoneRaster <- tryCatch(
-  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
-  error = function(e) NULL)
-weatherZoneRaster <- tryCatch(
-  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["WeatherZoneGridFileName"]]),
-  error = function(e) NULL)
+fuelsRaster <- loadSpatial$fuels()
+fireZoneRaster <- loadSpatial$firezone()
+weatherZoneRaster <- loadSpatial$weatherzone()
 
-## Handle empty values ----
-if(isDatasheetEmpty(WeatherStream)) {
-  stop("Error: Please provide weather stream data to sample burning conditions.")
-}
-
-if(isDatasheetEmpty(FireDurationTable)) {
-  updateRunLog("No fire duration distribution provided, defaulting to 1 day fires.", type = "warning")
-  FireDurationTable[1,"Mean"] <- 1
-  saveDatasheet(myScenario, FireDurationTable, "burnP3Plus_FireDuration")
-}
-
-if(isDatasheetEmpty(HoursBurningTable)) {
-  updateRunLog("No hours burning per day distribution provided, defaulting to 4 hours of burning per burn day.", type = "warning")
-  HoursBurningTable[1, "Season"] <- "All"
-  HoursBurningTable[1,"Mean"] <- 4
-  saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
-}
-
-# Make sure order is fully populated if sampling sequentially
-if(WeatherOptions$SampleSequentially & any(is.na(WeatherStream$Order))) {
-  stop("Weather can't be sample sequentially if the weather stream is not sorted using the Order column. Please update the weather stream to include this variable or update the Weather Sampling Options to not sample sequentially.")
-}
-
-# Check to ensure that distributions specified actually exist
-# Spread Event Days
-for (i in 1:nrow(FireDurationTable)){
-  distName <- FireDurationTable$DistributionType[i]
-  if (is.na(distName) | distName == "Gamma" | distName == "Normal") next
-  distValues <- DistributionValue %>% filter(Name == distName)
-  if (nrow(distValues) == 0){
-    stop(paste0("No values found in Distribution datasheet for Spread Event Days distribution: ", distName))
-  }
-}
-
-# Daily Burning Hours
-for (i in 1:nrow(HoursBurningTable)){
-  distName <- HoursBurningTable$DistributionType[i]
-  if (is.na(distName) | distName == "Gamma" | distName == "Normal") next
-  distValues <- DistributionValue %>% filter(Name == distName)
-  if (nrow(distValues) == 0){
-    stop(paste0("No values found in Distribution datasheet for Daily Burning Hours distribution: ", distName))
-  }
-}
-
-if (!isDatasheetEmpty(DeterministicBurnCondition)) {
-  updateRunLog("Values in Deterministic Burn Conditions datasheet are overwritten.", type = "warning")
-}
-
-if(isDatasheetEmpty(FireZoneTable))
-  FireZoneTable <- data.frame(Name = "", ID = 0)
-if(isDatasheetEmpty(WeatherZoneTable))
-  WeatherZoneTable <- data.frame(Name = "", ID = 0)
-
-# Fill missing season values
-
-# Define function to fill missing season values and optionally save changes back to library
-fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
-  datasheet <- datasheet %>%
-    mutate(
-      Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
-      Season = replace_na(Season, "All"))
-
-  if (update_library)
-    saveDatasheet(myScenario, datasheet, datasheet_name)
-
-  return(datasheet)
-}
-
-DeterministicIgnitionLocation <- fill_season(DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", TRUE)
-FireDurationTable <- fill_season(FireDurationTable, "burnP3Plus_FireDuration", TRUE)
-HoursBurningTable <- fill_season(HoursBurningTable, "burnP3Plus_HoursPerDayBurning", TRUE)
-WeatherStream <- fill_season(WeatherStream, "burnP3Plus_WeatherStream", TRUE)
-
-## Check raster inputs for consistency ----
-
-test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
-# Ensure fuels crs can be converted to Lat / Long
-if(test.point %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
-tryCatch(test.point %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
-
-# Define function to check input raster for consistency
-checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
-  # Only check if not null
-  if(!is.null(x)) {
-    # Ensure comparable number of rows and cols in all spatial inputs
-    if(nrow(fuelsRaster) != nrow(x) | ncol(fuelsRaster) != ncol(x))
-      if(warnOnly) {
-        updateRunLog("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.", type = "warning")
-        invisible(NULL) # Return null silently to mimic behaviour of missing input
-      } else
-        stop("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.")
-
-    # Info if CRS is not matching
-    if(checkProjection)
-      if(crs(x) != crs(fuelsRaster))
-        updateRunLog("Projection of ", name, " map does not match Fuels map. Please check that the CRS of these maps match.", type = "info")
-  }
-
-  # Silently return for clean pipelining
-  invisible(x)
-}
-
-# Check optional inputs
-if (!is.null(fireZoneRaster)) checkSpatialInput(fireZoneRaster, "Fire Zone")
-if (!is.null(weatherZoneRaster)) checkSpatialInput(weatherZoneRaster, "Weather Zone")
+## Parse and validate datasheets ----
+validateAndParseData$Season()
+validateAndParseData$Zones()
+validateAndParseData$DeterminsiticIgnitions()
+validateAndParseData$BurnConditionSampling()
 
 ## Function Definitions ----
-
-# Function to time code by returning a clean string of time since this function was last called
-updateBreakpoint <- function() {
-  # Calculate time since last breakpoint
-  newBreakPoint <- proc.time()
-  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
-
-  # Update current breakpoint
-  currentBreakPoint <<- newBreakPoint
-
-  # Return cleaned elapsed time
-  if (elapsed < 60) {
-    return(str_c(round(elapsed), "sec"))
-  } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), "min"))
-  } else
-    return(str_c(round(elapsed / 60 / 60, 1), "hr"))
-}
-
-# Define function to facilitate recoding a vector using a look-up table
-lookup <- function(x, old, new){
-  dplyr::recode(x, !!!set_names(new, old))
-}
-
-# Function to find the number of unique values in a column of a data.frame
-uni <- function(df, colName) {
-  return(df[colName] %>% unique %>% nrow)
-}
-
-# Function to parse a table defining a normal distribution and sample accordingly
-sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
-
-  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
-  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
-  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-
-  rnorm(numSamples, distributionMean, distributionSD) %>%
-    round(0) %>%
-    pmax(distributionMin) %>%
-    pmin(distributionMax) %>%
-    return
-}
-
-# Function to parse a table defining a gamma distribution and sample accordingly
-sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultMin = 1, defaultMax = Inf) {
-
-  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
-  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
-  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-
-  # Calculate shape and rate from mean and sd
-  # - Derivation from: https://math.stackexchange.com/questions/1810257/gamma-functions-mean-and-standard-deviation-through-shape-and-rate
-  shape <- (distributionMean / distributionSD)^2
-  rate  <- distributionMean / (distributionSD^2)
-
-  rgamma(numSamples, shape = shape, rate = rate) %>%
-    round(0) %>%
-    pmax(distributionMin) %>%
-    pmin(distributionMax) %>%
-    return
-}
 
 # Define function to sample days burning and hours per day burning given season and fire zone
 sampleFireDuration <- function(season, firezone, data){
@@ -376,44 +165,11 @@ sampleWeather <- function(season, weatherzone, data) {
 }
 
 # Determine Fire Zone and Weather Zone for each ignition ----
-DeterministicIgnitionLocation$cell <- cellFromXY(
-  fuelsRaster,
-  xy = data.frame(
-    long=DeterministicIgnitionLocation$Longitude,
-    lat=DeterministicIgnitionLocation$Latitude) %>% 
-      st_as_sf(crs = "EPSG:4326",
-      coords = c("long","lat")) %>%
-      st_transform(crs = crs(fuelsRaster)) %>%
-      st_coordinates)
-
-if (!is.null(weatherZoneRaster)){
-  DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
-    mutate(
-      weatherzoneID = weatherZoneRaster[][cell],
-      WeatherZone = lookup(weatherzoneID, WeatherZoneTable$ID, WeatherZoneTable$Name)
-    ) %>%
-    dplyr::select(-weatherzoneID)
-} else{
-  numIgnitions <- nrow(DeterministicIgnitionLocation)
-  weatherZoneSamples <- sample(WeatherZoneTable$Name, numIgnitions, replace = T)
-  DeterministicIgnitionLocation$WeatherZone <- weatherZoneSamples
-}
-
-if (!is.null(fireZoneRaster)){
-  DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
-    mutate(
-      firezoneID = fireZoneRaster[][cell],
-      FireZone = lookup(firezoneID, FireZoneTable$ID, FireZoneTable$Name)
-    ) %>%
-    dplyr::select(-firezoneID)
-} else{
-  numIgnitions <- nrow(DeterministicIgnitionLocation)
-  fireZoneSamples <- sample(FireZoneTable$Name, numIgnitions, replace = T)
-  DeterministicIgnitionLocation$FireZone <- fireZoneSamples
-}
-
-# Clean up
 DeterministicIgnitionLocation <- DeterministicIgnitionLocation %>%
+  joinZoneByLatLong(
+    fireZoneRaster = fireZoneRaster,
+    weatherZoneRaster = weatherZoneRaster,
+    sampleMissing = T) %>%
   dplyr::select(-cell)
 
 updateRunLog("Finished preparing inputs in ", updateBreakpoint())

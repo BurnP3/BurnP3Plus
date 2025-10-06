@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <update comment="Consolidate tabular outputs">
+  <!-- <action code="CreateTransformer" transformerName="burnP3Plus_mergeBurns" transformerDisplayName="3.5 - Merge Fire Growth Scenarios">
+  </action> -->
 
   <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputFBPTabular">
 
@@ -23,6 +25,10 @@
 
   <action code="Exec" condition="TableExists" criteria="burnP3Plus_OutputAllPerimTabular">
     <item> DROP TABLE burnP3Plus_OutputAllPerimTabular </item>
+  </action>
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_DeterministicIgnitionCount">
+    <item> DROP TABLE burnP3Plus_DeterministicIgnitionCount </item>
   </action>
 
 </update>

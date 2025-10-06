@@ -417,11 +417,20 @@ saveDatasheet(myScenario, OutputRawTabular, "burnP3Plus_OutputRawTabular", appen
 incompleteIterations <- integer(0)
 firesToReplace <- data.frame()
 
-# Decide if any resampling is required
-requiresResample <- OutputFireStatistic %>%
+# Identify how many fires are missing for each iteration
+missingFiresByIteration <- OutputFireStatistic %>%
+  # Extra ignitions need not be above minimum fire size
   filter(Iteration > 0) %>%
-  pull(ResampleStatus) %>%
-  str_detect("Discarded") %>%
+  # Some iterations (especially after a merge) might already have been resampled 
+  # - further resampling is only required if there are more discarded fires than reassigned
+  group_by(Iteration) %>%
+  summarize(
+    requiredFires = sum(str_detect(ResampleStatus, "Discarded")) - sum(str_detect(ResampleStatus, "Reassigned")))
+    
+# Decide if any resampling is required
+requiresResample <- missingFiresByIteration %>%
+  mutate(requiresResample = requiredFires > 0) %>%
+  pull(requiresResample) %>%
   any
 
 if(requiresResample) {
@@ -429,25 +438,22 @@ if(requiresResample) {
 
   # Identify fires available for reassignement
   validExtraFires <- OutputFireStatistic %>%
-    filter(ResampleStatus == "Extra") %>%
+    filter(ResampleStatus == "Extra" | ResampleStatus == "Not Used") %>%
     transmute(
       Iteration = Iteration,
       FireID = FireID,
       UniqueID = row_number())
   
   # Identify new fire IDs required to replace discarded fires
-  requiredFires <- OutputFireStatistic %>%
-    group_by(Iteration) %>%
-    mutate(TargetIgnitions = max(FireID)) %>%
-    filter(
-      Iteration > 0,
-      ResampleStatus == "Discarded") %>%
-    mutate(NewFireID = TargetIgnitions + row_number()) %>%
-    ungroup() %>%
-    transmute(
-      NewIteration = Iteration,
-      NewFireID    = NewFireID,
-      UniqueID     = row_number())
+  requiredFires <- missingFiresByIteration %>%
+    filter(requiredFires > 0) %>%
+    # Join table of missing fires to Output Fire Statistic to calculate new Fire IDs
+    left_join(OutputFireStatistic) %>%
+    dplyr::reframe(
+      NewFireID = seq(requiredFires[1]) + max(FireID),
+      .by = "Iteration") %>%
+    rename(NewIteration = Iteration) %>%
+    mutate(UniqueID = row_number())
 
   # Sequentially re-assign extra fires to new required IDs 
   firesToReplace <- inner_join(validExtraFires, requiredFires, by = "UniqueID", relationship = "one-to-one") %>%
@@ -467,7 +473,7 @@ if(requiresResample) {
       OriginalFireID = if_else(Iteration == 0, NA, OriginalFireID), # Extra fires that are not resampled don't require original fire id values
       ResampleStatus = case_when(
         ResampleStatus == "Extra" & Iteration == 0 ~ "Not Used",
-        ResampleStatus == "Extra" & Iteration != 0  ~ "Reassigned",
+        (ResampleStatus == "Extra" | ResampleStatus == "Not Used") & Iteration != 0  ~ "Reassigned",
         TRUE ~ ResampleStatus))
 
   saveDatasheet(
@@ -491,10 +497,10 @@ if(requiresResample) {
   if(nrow(firesToReplace) > 0) {
     ## Update Deterministic Input tables ----
     DeterministicIgnitionLocation <- updateResampledFireIDs(DeterministicIgnitionLocation, firesToReplace)
-    saveDatasheet(myScenario, DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation")
+    saveDatasheet(myScenario, DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = F)
 
     DeterministicBurnCondition <- updateResampledFireIDs(DeterministicBurnCondition, firesToReplace)
-    saveDatasheet(myScenario, DeterministicBurnCondition, "burnP3Plus_DeterministicBurnCondition")
+    saveDatasheet(myScenario, DeterministicBurnCondition, "burnP3Plus_DeterministicBurnCondition", append = F)
   }
 }
 
@@ -586,7 +592,8 @@ if (OutputOptionsSpatial$AllPerim) {
   saveDatasheet(
     myScenario,
     OutputAllPerim,
-    "burnP3Plus_OutputAllPerim")
+    "burnP3Plus_OutputAllPerim",
+    append = F)
 
   updateRunLog("Finished writing per-fire burn maps in ", updateBreakpoint())
   progressBar("end")
@@ -615,7 +622,8 @@ if(OutputOptionsSpatial$BurnMap | OutputOptionsSpatial$SeasonalBurnMap) {
   saveDatasheet(
     myScenario,
     OutputBurnMap,
-    "burnP3Plus_OutputBurnMap")
+    "burnP3Plus_OutputBurnMap",
+    append = F)
 
   updateRunLog("Finished writing per-iteration burn maps in ", updateBreakpoint())
   progressBar("end")
@@ -644,7 +652,8 @@ if (saveBurnMaps) {
         FileName = burnCountFileNames %>% normalizePath(),
         Season = seasonValues) %>%
         as.data.frame(),
-      "burnP3Plus_OutputBurnCount")
+      "burnP3Plus_OutputBurnCount",
+      append = F)
 
   # Calculate and save burn probability if requested by user
   if(OutputOptionsSpatial$BurnProbability         | OutputOptionsSpatial$SeasonalBurnProbability |
@@ -667,7 +676,8 @@ if (saveBurnMaps) {
           FileName = burnProbabilityFileNames %>% normalizePath(),
           Season = seasonValues) %>%
           as.data.frame(),
-        "burnP3Plus_OutputBurnProbability")
+        "burnP3Plus_OutputBurnProbability",
+        append = F)
     
     if(OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
 
@@ -686,7 +696,8 @@ if (saveBurnMaps) {
           FileName = relativeBurnProbabilityFileNames %>% normalizePath(),
           Season = seasonValues) %>%
           as.data.frame(),
-        "burnP3Plus_OutputRelativeBurnProbability")
+        "burnP3Plus_OutputRelativeBurnProbability",
+        append = F)
 
     }
   }

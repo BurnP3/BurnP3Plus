@@ -118,12 +118,6 @@
 		<column name="DistributionMax" displayName="Ignition Count Max" dataType="Double" validationType="Decimal" validationCondition="GreaterEqual" formula1="0.0" format="0.0" isOptional="True"/>
 	</dataSheet>
 
-	<dataSheet name="DeterministicIgnitionCount" displayName="Deterministic Ignition Count">
-		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" isOptional="True" format="d"/>
-		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
-		<column name="Ignitions" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d"/>
-	</dataSheet>
-
 	<dataSheet name="DeterministicIgnitionLocation" displayName="Deterministic Ignition Location">
 		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d"/>
 		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" isVisible="False"/>
@@ -516,7 +510,8 @@
 		<dataSheet name="DeterministicBurnCondition" type="Output"/>
 	</transformer>
 
-	<transformer name="mergeBurns" displayName="3.5 - Merge Burn Scenarios" isRunnable="True" programName="Rscript" programArguments="merge.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<!--Merge Fire Growth Outputs Transformer-->
+	<transformer name="mergeBurns" displayName="3.5 - Merge Fire Growth Scenarios" isRunnable="True" programName="Rscript" programArguments="merge.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
 	  <dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 	  <dataSheet name="DeterministicBurnCondition" type="Both"/>
 	  <dataSheet name="burnP3Plus_OutputFireStatistic" type="Both"/>

@@ -137,6 +137,26 @@ identifyIncompleteFBPRecords <- function(fbpColumnSummary) {
       type = "warning")
 }
 
+checkForSummarizedInputs <- function(scenariosToMerge) {
+  anySummarized <- F
+  for (scn in scenariosToMerge) {
+    anySummarized <- datasheet(scn, "core_Pipeline") %>%
+      pull("StageNameId") %>%
+      str_detect("4 - Summarize Burn Probability") %>%
+      any
+    
+    if (anySummarized)
+      break
+  }
+
+  if (anySummarized)
+    updateRunLog(
+      "One or more scenarios to merge include outputs from the Summary Transformer! \n",
+      "The Merge Transformer is intended to be run prior to summarizing and running it with summarized outputs can lead to inconsistent resampling and reassignment.\n",
+      "This transformer also does not update, consolidate, or delete spatial outputs, so please rerun the Summary Transformer to update these outputs.",
+      type = "warning")
+}
+
 ## Prepare for merge ----
 
 # Identify scenarios to merge
@@ -169,6 +189,9 @@ scenariosToMerge <- myScenario %>%
   as_vector() %>%
   # Convert to a list of scenarios
   scenario(myLibrary, scenario = .)
+
+# Check that inputs don't include summarized outputs ----
+checkForSummarizedInputs(scenariosToMerge)
 
 updateRunLog("Merging ", length(scenariosToMerge), " scenarios.", type = "status")
 progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios..."), type = "message")

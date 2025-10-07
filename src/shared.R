@@ -237,45 +237,48 @@ consolidateTabularOutputs <- function() {
 }
 
 consolidateVectorOutputs <- function() {
-  # TODO: Fill in missing shape files with empty geoms, arrange
-  # Notes from how this was implemented in BP3+ Prometheus
-  #   # Identify shapefile requested
-  #   required_shapefiles <- DeterministicBurnCondition %>%
-  #     dplyr::select(Iteration, FireID, BurnDay) %>%
-  #     # Only require final burn day if not saving daily perimeters
-  #     {if(OutputOptionsSpatial$BurnPerimeter != "Daily") dplyr::filter(., BurnDay == max(BurnDay), .by = c("Iteration", "FireID")) else .}
+  # Define empty geom to fill missing perimeters
+  empty_geom <- fuelsRaster %>%
+    ext() %>%
+    as.polygons() %>%
+    erase(.,.) %>%
+    st_as_sf() %>%
+    st_set_crs(crs(fuelsRaster)) %>%
+    st_cast("MULTIPOLYGON")
 
-  #   # Identify missing shapefiles
-  #   missing_shapefiles <- anti_join(required_shapefiles, shapefiles_present, by = c("Iteration", "FireID", "BurnDay"))
+  # Identify perimeters present in geopackage
+  perimeters_present <- st_read(geopackage_path, geopackage_layer_name) %>%
+    dplyr::select(any_of(c("Iteration", "FireID", "BurnDay")))
 
-  #   # Create an empty geometry with the right metadata to fill missing shapefiles
-  #   empty_geom <- fuelsRaster %>%
-  #     ext() %>%
-  #     as.polygons() %>%
-  #     erase(.,.) %>%
-  #     st_as_sf() %>%
-  #     st_set_crs(crs(fuelsRaster)) %>%
-  #     st_cast("MULTIPOLYGON")
+  # Identify fires that are needed
+  perimeters_required <- OutputFireStatistic %>%
+    filter(ResampleStatus == "Kept" | ResampleStatus == "Extra") %>%
+    dplyr::select(Iteration, FireID) %>%
+    left_join(DeterministicBurnCondition, by = c("Iteration", "FireID")) %>%
+    dplyr::select(Iteration, FireID, BurnDay) %>%
+    {if(OutputOptionsSpatial$BurnPerimeter != "Daily") dplyr::filter(., BurnDay == max(BurnDay), .by = c("Iteration", "FireID")) else .}
 
-  #   # Create empty geometries
-  #   missing_shapefiles %>%
-  #     pwalk(
-  #       function(Iteration, FireID, BurnDay) {
-  #         empty_geom %>%
-  #           mutate(
-  #             Iteration = Iteration,
-  #             FireID = FireID,
-  #             BurnDay = BurnDay,
-  #             geometry = geometry,
-  #             .keep = "none"
-  #             ) %>%
-  #           {if (OutputOptionsSpatial$BurnPerimeter != "Daily") dplyr::select(., -BurnDay) else .} %>%
-  #           st_write(
-  #             dsn = geopackage_path,
-  #             layer = geopackage_layer_name,
-  #             quiet = TRUE,
-  #             append = TRUE)
-  #       })
+  # Identify missing perimeters
+  perimeters_missing <- anti_join(perimeters_required, perimeters_present)
+
+  # Fill missing periemeters with empty geom
+  perimeters_missing %>%
+    pwalk(
+      function(Iteration, FireID, BurnDay) {
+        empty_geom %>%
+          mutate(
+            Iteration = Iteration,
+            FireID = FireID,
+            BurnDay = BurnDay,
+            geometry = geometry,
+            .keep = "none") %>%
+          {if (OutputOptionsSpatial$BurnPerimeter != "Daily") dplyr::select(., -BurnDay) else .} %>%
+          st_write(
+            dsn = geopackage_path,
+            layer = geopackage_layer_name,
+            quiet = TRUE,
+            append = TRUE)
+      })
 
   if(OutputOptionsSpatial$BurnPerimeter != "No" & file.exists(geopackage_path)) {
     progressBar(type = "message", message = "Saving burn perimeters...")
@@ -747,6 +750,12 @@ validateAndParseData <- list(
       HoursBurningTable[1, "Season"] <<- "All"
       HoursBurningTable[1,"Mean"] <<- 4
       saveDatasheet(myScenario, HoursBurningTable, "burnP3Plus_HoursPerDayBurning")
+    }
+
+    if(isDatasheetEmpty(WeatherOptions)) {
+      updateRunLog("No weather sampling options chosen, defaulting to sampling daily weather stream sequentially.", type = "info")
+      WeatherOptions$SampleSequentially <<- TRUE
+      saveDatasheet(myScenario, WeatherOptions, "burnP3Plus_WeatherOption")
     }
 
     # Make sure order is fully populated if sampling sequentially

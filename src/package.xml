@@ -197,7 +197,6 @@
 
 	<dataSheet name="WeatherOption" displayName="Weather Sampling Options" isSingleRow="True">
 		<column name="SampleSequentially" displayName="Sample Weather Sequentially" dataType="Boolean"/>
-		<record columns="SampleSequentially" values="-1"/>
 	</dataSheet>
 
 	<dataSheet name="DeterministicBurnCondition" displayName="Deterministic Burn Conditions">
@@ -633,9 +632,7 @@
 				<item name="GreenUp"/>
 				<item name="Curing"/>
 				<item name="FuelLoad"/>
-				<group name="BurnModifiers" displayName="Burn Condition Modifiers">
-					<item name="WindGrid"/>
-				</group>
+				<item name="WindGrid"/>
 			</group>
 		</group>
 		<group name="OutputOption" displayName="Output Options">

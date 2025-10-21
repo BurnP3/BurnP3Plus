@@ -840,15 +840,15 @@ validateAndParseData <- list(
   
       OutputOptionsSpatial <<- OutputOptionsSpatial %>%
         # Enable any missing summary maps
-        mutate(across(contains(c("Probability", "Count"))),
-          ~ replace_na(.x, TRUE)) %>%
+        mutate(across(contains(c("Probability", "Count")),
+          ~ replace_na(.x, TRUE))) %>%
         # Explicitly disable missing per-fire and per-iteration map options
         # - These can be regenerated later from the raw tabular outputs by rerunning the summary transformer
-        mutate(across(contains(c("Map", "AllPerim"))),
-          ~ replace_na(.x, FALSE)) %>%
+        mutate(across(contains(c("Map", "AllPerim")),
+          ~ replace_na(.x, FALSE))) %>%
         # Specify final burn perimeters as opposed to daily if missing
-        mutate(across("BurnPerimeter"),
-          ~ replace_na(.x, "Final"))
+        mutate(across("BurnPerimeter",
+          ~ replace_na(.x, "Final")))
   
       # Save back to SyncroSim
       saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")

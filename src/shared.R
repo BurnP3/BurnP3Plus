@@ -236,6 +236,10 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
       dplyr::select(Iteration, Timestep, FireID, Latitude, Longitude, Season,
                     Cause, FireZone, WeatherZone, FuelType, FireDuration,
                     HoursBurning, Area, ResampleStatus)
+  
+  # Clean up memory explicitly for other jobs
+  gc()
+  return(OutputFireStatistic)
 }
 
 consolidateTabularOutputs <- function() {

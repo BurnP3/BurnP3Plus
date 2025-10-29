@@ -66,6 +66,31 @@ uni <- function(df, colName) {
   return(df[colName] %>% unique %>% nrow)
 }
 
+# A slower but memory safe implementation of unique for spatRasters
+# - Only called once per job for validation, so speed is not too important
+uniqueOnDisk <- function(input_layer) {
+  # The blocks function is not available in the conda version of terra, so we access block info by opening and closing write connnection
+  temp <- rast(input_layer)
+  blockInfo <- writeStart(temp, filename = "")
+  invisible(writeStop(temp))
+  rm(temp)
+  v <- integer()
+
+  for (i in seq_along(blockInfo$row) ) {
+    # read values appears to leak memory until the file is closed, so we start and stop frequently to reduce memory overhead
+    readStart(input_layer)
+
+    # Read values and bind an appropriante number of NA columns to either side
+    v <- unique(c(v, readValues(input_layer, row = blockInfo$row[i], nrows = blockInfo$nrows[i])))
+
+    readStop(input_layer)
+    # Although garbage collection every block is slow, it help reduce memory overhead
+    gc()
+  }
+
+  return(purrr::discard(v, is.na))
+}
+
 # Function to delete files in file
 resetFolder <- function(path) {
   list.files(path, full.names = T) %>%
@@ -147,7 +172,7 @@ joinZoneByLatLong <- function(data, fireZoneRaster, weatherZoneRaster, sampleMis
   if (!is.null(weatherZoneRaster)){
     data <- data %>%
       mutate(
-        weatherzoneID = weatherZoneRaster[][cell],
+        weatherzoneID = unlist(extract(weatherZoneRaster, cell)),
         WeatherZone = lookup(weatherzoneID, WeatherZoneTable$ID, WeatherZoneTable$Name)
       ) %>%
       dplyr::select(-weatherzoneID)
@@ -160,7 +185,7 @@ joinZoneByLatLong <- function(data, fireZoneRaster, weatherZoneRaster, sampleMis
   if (!is.null(fireZoneRaster)){
     data <- data %>%
       mutate(
-        firezoneID = fireZoneRaster[][cell],
+        firezoneID = unlist(extract(fireZoneRaster, cell)),
         FireZone = lookup(firezoneID, FireZoneTable$ID, FireZoneTable$Name)
       ) %>%
       dplyr::select(-firezoneID)
@@ -203,7 +228,7 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
       weatherZoneRaster = weatherZoneRaster,
       sampleMissing = F) %>%
     mutate(
-      fueltypeID = fuelsRaster[][cell],
+      fueltypeID = unlist(extract(fuelsRaster, cell)),
       FuelType = lookup(fueltypeID, FuelType$ID, FuelType$Name),
       Timestep = 0) %>%
 
@@ -237,6 +262,9 @@ consolidateTabularOutputs <- function() {
 }
 
 consolidateVectorOutputs <- function() {
+  if (OutputOptionsSpatial$BurnPerimeter == "No" | !file.exists(geopackage_path))
+    return(invisible())
+
   # Define empty geom to fill missing perimeters
   empty_geom <- fuelsRaster %>%
     ext() %>%
@@ -280,20 +308,18 @@ consolidateVectorOutputs <- function() {
             append = TRUE)
       })
 
-  if(OutputOptionsSpatial$BurnPerimeter != "No" & file.exists(geopackage_path)) {
-    progressBar(type = "message", message = "Saving burn perimeters...")
+  progressBar(type = "message", message = "Saving burn perimeters...")
   
-    OutputFirePerimeter <-
-      tibble(
-        FileName = geopackage_path %>% normalizePath(),
-        Description = getPerimeterType(geopackage_path)) %>%
-      as.data.frame()
+  OutputFirePerimeter <-
+    tibble(
+      FileName = geopackage_path %>% normalizePath(),
+      Description = getPerimeterType(geopackage_path)) %>%
+    as.data.frame()
   
-    if(file.exists(geopackage_path))
-      saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter")
+  if(file.exists(geopackage_path))
+    saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter")
   
-    updateRunLog("Finished collecting burn perimeters in ", updateBreakpoint())
-  }
+  updateRunLog("Finished collecting burn perimeters in ", updateBreakpoint())
 }
 
 # Function to identify perimeter types (final, daily, mixed) present in a geopackage and return a description
@@ -603,9 +629,7 @@ validateAndParseData <- list(
     }
     
     # Make sure all fuels in the fuels map are defined
-    fuelsPresent <- unique(fuelsRaster) %>%
-      pull()
-    
+    fuelsPresent <- uniqueOnDisk(fuelsRaster)
     if(length(setdiff(fuelsPresent, FuelType$ID)) > 0) {
       FuelType <- bind_rows(
         FuelType,
@@ -969,3 +993,8 @@ myScenario <- scenario()
 
 # Determine if jobs are being multiprocessed
 runContext <- getRunContext()
+
+# Set max terra mem use for parallel runs
+# - note: not repsected by the conda version of terra
+if (runContext$isParallel)
+  terraOptions(memmax = 0.5)

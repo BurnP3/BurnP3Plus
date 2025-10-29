@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.6.0" minSyncroSimVersion="3.1.9">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.6.1" minSyncroSimVersion="3.1.9">
 
 	<!--Library Datasheets-->
 
@@ -662,18 +662,18 @@
 		<item name="ElevationMap" displayName ="Elevation" dataSheet="LandscapeRasters" column="ElevationGridFileName"/>
 		<item name="FireZoneMap" displayName ="Fire Zone" dataSheet="LandscapeRasters" column="FireZoneGridFileName"/>
 		<item name="WeatherZoneMap" displayName ="Weather Zone" dataSheet="LandscapeRasters" column="WeatherZoneGridFileName"/>
-		<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season"/>
-		<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season"/>
-		<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season"/>
-		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season"/>
+		<item name="BurnProbability" displayName ="Burn Probability" dataSheet="OutputBurnProbability" column="FileName" filter="Season" extendedIdentifier="(Prob.)"/>
+		<item name="RelativeBurnProbability" displayName ="Relative Burn Probability" dataSheet="OutputRelativeBurnProbability" column="FileName" filter="Season" extendedIdentifier="(Rel. Prob.)"/>
+		<item name="BurnCount" displayName ="Burn Count" dataSheet="OutputBurnCount" column="FileName" filter="Season" extendedIdentifier="(Count)"/>
+		<item name="BurnMap" displayName ="Burn Map" dataSheet="OutputBurnMap" column="FileName" filter="Season" extendedIdentifier="(Burn)"/>
 		<group name="FBPSummaryMap" displayName="Summarized FBP Outputs">
-			<item name="RosSummary" displayName="Rate of Spread" dataSheet="OutputRateOfSpreadSummaryMap" column="FileName" filter="Summary"/>
-			<item name="FiSummary" displayName="Fire Intensity" dataSheet="OutputFireIntensitySummaryMap" column="FileName" filter="Summary"/>
-			<item name="SdSummary" displayName="Spread Direction" dataSheet="OutputSpreadDirectionSummaryMap" column="FileName" filter="Summary"/>
-			<item name="SfcSummary" displayName="Surface Fuel Consumption" dataSheet="OutputSurfaceFuelConsumptionSummaryMap" column="FileName" filter="Summary"/>
-			<item name="CfbSummary" displayName="Crown Fraction Burned" dataSheet="OutputCrownFractionBurnedSummaryMap" column="FileName" filter="Summary"/>
-			<item name="CfcSummary" displayName="Crown Fraction Consumed" dataSheet="OutputCrownFractionConsumedSummaryMap" column="FileName" filter="Summary"/>
-			<item name="TfcSummary" displayName="Total Fuel Consumption" dataSheet="OutputTotalFuelConsumptionSummaryMap" column="FileName" filter="Summary"/>
+			<item name="RosSummary" displayName="Rate of Spread" dataSheet="OutputRateOfSpreadSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(ROS)"/>
+			<item name="FiSummary" displayName="Fire Intensity" dataSheet="OutputFireIntensitySummaryMap" column="FileName" filter="Summary" extendedIdentifier="(FI)"/>
+			<item name="SdSummary" displayName="Spread Direction" dataSheet="OutputSpreadDirectionSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(RAZ)"/>
+			<item name="SfcSummary" displayName="Surface Fuel Consumption" dataSheet="OutputSurfaceFuelConsumptionSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(SFC)"/>
+			<item name="CfbSummary" displayName="Crown Fraction Burned" dataSheet="OutputCrownFractionBurnedSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(CFB)"/>
+			<item name="CfcSummary" displayName="Crown Fraction Consumed" dataSheet="OutputCrownFractionConsumedSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(CFC)"/>
+			<item name="TfcSummary" displayName="Total Fuel Consumption" dataSheet="OutputTotalFuelConsumptionSummaryMap" column="FileName" filter="Summary" extendedIdentifier="(TFC)"/>
 		</group>
 		<group name="PerFire" displayName="Per-Fire Maps">
 			<item name="AllPerimMap" displayName ="Burn Map" dataSheet="OutputAllPerim" column="FileName"/>

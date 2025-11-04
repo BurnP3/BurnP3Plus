@@ -941,6 +941,7 @@ validateAndParseData <- list(
     } else {
       # Set flags to not save FBP outputs
       outputComponentsToKeepDisplayName <<- character(0)
+      outputComponentsToKeep <<- character(0)
       saveFBPMaps <<- FALSE
     }
   

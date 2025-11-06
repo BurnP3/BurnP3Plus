@@ -244,7 +244,7 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
 
 consolidateTabularOutputs <- function() {
   if(saveBurnMaps & file.exists(rawTableTempPath)) {
-    progressBar(type = "message", message = "Writing spatial burn outputs...")
+    progressBar(type = "message", message = "Writing tabular burn outputs...")
 
     rawTableTempPath %>%
       arrow::open_dataset(format = "arrow") %>%

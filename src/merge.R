@@ -12,9 +12,28 @@ getSharedDefinitionsPath <- function() {
 }
 source(getSharedDefinitionsPath())
 
+progressBar(message = "Parsing scenarios to merge...", type = "message")
 generateSharedTempFilePaths("merge-burns")
 
 # Function definitions ----
+
+# Function to read the run logs of a vector of scenario IDs and determine if they failed or not
+filterFailedScenarios <- function(scenarioIDs, lib) {
+  sidsToKeep <- integer(0)
+
+  # Run log always prints to output even when assigned, sink is used to keep the output stream clean
+  # - Be sure to run the cleanup line `sink()` when troubleshooting this block
+  # - unique() is used to avoid double counting scenarios if both parent and result are included as dependencies
+  sink(nullfile())
+  for (sid in unique(scenarioIDs)) {
+    log <- runLog(scenario(lib, scenario = sid))
+    if (!str_detect(log, "\\[Failure\\]"))
+      sidsToKeep <- c(sidsToKeep, sid)
+  }
+  sink()
+
+  return(sidsToKeep)
+}
 
 # Function to clean up data after loading
 cleanMergedDatasheets <- function(mergedData) {
@@ -163,7 +182,7 @@ checkForSummarizedInputs <- function(scenariosToMerge) {
 myLibrary <- ssimLibrary(myScenario)
 allScenarios <- scenario(myLibrary, summary = T) %>%
   dplyr::select(ScenarioId, ParentId, IsResult)
-scenariosToMerge <- myScenario %>%
+scenarioIDsToMerge <- myScenario %>%
   # Find parent of the current scenario
   parentId %>%
   scenario(myLibrary, scenario = .) %>%
@@ -187,16 +206,25 @@ scenariosToMerge <- myScenario %>%
       return()
     }) %>%
   as_vector() %>%
+  filterFailedScenarios(myLibrary) 
+
+  # Catch case where no scenarios are provided
+  if (length(scenarioIDsToMerge) == 0)
+    stop("Could not find any successful result scenarios to merge! Please check scenario dependencies to ensure it includes valid results.")
+  
   # Convert to a list of scenarios
-  scenario(myLibrary, scenario = .)
+  scenariosToMerge <- scenario(myLibrary, scenario = scenarioIDsToMerge, forceElements = T)
 
 # Check that inputs don't include summarized outputs ----
 checkForSummarizedInputs(scenariosToMerge)
 
-updateRunLog("Merging ", length(scenariosToMerge), " scenarios.", type = "status")
-progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios..."), type = "message")
+updateRunLog("Finished parsing scenarios to merge in ", updateBreakpoint())
 
 # Build crosswalk for fires after merge ----
+updateRunLog("Merging ", length(scenariosToMerge), " scenarios.", type = "status")
+progressBar("begin", totalSteps = 4)
+progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios", " - Building merge crosswalk..."), type = "message")
+
 # Start by finding iterations and fire ids in each scenario
 firesByScenario <- 
   map_dfr(
@@ -230,8 +258,12 @@ fireCrosswalk <- bind_rows(
     mutate(NewFireID = FireID)) %>%
   mutate(across(everything(), as.integer))
 
+updateRunLog("Finished building merge crosswalk in ", updateBreakpoint())
+
 # Update tabular datasheets ----
 # Some data to update is just stored directly in datasheets, these can be merged by applying the crosswalk
+progressBar()
+progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios", " - Merging deterministic inputs and fire statistics..."), type = "message")
 
 # Deterministic Ignition Locations
 mergeDatasheets(
@@ -251,10 +283,14 @@ mergeDatasheets(
   "burnP3Plus_OutputFireStatistic",
   fireCrosswalk)
 
+updateRunLog("Finished merging tabular data in ", updateBreakpoint())
+
 # Update external file datasheets ----
 # Some data are stored in external files that need to be loaded and merged
 
-# Burn perimeters ----
+## Burn perimeters ----
+progressBar()
+progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios", " - Merging vector burn perimters..."), type = "message")
 
 # Pick where to store merged fire perimeters and reset the file
 # Crosswalk and merge geopackages
@@ -281,7 +317,12 @@ OutputFirePerimeter <-
 
 saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)
 
-# Raw tabular outputs ----
+updateRunLog("Finished merging burn perimeters in ", updateBreakpoint())
+
+## Raw tabular outputs ----
+
+progressBar()
+progressBar(message = str_c("Merging ", length(scenariosToMerge), " scenarios", " - Merging tabular burn outputs..."), type = "message")
 
 # Pick where to store merged fire perimeters and reset the file
 scenariosToMerge %>%
@@ -303,3 +344,5 @@ scenariosToMerge %>%
 # Combine the partitioned temporary raw output to final and save back to SyncroSim using the consolidate tabular function
 saveBurnMaps <- T
 consolidateTabularOutputs()
+
+updateRunLog("Finished merging parquet files in ", updateBreakpoint())

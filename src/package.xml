@@ -553,18 +553,18 @@
 
 	<!--Export Transformers-->
 
-	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" isExport="True" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"/>
-	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" isExport="True" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"/>
-	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" isExport="True" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"/>
-	<transformer name="FirePerimeters" displayName="Burn Perimeters by Iteration and FireID" isExport="True" dataSheet="OutputFirePerimeter" column="FileName" isFolderExport="True"/>
-	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" isExport="True" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"/>
-	<transformer name="RateOfSpreadMap" displayName="Rate of Spread Map by Iteration and Fire ID" isExport="True" dataSheet="OutputRateOfSpreadMap" column="FileName" isFolderExport="True"/>
-	<transformer name="FireIntensityMap" displayName="Fire Intensity Map by Iteration and Fire ID" isExport="True" dataSheet="OutputFireIntensityMap" column="FileName" isFolderExport="True"/>
-	<transformer name="SpreadDirectionMap" displayName="Spread Direction Map by Iteration and Fire ID" isExport="True" dataSheet="OutputSpreadDirectionMap" column="FileName" isFolderExport="True"/>
-	<transformer name="SurfaceFuelConsumptionMap" displayName="Surface Fuel Consumption Map by Iteration and Fire ID" isExport="True" dataSheet="OutputSurfaceFuelConsumptionMap" column="FileName" isFolderExport="True"/>
-	<transformer name="CrownFractionBurnedMap" displayName="Crown Fraction Burned Map by Iteration and Fire ID" isExport="True" dataSheet="OutputCrownFractionBurnedMap" column="FileName" isFolderExport="True"/>
-	<transformer name="CrownFractionConsumedMap" displayName="Crown Fraction Consumed Map by Iteration and Fire ID" isExport="True" dataSheet="OutputCrownFractionConsumedMap" column="FileName" isFolderExport="True"/>
-	<transformer name="TotalFuelConsumptionMap" displayName="Total Fuel Consumption Map by Iteration and Fire ID" isExport="True" dataSheet="OutputTotalFuelConsumptionMap" column="FileName" isFolderExport="True"/>
+	<transformer name="BurnRasterMap" displayName="Burn Map by Iteration" dataSheet="OutputBurnMap" column="FileName" isFolderExport="True"/>
+	<transformer name="BurnCountRasterMap" displayName="Burn Count Map" dataSheet="OutputBurnCount" column="FileName" isFolderExport="True"/>
+	<transformer name="BurnProbabilityRasterMap" displayName="Burn Probability Map" dataSheet="OutputBurnProbability" column="FileName" isFolderExport="True"/>
+	<transformer name="FirePerimeters" displayName="Burn Perimeters by Iteration and FireID" dataSheet="OutputFirePerimeter" column="FileName" isFolderExport="True"/>
+	<transformer name="AllPerimRasterMap" displayName="Burn Map by Iteration and FireID" dataSheet="OutputAllPerim" column="FileName" isFolderExport="True"/>
+	<transformer name="RateOfSpreadMap" displayName="Rate of Spread Map by Iteration and Fire ID" dataSheet="OutputRateOfSpreadMap" column="FileName" isFolderExport="True"/>
+	<transformer name="FireIntensityMap" displayName="Fire Intensity Map by Iteration and Fire ID" dataSheet="OutputFireIntensityMap" column="FileName" isFolderExport="True"/>
+	<transformer name="SpreadDirectionMap" displayName="Spread Direction Map by Iteration and Fire ID" dataSheet="OutputSpreadDirectionMap" column="FileName" isFolderExport="True"/>
+	<transformer name="SurfaceFuelConsumptionMap" displayName="Surface Fuel Consumption Map by Iteration and Fire ID" dataSheet="OutputSurfaceFuelConsumptionMap" column="FileName" isFolderExport="True"/>
+	<transformer name="CrownFractionBurnedMap" displayName="Crown Fraction Burned Map by Iteration and Fire ID" dataSheet="OutputCrownFractionBurnedMap" column="FileName" isFolderExport="True"/>
+	<transformer name="CrownFractionConsumedMap" displayName="Crown Fraction Consumed Map by Iteration and Fire ID" dataSheet="OutputCrownFractionConsumedMap" column="FileName" isFolderExport="True"/>
+	<transformer name="TotalFuelConsumptionMap" displayName="Total Fuel Consumption Map by Iteration and Fire ID" dataSheet="OutputTotalFuelConsumptionMap" column="FileName" isFolderExport="True"/>
 
 	<!--Layouts-->
 

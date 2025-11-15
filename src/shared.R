@@ -604,14 +604,21 @@ isDatasheetEmpty <- function(ds){
 
 # Define function to fill missing season values and save changes back to library
 fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
+  # Handle null case, don't save back to library
+  if (isDatasheetEmpty(datasheet))
+    return(datasheet)
+
+  # Update season values
   datasheet <- datasheet %>%
     mutate(
       Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
       Season = replace_na(Season, "All"))
 
+  # Save if required
   if (update_library)
     saveDatasheet(myScenario, datasheet, datasheet_name)
 
+  # Return udpated datasheet
   return(datasheet)
 }
 

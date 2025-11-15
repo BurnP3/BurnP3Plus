@@ -17,7 +17,7 @@ DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBur
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_WeatherZone")
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% dplyr::filter(is.na(IsAuto))
 FireDurationTable <- datasheet(myScenario, "burnP3Plus_FireDuration", optional = T, lookupsAsFactors = F, returnInvisible = T)
 HoursBurningTable <- datasheet(myScenario, "burnP3Plus_HoursPerDayBurning", optional = T, lookupsAsFactors = F, returnInvisible = T)
 WeatherStream <- datasheet(myScenario, "burnP3Plus_WeatherStream", optional = T, lookupsAsFactors = F)
@@ -41,8 +41,8 @@ sampleFireDuration <- function(season, firezone, data){
   # Determine fire duration distribution type to use
   # This is a function of season and firezone
   filteredFireDurationTable <- FireDurationTable %>%
-    filter(
-      Season == season | is.na(Season) | Season == "All",
+    dplyr::filter(
+      Season == season | is.na(Season) | Season == "All" | season == "All",
       FireZone == firezone | is.na(FireZone))
 
   fireDurationDistributionName <- filteredFireDurationTable %>%
@@ -52,13 +52,8 @@ sampleFireDuration <- function(season, firezone, data){
 
   # Determine hours burning per day distribution type to use
   # This is a function of season only
-  if (season %in% HoursBurningTable$Season){
-    filteredHoursBurningTable <- HoursBurningTable %>%
-      filter(Season == season)
-  } else {
-    filteredHoursBurningTable <- HoursBurningTable %>%
-      filter(Season == "All" | is.na(Season))
-  }
+  filteredHoursBurningTable <- HoursBurningTable %>%
+    dplyr::filter(Season == season | is.na(Season) | Season == "All" | season == "All")
 
   hoursBurningDistributionName <- filteredHoursBurningTable %>%
     pull(DistributionType) %>%
@@ -81,7 +76,7 @@ sampleFireDuration <- function(season, firezone, data){
 
     # Otherwise sample from a user defined distribution
   } else {
-    fireDurationDistribution <- DistributionValue %>% filter(Name == fireDurationDistributionName)
+    fireDurationDistribution <- DistributionValue %>% dplyr::filter(Name == fireDurationDistributionName)
     
     if (nrow(fireDurationDistribution) == 1) {
       fireDurations <- rep(fireDurationDistribution$Value, nrow(data))
@@ -116,7 +111,7 @@ sampleFireDuration <- function(season, firezone, data){
 
           # Otherwise sample from a user defined distribution
         } else {
-          hoursBurningDistribution <- DistributionValue %>% filter(Name == hoursBurningDistributionName)
+          hoursBurningDistribution <- DistributionValue %>% dplyr::filter(Name == hoursBurningDistributionName)
           
           if (nrow(hoursBurningDistribution) == 1) {
             rep(hoursBurningDistribution$Value, nrow(.))
@@ -134,8 +129,8 @@ sampleWeather <- function(season, weatherzone, data) {
   
   # Filter weather by season and weather zone
   localWeather <- WeatherStream %>%
-    filter(
-      Season == season | is.na(Season) | Season == "All",
+    dplyr::filter(
+      Season == season | is.na(Season) | Season == "All" | season == "All",
       WeatherZone == weatherzone | is.na(WeatherZone)) %>%
     dplyr::select(-Season, -WeatherZone) %>%
     dplyr::arrange(Order)

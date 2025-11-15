@@ -18,7 +18,7 @@ FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F, returnInvisible = T)
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% dplyr::filter(is.na(IsAuto) | IsAuto == 0)
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
 IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T, lookupsAsFactors = F, returnInvisible = T)
 ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T) %>% dplyr::select(-starts_with("Scenario"))
@@ -55,19 +55,19 @@ if (!is.na(ResampleOption$ProportionExtraIgnition))
 # Define function to sample locations given season, cause, and fire zone
 sampleLocations <- function(season, cause, firezone, data) {
   # Convert firezone to ID value
-  firezoneID <- FireZoneTable %>% filter(Name == firezone) %>% pull(ID)
+  firezoneID <- FireZoneTable %>% dplyr::filter(Name == firezone) %>% pull(ID)
 
   # Determine the restricted fuel types for the given season, cause, firezone
   restrictedFuels <- IgnitionRestriction %>%
-    filter(
-      Season == season | is.na(Season) | Season == "All",
+    dplyr::filter(
+      Season == season | is.na(Season) | Season == "All" | season == "All",
       Cause == cause | is.na(Cause),
       FireZone == firezone | is.na(FireZone)) %>%
     pull(FuelType)
 
   # Convert restricted fuels list to IDs, add NA as restricted fuel
   restrictedFuelIDs <- FuelType %>%
-    filter(Name %in% restrictedFuels) %>%
+    dplyr::filter(Name %in% restrictedFuels) %>%
     pull(ID) %>%
     c(NA)
 
@@ -76,7 +76,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   maskedProbability <- ProbabilisticIgnitionLocation %>%
 
     # Start by finding the relevant probabilistic ignition grid
-    filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
+    dplyr::filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
     pull(IgnitionGridFileName) %>%
 
     # Warn if multiple probabilistic ignition grids are specified
@@ -132,7 +132,7 @@ if(is.na(distributionName)) {
 
 # Otherwise sample from a user distribution
 } else {
-  ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
+  ignitionCountDistribution <- DistributionValue %>% dplyr::filter(Name == distributionName)
   
   if (nrow(ignitionCountDistribution) == 1) {
     numIgnitions <- rep(IgnitionsPerIteration$Value, numIterations)

@@ -5,7 +5,7 @@
 
 	<dataSheet name="BatchOption" displayName="Batch Options" isSingleRow="True" dataScope="Library">
 		<column name="BatchSize" displayName="Batch size (ignitions):" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="1"/>
-		<record columns="BatchSize" values="250"/>
+		<record columns="BatchSize" values="50"/>
 	</dataSheet>
 
 	<!--Project Datasheets-->

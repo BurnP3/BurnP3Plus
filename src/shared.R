@@ -642,12 +642,12 @@ validateAndParseData <- list(
     
     # Make sure all fuels in the fuels map are defined
     fuelsPresent <- uniqueOnDisk(fuelsRaster)
-    if(length(setdiff(fuelsPresent, FuelType$ID)) > 0) {
+    missingFuels <- setdiff(fuelsPresent, FuelType$ID)
+    if(length(missingFuels) > 0) {
       FuelType <- bind_rows(
         FuelType,
         tibble(ID = setdiff(fuelsPresent, FuelType$ID)))
-      saveDatasheet(myScenario, FuelTypeCrosswalk, crosswalk)
-      stop("Found fuel values in the fuel map that are not defined in the Fuel Type definitions. Missing records have been added to the Fuel Type table, please name these fuel types.")
+      stop("Found fuel values in the fuel map that are not defined in the Fuel Type definitions. Missing Fuel IDs were: ", str_c(missingFuels, collapse = " "))
     }
     
     # Make sure fuel crosswalk definitions exist and is fully populated, if relevant

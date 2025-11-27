@@ -44,7 +44,7 @@ validateAndParseData$IgnitionSampling()
 ## Parse distributions ----
 
 ## Extract relevant parameters ----
-iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
+iterations <- rlang::seq2(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
 proportionExtraIgnitions <- 0
 if (!is.na(ResampleOption$ProportionExtraIgnition))
@@ -144,6 +144,7 @@ if(is.na(distributionName)) {
 # Prepend extra ignitions for resampling to vector of ignition counts if requested (to be assigned to iteration 0)
 numIgnitions <- numIgnitions %>%
   sum %>%
+  max(1) %>% # If 0 ignitions are requested, user still might want extra ignitions to merge into a run with insufficient fires
   prod(proportionExtraIgnitions) %>%
   ceiling %>%
   c(numIgnitions)

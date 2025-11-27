@@ -16,6 +16,7 @@ suppressPackageStartupMessages(library(terra))
 suppressPackageStartupMessages(library(sf))
 suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(arrow))
+suppressPackageStartupMessages(library(rlang))
 
 # Function for validating package versions against what is expected
 checkPackageVersion <- function(packageString, minimumVersion){

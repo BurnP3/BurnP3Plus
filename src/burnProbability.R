@@ -13,7 +13,6 @@ source(getSharedDefinitionsPath())
 
 # Load relevant datasheets
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T, returnInvisible = T)
-RunControl <- datasheet(myScenario, "burnP3Plus_RunControl", returnInvisible = T)
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookupsAsFactors = F, optional = T, returnInvisible = T)
@@ -299,7 +298,7 @@ generateBurnMaps <- function(season, data, outputFilePrefix, template) {
     # Use summarize to drop multiple burns of the same cell within an iteration
     summarize()
   
-  iterations <- seq(RunControl$MaximumIteration)
+  iterations <- seq(MaximumIteration)
   
   # Generate a map per iteration and record where the files were written
   OutputBurnMap <- map_dfr(
@@ -352,7 +351,7 @@ summarizeBurnProbability <- function(season, burnCountFileName, outputFilePrefix
   # Calculate burn probability and write to file
   burnCountFileName %>%
     rast() %>%
-    `/`(as.double(max(RunControl$MaximumIteration - length(incompleteIterations), 1))) %>%
+    `/`(as.double(max(MaximumIteration - length(incompleteIterations), 1))) %>%
     terra::writeRaster(
       filename = outputFileName,
       overwrite = T,
@@ -386,6 +385,12 @@ summarizeRelativeBurnProbability <- function(season, burnProbabilityFileName, ou
 }
 
 # Extract relevant parameters ----
+
+# Identify total number of iterations
+# - Note that run control might be out of date after a merge
+MaximumIteration <- OutputFireStatistic %>%
+  pull(Iteration) %>%
+  max
 
 updateRunLog("Finished preparing inputs in ", updateBreakpoint())
 
@@ -607,7 +612,7 @@ if(OutputOptionsSpatial$BurnMap | OutputOptionsSpatial$SeasonalBurnMap) {
   if (!OutputOptionsSpatial$SeasonalBurnMap)
     seasonsToRun <- "All"
 
-  progressBar("begin", totalSteps = RunControl$MaximumIteration * length(seasonsToRun))
+  progressBar("begin", totalSteps = MaximumIteration * length(seasonsToRun))
   progressBar(type = "message", message = "Writing per-iteration burn maps...")
   
   # Write outputs per iteration to file and get a table of the file paths

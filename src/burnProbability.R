@@ -402,7 +402,6 @@ if (!isDatasheetEmpty(OutputRawTabular)) {
   OutputRawTabular$FileName %>%
     arrow::open_dataset() %>%
     write_parquet(rawTablePath)
-  unlink(OutputRawTabular$FileName, force = T)
 }  else {
   data.frame(Iteration = integer(0), FireID = integer(0), CellID = integer(0)) %>%
     write_parquet(rawTablePath)

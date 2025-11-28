@@ -50,6 +50,18 @@ proportionExtraIgnitions <- 0
 if (!is.na(ResampleOption$ProportionExtraIgnition))
   proportionExtraIgnitions <- ResampleOption$ProportionExtraIgnition
 
+# Handle case where user is only sampling extra ignitions
+# - In this case, we want to update run controls so that an appropriate number of jobs are spawned during the fire growth transformer
+# - Note that sampling ignitions is the only BP3+ transformer that reads the run controls datasheet
+if (RunControl$MaximumIteration == 0) {
+  saveDatasheet(
+    myScenario,
+    data.frame(
+      MinimumIteration = 1,
+      MaximumIteration = datasheet(myScenario, "core_Multiprocessing")$MaximumJobs),
+    "burnP3Plus_RunControl")
+}
+
 ## Function Definitions ----
 
 # Define function to sample locations given season, cause, and fire zone

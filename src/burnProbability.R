@@ -298,7 +298,8 @@ generateBurnMaps <- function(season, data, outputFilePrefix, template) {
     # Use summarize to drop multiple burns of the same cell within an iteration
     summarize()
   
-  iterations <- seq(MaximumIteration)
+  # Safer implementation of seq to handle case where no burn maps should be produced
+  iterations <- rlang::seq2(1, MaximumIteration)
   
   # Generate a map per iteration and record where the files were written
   OutputBurnMap <- map_dfr(
@@ -594,11 +595,12 @@ if (OutputOptionsSpatial$AllPerim) {
     template = templateRaster)
 
   # Save to SyncroSim
-  saveDatasheet(
-    myScenario,
-    OutputAllPerim,
-    "burnP3Plus_OutputAllPerim",
-    append = F)
+  if (!isDatasheetEmpty(OutputAllPerim))
+    saveDatasheet(
+      myScenario,
+      OutputAllPerim,
+      "burnP3Plus_OutputAllPerim",
+      append = F)
 
   updateRunLog("Finished writing per-fire burn maps in ", updateBreakpoint())
   progressBar("end")
@@ -624,11 +626,12 @@ if(OutputOptionsSpatial$BurnMap | OutputOptionsSpatial$SeasonalBurnMap) {
     template = templateRaster)
 
   # Save to SyncroSim
-  saveDatasheet(
-    myScenario,
-    OutputBurnMap,
-    "burnP3Plus_OutputBurnMap",
-    append = F)
+  if (!isDatasheetEmpty(OutputBurnMap))
+    saveDatasheet(
+      myScenario,
+      OutputBurnMap,
+      "burnP3Plus_OutputBurnMap",
+      append = F)
 
   updateRunLog("Finished writing per-iteration burn maps in ", updateBreakpoint())
   progressBar("end")
@@ -756,7 +759,8 @@ if (saveFBPMaps) {
         outputFilePrefix = str_c(fbpIndividualDir, "/", component, "-"),
         template = templateRaster)
 
-      saveDatasheet(myScenario, OutputFBPIndividual, str_c("burnP3Plus_Output", component, "Map"), append = FALSE)
+      if (!isDatasheetEmpty(OutputFBPIndividual))
+        saveDatasheet(myScenario, OutputFBPIndividual, str_c("burnP3Plus_Output", component, "Map"), append = FALSE)
       rm(OutputFBPIndividual)
 
       progressBar("end")

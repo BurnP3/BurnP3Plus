@@ -806,5 +806,3 @@ if (saveFBPMaps) {
 
   updateRunLog("Finished summarizing and writing FBP outputs in ", updateBreakpoint(), "\n\n")
 }
-
-updateRunLog("Run Context: ", as.character(datasheet(myScenario, "core_Multiprocessing")$EnableMultiprocessing), "\n\n")

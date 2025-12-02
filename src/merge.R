@@ -80,6 +80,10 @@ mergeDatasheets <- function(scenariosToMerge, datasheetName, crosswalk) {
 
 # Function to crosswalk and merge fire perimeter geopackages
 mergeFirePerimeters <- function(ScenarioId, FileName, crosswalk, geopackage_path) {
+  # Make sure geopackage exists
+  if (!file.exists(FileName))
+    return()
+
   # Get layers present (in case there are multiple)
   layer_names <- st_layers(FileName)$name
 
@@ -194,7 +198,6 @@ scenarioIDsToMerge <- myScenario %>%
     scnInfo <- allScenarios %>%
       dplyr::filter(ScenarioId == sid)
 
-    # TODO: filter out failed runs
     # If this is a result scenario, there's nothing to do
     if (scnInfo$IsResult == "Yes")
       return(sid)
@@ -315,7 +318,8 @@ OutputFirePerimeter <-
     Description = getPerimeterType(geopackage_path)) %>%
   as.data.frame()
 
-saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)
+if (file.exists(geopackage_path))
+  saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)
 
 updateRunLog("Finished merging burn perimeters in ", updateBreakpoint())
 

@@ -329,6 +329,9 @@ consolidateVectorOutputs <- function() {
 
 # Function to identify perimeter types (final, daily, mixed) present in a geopackage and return a description
 getPerimeterType <- function(geopackage_path) {
+  if(!file.exists(geopackage_path))
+    return("")
+
   # A suffix to the description is added based on the current job number
   jobSuffix <- ifelse(runContext$isParallel, str_c(" - Job ", runContext$jobIndex), "")
 

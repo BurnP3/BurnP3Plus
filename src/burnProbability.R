@@ -126,6 +126,7 @@ writeTabularToSpatial <- function(tabularInput, outputFileName, template, dataty
   # Corece into spatial
   spatialOutput <- rast(template)
   names(spatialOutput) <- outputFileName %>% basename %>% tools::file_path_sans_ext()
+  tabularInput <- tabularInput %>% filter(!is.na(CellID))
   spatialOutput[tabularInput$CellID] <- tabularInput$Value
 
   # Save to disk

@@ -75,7 +75,7 @@ mergeDatasheets <- function(scenariosToMerge, datasheetName, crosswalk) {
   # Save back to SyncroSim
   saveDatasheet(myScenario, mergedData, datasheetName)
 
-  return(mergedData)
+  invisible(mergedData)
 }
 
 # Function to crosswalk and merge fire perimeter geopackages
@@ -123,11 +123,11 @@ mergeRawTabular <- function(ScenarioId, BatchID, FileName, crosswalk, rawTableTe
       Iteration = as.integer(NewIteration),
       FireID = as.integer(NewFireID)) %>%
     dplyr::select(-ScenarioId, -NewIteration, -NewFireID) %>%
+    group_by(BatchID) %>%
     # Append to temp file using BatchID to avoid overwriting past data
     arrow::write_dataset(
       path = rawTableTempPath,
-      format = "arrow",
-      partitioning = "BatchID",
+      format = "parquet",
       existing_data_behavior = "delete_matching")
     
   # Finally return a single row of the raw tabular output to track which FBP variables were included
@@ -211,12 +211,12 @@ scenarioIDsToMerge <- myScenario %>%
   as_vector() %>%
   filterFailedScenarios(myLibrary) 
 
-  # Catch case where no scenarios are provided
-  if (length(scenarioIDsToMerge) == 0)
-    stop("Could not find any successful result scenarios to merge! Please check scenario dependencies to ensure it includes valid results.")
+# Catch case where no scenarios are provided
+if (length(scenarioIDsToMerge) == 0)
+  stop("Could not find any successful result scenarios to merge! Please check scenario dependencies to ensure it includes valid results.")
   
-  # Convert to a list of scenarios
-  scenariosToMerge <- scenario(myLibrary, scenario = scenarioIDsToMerge, forceElements = T)
+# Convert to a list of scenarios
+scenariosToMerge <- scenario(myLibrary, scenario = scenarioIDsToMerge, forceElements = T)
 
 # Check that inputs don't include summarized outputs ----
 checkForSummarizedInputs(scenariosToMerge)
@@ -346,7 +346,6 @@ scenariosToMerge %>%
   identifyIncompleteFBPRecords()
 
 # Combine the partitioned temporary raw output to final and save back to SyncroSim using the consolidate tabular function
-saveBurnMaps <- T
-consolidateTabularOutputs()
+saveParitionedParquetToSyncroSim(rawTableTempPath)
 
 updateRunLog("Finished merging parquet files in ", updateBreakpoint())

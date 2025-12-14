@@ -243,12 +243,15 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
   return(OutputFireStatistic)
 }
 
+# Function to combine a partitioned parquet file into a single parquet
+# - Note: Note not memory-safe above a ~2GB output!
+# - This is generally okay for merging batches within a job, but use `saveParitionedParquetToSyncroSim` for truly large datasets
 consolidateTabularOutputs <- function() {
   if(saveBurnMaps & file.exists(rawTableTempPath)) {
     progressBar(type = "message", message = "Writing tabular burn outputs...")
 
     rawTableTempPath %>%
-      arrow::open_dataset(format = "arrow") %>%
+      arrow::open_dataset(format = "parquet") %>%
       dplyr::select(-BatchID) %>%
       arrange(Iteration, FireID, CellID) %>%
       arrow::write_parquet(rawTablePath)
@@ -266,6 +269,67 @@ consolidateTabularOutputs <- function() {
   }
 }
 
+# Function to save a partitioned parquet dataset as individual single parquet files to SyncroSim
+# - This sidesteps a non-memory safe concatenation of the datasets
+# - This renames the parquet partition files on disk, which does not appear to break the full dataset, but still best to do last just to be safe
+# - This process also drop the partitioning variable of the partitioned dataset (usually something like "BatchID"). This is planned around in the current code base, but be aware if reusing.
+saveParitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
+  # Do nothing if the parquet file does not exist
+  if (!file.exists(partitioned_parquet_path))
+    return()
+  
+  # Handle case where a non partitioned file is received
+  # - Also handles calls from multiproc jobs, but this is currently not expected
+  if (!dir.exists(partitioned_parquet_path)) {
+    OutputRawTabular <- data.frame(
+      FileName = partitioned_parquet_path %>% normalizePath(),
+      Description =
+        str_c(
+          "Raw tabular outputs", 
+          ifelse(runContext$isParallel, str_c(" - Job ", runContext$jobIndex), "")))
+
+      saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"))
+  }
+  
+  # Identify partition files
+  OutputRawTabular <- partitioned_parquet_path %>%
+    # Get list of parquet partition files
+    list.files(pattern = ".parquet$", recursive = T, full.names = T) %>%
+    # Convert to table
+    enframe(name = NULL, value = "OldFileName") %>%
+    # Identify batch numbers, new file names, and a description
+    mutate(
+      BatchInfo = OldFileName %>% 
+        # Start by converting the path to a vector of directories
+        str_split("[/\\\\]") %>%
+        # Hive-style partitioning means we can extract the partitioning scheme from the path members with `=`
+        # - Assumes the user doesn't have equal signs in their regular paths
+        map(str_subset, "=") %>%
+        # Clean up and rename
+        map(str_replace_all, "=", "") %>%
+        map_chr(str_c, collapse = "-"),
+      FileName = OldFileName %>%
+        dirname %>%
+        str_c("/raw-tabular-", BatchInfo, ".parquet") %>%
+        normalizePath(mustWork = F),
+      Description = str_c(
+        "Raw tabular outputs - ",
+        BatchInfo %>% str_replace_all("(\\d+)", " \\1") %>% str_replace_all("-", " - ")))
+
+  # Rename partitions files to avoid file colisions / be more descriptive 
+  walk2(
+    OutputRawTabular$OldFileName,
+    OutputRawTabular$FileName,
+    file.rename)
+  
+  # Clean up and save
+  OutputRawTabular <- OutputRawTabular %>%
+    dplyr::select(-OldFileName, -BatchInfo)
+  
+  saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"))
+}
+
+# Function to combine multiple geopackages into a single file
 consolidateVectorOutputs <- function() {
   if (OutputOptionsSpatial$BurnPerimeter == "No" | !file.exists(geopackage_path))
     return(invisible())

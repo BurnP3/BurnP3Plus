@@ -654,17 +654,17 @@ if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
 
 # Raster outputs ----
 if (saveBurnMaps | saveFBPMaps | requiresResample) {
-  ## Repartition output raw tabular for memory-safe spatial analysis
-  # - Resample and filter too if required
-  updateResampledFireIDsParquet(OutputRawTabular$FileName, firesToReplace, firesToSummarize, rawTablePath)
-  saveParitionedParquetToSyncroSim(rawTablePath)
-
   # Set up parameters for tiling / subtiling
   iterations_per_batch <- 5000L
   tile_size <- 256L
   cells_per_tile <- as.integer(ncol(templateRaster) * tile_size)
   cells_per_subtile <- 250000L
   subtiles_per_tile <- as.integer(ceiling(cells_per_tile / cells_per_subtile))
+
+  ## Repartition output raw tabular for memory-safe spatial analysis
+  # - Resample and filter too if required
+  updateResampledFireIDsParquet(OutputRawTabular$FileName, firesToReplace, firesToSummarize, rawTablePath)
+  saveParitionedParquetToSyncroSim(rawTablePath)
 
   # Identify which seasons to generate outputs for
   if (saveSeasonalBurnMaps) {

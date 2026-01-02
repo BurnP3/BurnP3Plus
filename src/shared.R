@@ -245,7 +245,7 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
 
 # Function to combine a partitioned parquet file into a single parquet
 # - Note: Note not memory-safe above a ~2GB output!
-# - This is generally okay for merging batches within a job, but use `saveParitionedParquetToSyncroSim` for truly large datasets
+# - This is generally okay for merging batches within a job, but use `savePartitionedParquetToSyncroSim` for truly large datasets
 consolidateTabularOutputs <- function() {
   if(saveBurnMaps & file.exists(rawTableTempPath)) {
     progressBar(type = "message", message = "Writing tabular burn outputs...")
@@ -273,7 +273,7 @@ consolidateTabularOutputs <- function() {
 # - This sidesteps a non-memory safe concatenation of the datasets
 # - This renames the parquet partition files on disk, which does not appear to break the full dataset, but still best to do last just to be safe
 # - This process also drop the partitioning variable of the partitioned dataset (usually something like "BatchID"). This is planned around in the current code base, but be aware if reusing.
-saveParitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
+savePartitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
   # Do nothing if the parquet file does not exist
   if (!file.exists(partitioned_parquet_path))
     return()
@@ -288,7 +288,7 @@ saveParitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
           "Raw tabular outputs", 
           ifelse(runContext$isParallel, str_c(" - Job ", runContext$jobIndex), "")))
 
-      saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"))
+      saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"), append = F)
   }
   
   # Identify partition files
@@ -326,7 +326,7 @@ saveParitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
   OutputRawTabular <- OutputRawTabular %>%
     dplyr::select(-OldFileName, -BatchInfo)
   
-  saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"))
+  saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"), append = F)
 }
 
 # Function to combine multiple geopackages into a single file

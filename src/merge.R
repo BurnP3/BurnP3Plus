@@ -71,6 +71,10 @@ mergeDatasheets <- function(scenariosToMerge, datasheetName, crosswalk) {
     dplyr::select(-ScenarioId, -NewIteration, -NewFireID) %>%
     arrange(Iteration, FireID) %>%
     as.data.frame()
+  
+  # Make sure the fire crosswalk did not produce any NA Iterations or FireIDs
+  if (mergedData %>% dplyr::select(Iteration, FireID) %>% is.na %>% any)
+    stop("Found one or more missing values while merging the ", datasheetName, " datasheet! Please check that this datasheet and the Deterministic Ignitions sheet is complete for all input scenarios.")
 
   # Save back to SyncroSim
   saveDatasheet(myScenario, mergedData, datasheetName)
@@ -346,6 +350,6 @@ scenariosToMerge %>%
   identifyIncompleteFBPRecords()
 
 # Combine the partitioned temporary raw output to final and save back to SyncroSim using the consolidate tabular function
-saveParitionedParquetToSyncroSim(rawTableTempPath)
+savePartitionedParquetToSyncroSim(rawTableTempPath)
 
 updateRunLog("Finished merging parquet files in ", updateBreakpoint())

@@ -52,8 +52,8 @@ updateResampledFireIDs <- function(data, firesToReplace) {
   data %>%
     left_join(firesToReplace) %>%
     mutate(
-      Iteration = if_else(!is.na(NewIteration), NewIteration, Iteration),
-      FireID    = if_else(!is.na(NewFireID), NewFireID, FireID)) %>%
+      Iteration = coalesce(NewIteration, Iteration),
+      FireID    = coalesce(NewFireID, FireID)) %>%
     dplyr::select(-NewIteration, -NewFireID) %>%
     arrange(Iteration, FireID) %>%
     return()
@@ -69,8 +69,8 @@ updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, fi
     open_dataset() %>%
     left_join(firesToReplace) %>%
     mutate(
-      Iteration = if_else(!is.na(NewIteration), NewIteration, Iteration),
-      FireID    = if_else(!is.na(NewFireID), NewFireID, FireID)) %>%
+        Iteration = coalesce(NewIteration, Iteration),
+        FireID    = coalesce(NewFireID, FireID)) %>%
     dplyr::select(-NewIteration, -NewFireID) %>%
     inner_join(firesToSummarize) %>%
     mutate(
@@ -80,9 +80,8 @@ updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, fi
     group_by(TileID, BatchID) %>%
     write_dataset(
       path = output_parquet_path,
-      format = "parquet"
-    )
-    gc()
+      format = "parquet")
+  gc()
 }
 
 # Function to quickly identify unique parition IDs by name
@@ -663,8 +662,12 @@ if (saveBurnMaps | saveFBPMaps | requiresResample) {
 
   ## Repartition output raw tabular for memory-safe spatial analysis
   # - Resample and filter too if required
-  updateResampledFireIDsParquet(OutputRawTabular$FileName, firesToReplace, firesToSummarize, rawTablePath)
-  saveParitionedParquetToSyncroSim(rawTablePath)
+  updateResampledFireIDsParquet(
+    input_parquet_path = OutputRawTabular$FileName,
+    firesToReplace = firesToReplace,
+    firesToSummarize = firesToSummarize,
+    output_parquet_path = rawTablePath)
+  savePartitionedParquetToSyncroSim(rawTablePath)
 
   # Identify which seasons to generate outputs for
   if (saveSeasonalBurnMaps) {

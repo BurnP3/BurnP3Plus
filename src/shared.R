@@ -431,7 +431,7 @@ sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMi
 
   distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
   distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
+  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  max(df$DistributionMin, defaultMin)) # Never allow min below 1
   distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
 
   rnorm(numSamples, distributionMean, distributionSD) %>%
@@ -446,7 +446,7 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 
   distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
   distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
+  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  max(df$DistributionMin, defaultMin)) # Never allow min below 1
   distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
 
   # Calculate shape and rate from mean and sd

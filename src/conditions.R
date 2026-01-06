@@ -64,6 +64,13 @@ sampleFireDuration <- function(season, firezone, data){
 
   # If no distribution is specified
   if(is.na(fireDurationDistributionName)) {
+    # Filter out zero burn days
+    filteredFireDurationTable <- filteredFireDurationTable %>%
+      dplyr::filter(Mean >= 1)
+    # Make sure at least one valid entry remains
+    if (nrow(filteredFireDurationTable) == 0)
+      stop("Could not find a valid fire duration for the Season ", season, " and Fire Zone ", firezone, ". Please check your Spread Event Days datasheet.")
+
     fireDurations <- sample(rep(filteredFireDurationTable$Mean, 2), nrow(data), replace = T)
 
     # If sampling form a normal distribution
@@ -78,12 +85,18 @@ sampleFireDuration <- function(season, firezone, data){
   } else {
     fireDurationDistribution <- DistributionValue %>% dplyr::filter(Name == fireDurationDistributionName)
     
+    # Check that a valid distribution is actually defined
+    if (nrow(fireDurationDistribution) == 0)
+      stop("No valid spread event day distribution values found for the distribution: ", fireDurationDistribution)
+        
     if (nrow(fireDurationDistribution) == 1) {
       fireDurations <- rep(fireDurationDistribution$Value, nrow(data))
     } else {
       fireDurations <- sample(fireDurationDistribution$Value, nrow(data), replace = T, prob = fireDurationDistribution$RelativeFrequency)
     }
   }
+
+  fireDurations <- as.integer(round(fireDurations, 0))
 
   # Update SyncroSim progress bar
   progressBar()
@@ -99,6 +112,13 @@ sampleFireDuration <- function(season, firezone, data){
       HoursBurning =
         # If no distribution is provided
         if (is.na(hoursBurningDistributionName)) {
+          # Filter out zero hour burn days
+          filteredHoursBurningTable <- filteredHoursBurningTable %>%
+            dplyr::filter(Mean >= 1)
+          # Make sure at least one valid entry remains
+          if (nrow(filteredHoursBurningTable) == 0)
+            stop("Could not find a valid daily burn duration for the Season ", season, " and Fire Zone ", firezone, ". Please check your Daily Burning Hours datasheet.")
+
           sample(rep(filteredHoursBurningTable$Mean, 2), nrow(.), replace = T)
 
           # If sampling from a normal distribution
@@ -111,7 +131,7 @@ sampleFireDuration <- function(season, firezone, data){
 
           # Otherwise sample from a user defined distribution
         } else {
-          hoursBurningDistribution <- DistributionValue %>% dplyr::filter(Name == hoursBurningDistributionName)
+          hoursBurningDistribution <- DistributionValue %>% dplyr::filter(Name == hoursBurningDistributionName, Value >= 1)
           
           if (nrow(hoursBurningDistribution) == 1) {
             rep(hoursBurningDistribution$Value, nrow(.))
@@ -119,6 +139,7 @@ sampleFireDuration <- function(season, firezone, data){
             sample(hoursBurningDistribution$Value, nrow(.), replace= T, prob = hoursBurningDistribution$RelativeFrequency)
           }
         },
+      HoursBurning = as.integer(round(HoursBurning, 0)),
       firezone = firezone,
       season = season) %>%
     return

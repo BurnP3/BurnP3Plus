@@ -174,7 +174,7 @@ summarizeFBPFromTabular <- function(data, data_path, component, statistic, stati
   outputFileName <- str_c(outputFilePrefix, "-", component, "-", statistic, ".tif")
 
   # Get vectory of unique tile IDs
-  tileIDs <- getPartitionLevels(rawTablePath, key = "TileID")
+  tileIDs <- getPartitionLevels(data_path, key = "TileID")
 
   # Prep for subtiling if necessary
   subtileTempfilePath <- str_c(tempfilePath, "-subtiles")
@@ -410,29 +410,53 @@ summarizeBurnCountFromTabular <- function(season, data, data_path, outputFilePre
   # Generate output file name
   outputFileName <- generateSeasonalOutputFileName(season, outputFilePrefix)
 
-  # Get vectory of unique tile IDs
+  batchedTempfilePath <- str_c(tempfilePath, "-batched")
+
+  # Get vectory of unique tile and batch IDs
   tileIDs <- getPartitionLevels(rawTablePath, key = "TileID")
+  batchIDs <- getPartitionLevels(rawTablePath, key = "BatchID")
 
   # Reset temp file path
   unlink(tempfilePath, recursive = T)
+  unlink(batchedTempfilePath, recursive = T)
 
   # Add progress bar with steps per tile plus one for writing to tif
-  progressBar("begin", totalSteps = length(tileIDs) + 1)
+  progressBar("begin", totalSteps = 2 * length(tileIDs) + 1)
   progressBar(type = "message", message = str_c("Summarizing raw burn data for season: ", season))
 
-  # TODO: maybe iterate over batches of iterations too?
+  # Calculate burn count for each tile and batch
+  for(tileID in tileIDs) {
+    for(batchID in batchIDs) {
+      # Calculate burn count for this tile and batch, save to a unique partition of temp parquet file
+      data %>%
+        dplyr::filter(TileID == tileID, BatchID == batchID) %>%
+        dplyr::filter(Season == season | season == "All") %>%
+        group_by(TileID, BatchID, CellID) %>%
+        summarize(Value = n_distinct(Iteration)) %>%
+        write_dataset(
+          path = batchedTempfilePath,
+          format = "parquet",
+          existing_data_behavior = "delete_matching")
+    
+      progressBar()
+    }
+  }
+
+  # Combine burn count summaries from all batches
+  # - This works since no iterations are shared across batches
+  # - Although slower, helps limit memory use for runs with very large counts of iterations
+  temp_parquet <- open_dataset(batchedTempfilePath, partitioning = c("TileID", "BatchID"))
   for(tileID in tileIDs) {
     # Calculate burn count for this tile, save to a unique partition of temp parquet file
-    data %>%
-      filter(TileID == tileID) %>%
-      filter(Season == season | season == "All") %>%
+    temp_parquet %>%
+      dplyr::filter(TileID == tileID) %>%
       group_by(TileID, CellID) %>%
-      summarize(Value = n_distinct(Iteration)) %>%
+      summarize(Value = sum(Value)) %>%
       write_dataset(
         path = tempfilePath,
         format = "parquet",
         existing_data_behavior = "delete_matching")
-    
+   
     progressBar()
   }
 
@@ -442,6 +466,10 @@ summarizeBurnCountFromTabular <- function(season, data, data_path, outputFilePre
     outputFileName = outputFileName,
     template = template,
     datatype = "INT2S")
+  
+  rm(temp_parquet)
+  unlink(tempfilePath, recursive = T)
+  unlink(batchedTempfilePath, recursive = T)
 
   return(outputFileName)
 }

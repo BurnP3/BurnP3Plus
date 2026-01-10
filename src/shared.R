@@ -473,8 +473,11 @@ splitFiresByJob <- function() {
     group_by(Iteration, FireID) %>%
     summarize(HoursBurning = sum(HoursBurning), .groups = "drop") %>%
 
+    # Sort by hours burning, Iteration and FireID to break ties
+    arrange(-HoursBurning, Iteration, FireID) %>%
+
     # Split fires into approximately equal total hours burning
-    mutate(JobIndex = (floor(cumsum(HoursBurning) / sum(HoursBurning) * runContext$numJobs) + 1) %>% pmin(runContext$numJobs)) %>%
+    mutate(JobIndex = rep(c(seq(runContext$numJobs), rev(seq(runContext$numJobs))), length.out = length(HoursBurning))) %>%
     dplyr::filter(JobIndex == runContext$jobIndex) %>%
     dplyr::select(Iteration, FireID)
 }

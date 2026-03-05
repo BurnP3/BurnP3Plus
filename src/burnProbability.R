@@ -888,7 +888,7 @@ if (saveFBPMaps) {
       as.list()
 
     # Save individual maps if requested
-    if (!is.na(componentOutputOptions$Individual) & componentOutputOptions$Individual) {
+    if (!is.null(componentOutputOptions$Individual) && length(componentOutputOptions$Individual) == 1 && !is.na(componentOutputOptions$Individual) && componentOutputOptions$Individual) {
       progressBar("begin", totalSteps = nrow(firesToSummarize))
       progressBar(type = "message", message = str_c("Writing per-fire ", lookup(component, FBPVariableTable$Name, FBPVariableTable$DisplayName), " maps..."))
 
@@ -918,7 +918,7 @@ if (saveFBPMaps) {
       statistic <- statisticDisplayName %>% str_replace(" ", "") # Percentile1, Percentile2, and Percentile3 all have spaces in their display names, but not in keys
 
       # Skip if this statistic is not requested for this FBP variable
-      if (is.na(componentOutputOptions[statistic]) | !as.logical(componentOutputOptions[[statistic]]))
+      if (is.null(componentOutputOptions[[statistic]]) || length(componentOutputOptions[[statistic]]) == 0 || (length(is.na(componentOutputOptions[statistic])) == 1 && is.na(componentOutputOptions[statistic])) || !isTRUE(as.logical(componentOutputOptions[[statistic]])))
         next
 
       # Add progress bar with steps per tile plus one for writing to tif

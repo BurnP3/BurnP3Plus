@@ -19,7 +19,7 @@ FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookup
 FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", lookupsAsFactors = F, optional = T, returnInvisible = T)
 OutputOptions <- datasheet(myScenario, "burnP3Plus_OutputOption", returnInvisible = T, optional = T)
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T, optional = T) %>% mutate(BurnPerimeter = as.character(BurnPerimeter))
-OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable))
+OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable)) %>% distinct()
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T, optional = T) %>% arrange(Iteration, FireID)
 OutputRawTabular <- datasheet(myScenario, "burnP3Plus_OutputRawTabular", optional = T, returnInvisible = T)
 OutputFirePerimeter <- datasheet(myScenario, "burnP3Plus_OutputFirePerimeter", returnInvisible = T, optional = T)

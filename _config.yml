@@ -4,7 +4,6 @@ description: BurnP3+ SyncroSim Package
 author: The Canadian Forest Service
 email: info@burnp3plus.ca
 header_pages:
-  - index.md
   - getting_started.md
   - tutorials.md
   - reference.md

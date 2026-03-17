@@ -141,14 +141,16 @@ chmod 755 $HOME/syncrosim/SyncroSim.Console.exe \
 For convenience, create shell wrappers so you can invoke `ssim` and `ssimpm` from anywhere on the system:
 
 ```bash
-sudo tee /usr/local/bin/ssim > /dev/null << 'EOF'
+SYNCROSIM_DIR="$HOME/syncrosim"
+
+sudo tee /usr/local/bin/ssim > /dev/null << EOF
 #!/bin/bash
-mono $HOME/syncrosim/SyncroSim.Console.exe "$@"
+mono ${SYNCROSIM_DIR}/SyncroSim.Console.exe "\$@"
 EOF
 
 sudo tee /usr/local/bin/ssimpm > /dev/null << 'EOF'
 #!/bin/bash
-mono $HOME/syncrosim/SyncroSim.PackageManager.exe "$@"
+mono ${SYNCROSIM_DIR}/SyncroSim.PackageManager.exe "$@"
 EOF
 
 sudo chmod +x /usr/local/bin/ssim /usr/local/bin/ssimpm
@@ -169,9 +171,12 @@ conda create -y --name gdal-mono gdal-csharp=1.1.1
 # Copy the GDAL helper files into the SyncroSim folder
 cp $HOME/miniconda3/envs/gdal-mono/lib/*_csharp.dll $HOME/syncrosim/
 cp $HOME/miniconda3/envs/gdal-mono/lib/*.so* $HOME/syncrosim/
+
+# Remove the conda-forge SQLite libraries; Mono requires the system version
+rm $HOME/syncrosim/libsqlite3.so*
 ```
 
-> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files files and shared library `.so` files into the SyncroSim folder makes them available when SyncroSim starts up.
+> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files and shared library `.so` files into the SyncroSim folder makes them available when SyncroSim starts up.
 
 > **Important:** Always use a **named environment** (like `gdal-mono`) rather than installing into `base`. Installing GDAL into the base environment has been found to cause library conflicts that prevent SyncroSim from loading spatial tools correctly.
 
@@ -199,6 +204,31 @@ export PROJ_LIB=/usr/share/proj
 
 Add these lines to your `~/.bashrc` or to a project-specific activation script if you are running **BurnP3+** frequently.
 
+### Install R Package Dependencies
+
+BurnP3+ and FireSTARR require several R packages. Install them from source to ensure they compile against your system libraries:
+```bash
+# Extract all dependencies from installed package scripts and install
+PACKAGES=$(grep -rh "library\|require" \
+    $HOME/syncrosim/Packages/burnP3Plus/2.6.5/*.R \
+    $HOME/syncrosim/Packages/burnP3PlusFireSTARR/1.5.5/*.R 2>/dev/null \
+    | grep -oP "(?<=library\()['\"]?[A-Za-z0-9.]+['\"]?(?=\))|(?<=require\()['\"]?[A-Za-z0-9.]+['\"]?(?=\))" \
+    | tr -d "'\"" | sort -u)
+
+# Verify the package list before installing
+echo "$PACKAGES"
+
+Rscript -e "
+pkgs <- c($(echo "$PACKAGES" | sed "s/.*/'&'/" | paste -sd,))
+pkgs <- pkgs[!pkgs %in% rownames(installed.packages())]
+if (length(pkgs) > 0) install.packages(pkgs, type='source', repos='https://cloud.r-project.org')
+"
+```
+
+> Review the output of `echo "$PACKAGES"` before proceeding. It should be a clean list of R package names with no unexpected characters or blank lines. If the list looks correct, run the `Rscript` command to install.
+
+> **Why install from source?** Pre-built R package binaries may link against system library versions that conflict with your Ubuntu installation. Installing from source ensures packages compile against the libraries actually present on your system. Note that the `arrow` package can take 10–15 minutes to compile.
+
 <br>
 
 <p id="step2"> <h2> <b>Step 2: Installing BurnP3+ and FireSTARR</b> </h2> </p>
@@ -217,33 +247,56 @@ ssimpm --install=burnP3Plus --version=2.6.5
 ssimpm --install=burnP3PlusFireSTARR --version=1.5.5
 ```
 
-> **Tip:** Check the [ApexRMS GitHub releases page](https://github.com/ApexRMS/burnP3Plus/releases){:target="_blank"} for the current version numbers of **BurnP3+** and its compatible FireSTARR release. Always install versions that are listed as compatible with each other.
+> **Tip:** Check the <a href="https://github.com/BurnP3/BurnP3Plus/releases" target="_blank">BurnP3Plus GitHub releases page</a> for the current version numbers of **BurnP3+** and its compatible FireSTARR release. Always install versions that are listed as compatible with each other.
 
 Verify the *packages* installed correctly:
 
 ```bash
-ssimpm --list
+ssimpm --list --installed
 ```
 
-You should see `burnP3Plus` and `burnP3PlusFireSTARR` (along with their dependencies) in the output.
+You should see `burnP3Plus` and `burnP3PlusFireSTARR` in the output.
 
 **Offline / Airgapped Install**
 
-If your server does not have internet access, download the *package* files on another machine and transfer them manually. Download the `.ssimpkg` files from the [ApexRMS GitHub releases page](https://github.com/ApexRMS/burnP3Plus/releases){:target="_blank"}, copy them to the server, then install:
+If your server does not have internet access, download the *package* files on another machine and transfer them manually. Download the `.ssimpkg` files from the <a href="https://github.com/BurnP3/BurnP3Plus/releases" target="_blank">BurnP3Plus GitHub releases page</a>, then copy them to the server using `scp`.
 
+First, on the server, create the destination directory:
 ```bash
 mkdir -p $HOME/burnp3
+```
 
-# Install from local package files
+Then, on your local machine, transfer the files:
+```bash
+scp -i /path/to/your-key.pem \
+    /path/to/burnP3Plus-2-6-5.ssimpkg \
+    /path/to/burnP3PlusFireSTARR-1-5-5.ssimpkg \
+    ubuntu@<server-ip>:$HOME/burnp3/
+```
+
+> ***Windows users (PowerShell):** The backslash line continuation used above is bash syntax and will not work in PowerShell. Use backticks for line continuation, quote the filenames, and use the literal `/home/ubuntu` path instead of `$HOME` (which PowerShell will not expand on the remote side):*
+> ```powershell
+> scp -i C:\path\to\your-key.pem `
+>     "C:\path\to\burnP3Plus-2-6-5.ssimpkg" `
+>     "C:\path\to\burnP3PlusFireSTARR-1-5-5.ssimpkg" `
+>     ubuntu@<server-ip>:/home/ubuntu/burnp3/
+> ```
+
+Replace `/path/to/your-key.pem` with your SSH key, `/path/to/` with the local directory containing the `.ssimpkg` files, and `<server-ip>` with your server's IP address or hostname.
+
+Then, back on the server, install from the local package files:
+```bash
+# Run this on the SERVER
 ssimpm --finstall="$HOME/burnp3/burnP3Plus-2-6-5.ssimpkg"
 ssimpm --finstall="$HOME/burnp3/burnP3PlusFireSTARR-1-5-5.ssimpkg"
+ssimpm --list --installed
 ```
 
 <br>
 
 <p id="step3"> <h2> <b>Step 3: Running BurnP3+ from the SyncroSim console</b> </h2> </p>
 
-With SyncroSim and **BurnP3+** installed, you can run any **BurnP3+** *library* entirely from the command line. This is the approach you would use in a batch script, cron job, or HPC job submission. The full SyncroSim console reference is available at [docs.syncrosim.com/reference/console_core.html](https://docs.syncrosim.com/reference/console_core.html){:target="_blank"}.
+With SyncroSim and **BurnP3+** installed, you can run any **BurnP3+** *library* entirely from the command line. This is the approach you would use in a batch script, cron job, or HPC job submission. The full SyncroSim console reference is available at <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.
 
 A SyncroSim *library* (`.ssim` file) is the top-level container for a modeling project. Inside a *library*, you have one or more *projects*, and within each *project*, one or more *scenarios*. A *scenario* defines all the model inputs and configuration for a single run. When running from the console, you reference *scenarios* by their **scenario ID** — an integer assigned when the *scenario* is created. To list the *scenarios* available in a *library*:
 
@@ -259,16 +312,20 @@ Before running a *scenario*, configure how many fire iterations to run and how m
 
 Create a `Run_Control.csv` with your iteration settings:
 
-```
-MaximumIteration,StartTimestep,EndTimestep
-10000,1,1
+```bash
+cat > $HOME/burnp3/Run_Control.csv << 'EOF'
+MinimumIteration,MaximumIteration,MinimumTimestep,MaximumTimestep
+1,10000,1,1
+EOF
 ```
 
 Create a `Multiprocessing.csv` to enable parallel processing:
 
-```
-EnableMultiprocessing,MaximumJobs
-TRUE,8
+```bash
+cat > $HOME/burnp3/Multiprocessing.csv << 'EOF'
+EnableMultiprocessing,MaximumJobs,EnableMultiScenario,EnableCopyExternalFiles
+Yes,8,,
+EOF
 ```
 
 Then import them into your *scenario* before running:
@@ -277,10 +334,10 @@ Then import them into your *scenario* before running:
 SSIMLIB=/path/to/your/burnp3.ssim
 
 ssim --import --lib=$SSIMLIB --sheet=burnP3Plus_RunControl \
-     --sid=1 --file='Run_Control.csv'
+     --sid=1 --file=$HOME/burnp3/Run_Control.csv
 
 ssim --import --lib=$SSIMLIB --sheet=core_Multiprocessing \
-     --sid=1 --file='Multiprocessing.csv'
+     --sid=1 --file=$HOME/burnp3/Multiprocessing.csv
 ```
 
 Set `MaximumJobs` to match the number of CPU cores you want to use. On an HPC cluster, this should match the number of cores allocated to your job (e.g., `$SLURM_CPUS_PER_TASK`).
@@ -295,10 +352,10 @@ conda activate gdal-mono
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
 
 # Run scenario with ID 1 in your library
-ssim --lib=/path/to/your/burnp3.ssim --run --sid=1
+ssim --lib=$SSIMLIB --run --sid=1
 ```
 
-The table below summarizes the most useful console flags. For a complete reference, see [docs.syncrosim.com/reference/console_core.html](https://docs.syncrosim.com/reference/console_core.html){:target="_blank"}.
+The table below summarizes the most useful console flags. For a complete reference, see <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.
 
 | Flag | Description |
 |---|---|
@@ -377,8 +434,8 @@ SSIMLIB=$HOME/projects/burnp3/my_project.ssim
 
 # Import multiprocessing config to use all allocated cores
 cat > /tmp/mp.csv << EOF
-EnableMultiprocessing,MaximumJobs
-TRUE,$SLURM_CPUS_PER_TASK
+EnableMultiprocessing,MaximumJobs,EnableMultiScenario,EnableCopyExternalFiles
+Yes,$SLURM_CPUS_PER_TASK,,
 EOF
 
 ssim --import --lib=$SSIMLIB --sheet=core_Multiprocessing \
@@ -431,13 +488,47 @@ If the files are missing, re-run the copy step from the [GDAL setup section](#gd
 
 *Symptom:* After installing **BurnP3+** and FireSTARR, SyncroSim reports a version mismatch or a *package* fails to load.
 
-*Fix:* **BurnP3+** and FireSTARR must be installed as compatible versions. Check the [BurnP3+ releases page](https://github.com/ApexRMS/burnP3Plus/releases){:target="_blank"} to confirm which FireSTARR version is required for your **BurnP3+** release. Uninstall and reinstall the mismatched *package*:
+*Fix:* **BurnP3+** and FireSTARR must be installed as compatible versions. Check the <a href="https://github.com/ApexRMS/burnP3Plus/releases" target="_blank">BurnP3+ releases page</a> to confirm which FireSTARR version is required for your **BurnP3+** release. Uninstall and reinstall the mismatched *package*:
 
 ```bash
 ssimpm --uninstall=burnP3PlusFireSTARR
 ssimpm --install=burnP3PlusFireSTARR --version=<correct_version>
 ```
 
+**SQLite crash on library open**  
+*Symptom:* SyncroSim crashes with a `SIGSEGV` and a managed stacktrace pointing to `Mono.Data.Sqlite.UnsafeNativeMethods:sqlite3_open_v2` when trying to open a `.ssim` library file.
+
+*Fix:* The conda-forge version of `libsqlite3` copied from the gdal-mono environment is incompatible with Mono's SQLite bindings. Remove it and let Mono fall back to the system version:
+```bash
+rm $HOME/syncrosim/libsqlite3.so*
+```
+
+**R package load failures (`terra`, `sf`, or others)**
+
+*Symptom:* A transformer fails with an error like:
+```
+unable to load shared object '.../terra/libs/terra.so':
+  /usr/lib/x86_64-linux-gnu/libspatialite.so.8: undefined symbol: freexl_get_worksheets_count
+```
+
+*Fix:* This is a known incompatibility on Ubuntu 24.04 between pre-built R package binaries and the system `libspatialite`/`libfreexl` versions. First ensure the correct system libraries are installed. Note that the package name for `libspatialite` varies by Ubuntu version:
+```bash
+# Ubuntu 24.04
+sudo apt-get install -y libspatialite8t64 libfreexl1
+
+# Ubuntu 20.04 / 22.04
+sudo apt-get install -y libspatialite7 libfreexl1
+
+sudo ldconfig
+```
+
+Then reinstall the affected R packages from source so they compile against the correct libraries:
+```bash
+Rscript -e "install.packages(c('terra', 'sf'), type='source', repos='https://cloud.r-project.org')"
+```
+
+If other packages show the same error, reinstall them from source using the same approach.
+
 <br>
 
-*For more on SyncroSim, visit [syncrosim.com](https://syncrosim.com){:target="_blank"}. **BurnP3+** package documentation is available at [apexrms.github.io/burnP3Plus](https://apexrms.github.io/burnP3Plus/){:target="_blank"}. The full SyncroSim console reference can be found at [docs.syncrosim.com/reference/console_core.html](https://docs.syncrosim.com/reference/console_core.html){:target="_blank"}.*
+*For more on SyncroSim, visit <a href="https://syncrosim.com" target="_blank">syncrosim.com</a>. **BurnP3+** package documentation is available at <a href="https://burnp3.github.io/BurnP3Plus" target="_blank">apexrms.github.io/burnP3Plus</a>. The full SyncroSim console reference can be found at <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.*

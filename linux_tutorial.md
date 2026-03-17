@@ -83,7 +83,7 @@ sudo apt-get install -y mono-complete
 
 **RHEL / Rocky Linux / Fedora**
 
-On Red Hat-based systems, Mono is installed via an RPM repository. Follow the official instructions for your distribution at [mono-project.com/download/stable](https://www.mono-project.com/download/stable/){:target="_blank"} — the steps vary slightly between RHEL versions.
+On Red Hat-based systems, Mono is installed via an RPM repository. Follow the official instructions for your distribution at <a href="https://www.mono-project.com/download/stable/" target="_blank">mono-project.com/download/stable</a>; the steps vary slightly between RHEL versions.
 
 > **Other distributions (Arch, openSUSE, etc.):** Use your distribution's package manager to install `mono-complete` or an equivalent package. Refer to the Mono project documentation for distro-specific guidance.
 
@@ -123,11 +123,11 @@ conda config --set channel_priority strict
 
 <p id="syncrosim"> <h3> Install SyncroSim </h3> </p>
 
-Download and extract the SyncroSim Linux build. You can find the latest version number on the [SyncroSim downloads page](https://syncrosim.com/download/){:target="_blank"}:
+Download and extract the SyncroSim Linux build. You can find the latest version number on the <a href="https://syncrosim.com/download/" target="_blank">SyncroSim downloads page</a>:
 
 ```bash
 # Download SyncroSim (adjust version as needed)
-curl -fsSL "https://downloads.syncrosim.com/3-1-24/syncrosim-linux-3-1-24.zip" \
+curl -fsSL "https://downloads.syncrosim.com/3-1-28/syncrosim-linux-3-1-28.zip" \
     -o /tmp/syncrosim.zip
 
 unzip -q /tmp/syncrosim.zip -d $HOME/syncrosim
@@ -167,11 +167,11 @@ SyncroSim needs **GDAL** to work with spatial raster files (such as `.tif`). On 
 conda create -y --name gdal-mono gdal-csharp=1.1.1
 
 # Copy the GDAL helper files into the SyncroSim folder
-cp $HOME/miniconda3/envs/gdal-mono/lib/*_csharp.dll \
-   $HOME/syncrosim/
+cp $HOME/miniconda3/envs/gdal-mono/lib/*_csharp.dll $HOME/syncrosim/
+cp $HOME/miniconda3/envs/gdal-mono/lib/*.so* $HOME/syncrosim/
 ```
 
-> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files into the SyncroSim folder makes them available when SyncroSim starts up.
+> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files files and shared library `.so` files into the SyncroSim folder makes them available when SyncroSim starts up.
 
 > **Important:** Always use a **named environment** (like `gdal-mono`) rather than installing into `base`. Installing GDAL into the base environment has been found to cause library conflicts that prevent SyncroSim from loading spatial tools correctly.
 

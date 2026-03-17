@@ -7,9 +7,9 @@ title: Running BurnP3+ on Linux
 
 ### Here we provide a complete guide to setting up and running **BurnP3+** on Linux using the SyncroSim console and the `rsyncrosim` R package — no GUI required.
 
-**BurnP3+** is a [SyncroSim](https://syncrosim.com/){:target="_blank"} package that simulates wildfire ignition, spread, and suppression over many thousands of iterations to produce spatially explicit burn probability maps. It uses [FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"} (or other fire growth engines) under the hood and requires spatial inputs including weather streams, fuel grids, topography, and ignition zones. Full **BurnP3+** documentation is available at [apexrms.github.io/burnP3Plus](https://apexrms.github.io/burnP3Plus/){:target="_blank"}.
+**BurnP3+** is a <a href="https://syncrosim.com/" target="_blank">SyncroSim</a> package that simulates wildfire ignition, spread, and suppression over many thousands of iterations to produce spatially explicit burn probability maps. It uses <a href="https://github.com/CWFMF/FireSTARR" target="_blank">FireSTARR</a> (or other fire growth engines) under the hood and requires spatial inputs including weather streams, fuel grids, topography, and ignition zones. Full **BurnP3+** documentation is available at <a href="https://burnp3.github.io/BurnP3Plus/" target="_blank">https://burnp3.github.io/BurnP3Plus</a>.
 
-Most **BurnP3+** workflows assume you are working through the SyncroSim Studio graphical interface on Windows. However, if you are running analyses on a Linux server, a high-performance computing (HPC) cluster, or an automated pipeline, you need to work headlessly. This guide walks through everything required to get **BurnP3+** running on Linux — from a bare system all the way through a complete model run using both the SyncroSim console and the `rsyncrosim` R package. Throughout this tutorial, terminology associated with SyncroSim will be italicized, and whenever possible, links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com/index.html){:target="_blank"}.
+Most **BurnP3+** workflows assume you are working through the SyncroSim Studio graphical interface on Windows. However, if you are running analyses on a Linux server, a high-performance computing (HPC) cluster, or an automated pipeline, you need to work headlessly. This guide walks through everything required to get **BurnP3+** running on Linux — from a bare system all the way through a complete model run using both the SyncroSim console and the `rsyncrosim` R package. Throughout this tutorial, terminology associated with SyncroSim will be italicized, and whenever possible, links will be provided to the SyncroSim <a href="https://docs.syncrosim.com/home/index.html" target="_blank">online documentation</a>.
 
 <br>
 
@@ -59,6 +59,13 @@ Mono provides the .NET runtime needed to execute SyncroSim on Linux.
 On Ubuntu or Debian-based systems, add the official Mono repository and install using the `gpg --keyring` method (required on Ubuntu 22.04 and later):
 
 ```bash
+# Install GPG dependencies (required on minimal Ubuntu cloud images)
+sudo apt-get update
+sudo apt-get install -y gnupg2 dirmngr
+
+# Initialize the gnupg directory for root
+sudo gpg --list-keys
+
 # Import the Mono signing key into a dedicated keyring file
 sudo gpg --no-default-keyring \
     --keyring /usr/share/keyrings/mono-keyring.gpg \

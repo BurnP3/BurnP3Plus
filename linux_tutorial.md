@@ -5,7 +5,7 @@ title: Running BurnP3+ on Linux
 
 # Running **BurnP3+** on Linux
 
-### Here we provide a complete guide to setting up and running **BurnP3+** on Linux using the SyncroSim console and the `rsyncrosim` R package — no GUI required.
+### Here we provide a complete guide to setting up and running **BurnP3+** on Linux using the SyncroSim console and the `rsyncrosim` R package, no GUI required.
 
 **BurnP3+** is a <a href="https://syncrosim.com/" target="_blank">SyncroSim</a> package that simulates wildfire ignition, spread, and suppression over many thousands of iterations to produce spatially explicit burn probability maps. It uses <a href="https://github.com/CWFMF/FireSTARR" target="_blank">FireSTARR</a> (or other fire growth engines) under the hood and requires spatial inputs including weather streams, fuel grids, topography, and ignition zones. Full **BurnP3+** documentation is available at <a href="https://burnp3.github.io/BurnP3Plus/" target="_blank">https://burnp3.github.io/BurnP3Plus</a>.
 
@@ -21,6 +21,7 @@ This tutorial will walk you through running **BurnP3+** on Linux. The steps incl
     * <a href="#mono"> Install Mono </a>
     * <a href="#miniconda"> Install Miniconda </a>
     * <a href="#syncrosim"> Install SyncroSim </a>
+    * <a href="#spatial"> Install system spatial libraries </a>
     * <a href="#gdal"> Set up the GDAL Conda environment </a>
     * <a href="#env"> Configure your environment for runtime </a>
 2. <a href="#step2"> Installing <b>BurnP3+</b> and FireSTARR </a>
@@ -46,7 +47,7 @@ Before you begin, make sure the following are in place:
 
 > **Why Mono?** SyncroSim is a .NET application. On Linux, it runs via Mono, which provides the runtime environment. On Windows, the native .NET runtime is used instead.
 
-> **Why Conda?** SyncroSim needs a helper tool called GDAL to read and write spatial raster files. On Linux, the easiest way to install GDAL with the correct bindings is through a Conda environment, which avoids conflicts with system libraries.
+> **Why Conda?** SyncroSim needs GDAL C# bindings to read and write spatial raster files. On Linux, Conda is used only to provide these bindings — the actual spatial libraries (GDAL, PROJ, GEOS) are installed system-wide via `apt`.
 
 <br>
 
@@ -148,40 +149,67 @@ sudo tee /usr/local/bin/ssim > /dev/null << EOF
 mono ${SYNCROSIM_DIR}/SyncroSim.Console.exe "\$@"
 EOF
 
-sudo tee /usr/local/bin/ssimpm > /dev/null << 'EOF'
+sudo tee /usr/local/bin/ssimpm > /dev/null << EOF
 #!/bin/bash
-mono ${SYNCROSIM_DIR}/SyncroSim.PackageManager.exe "$@"
+mono ${SYNCROSIM_DIR}/SyncroSim.PackageManager.exe "\$@"
 EOF
 
 sudo chmod +x /usr/local/bin/ssim /usr/local/bin/ssimpm
 ```
 
-> **Note:** If you are working in a shared environment or HPC cluster without `sudo` access, add `$HOME/bin` to your `PATH` and place the wrapper scripts there instead.
+> ***Note:** If you are working in a shared environment or HPC cluster without `sudo` access, add `$HOME/bin` to your `PATH` and place the wrapper scripts there instead.*
 
 <br>
 
+<p id="spatial"> <h3> Install system spatial libraries </h3> </p>
+
+BurnP3+ requires several spatial C libraries for raster and vector operations. Install them system-wide via `apt`:
+```bash
+sudo apt-get install -y \
+    libgdal-dev \
+    libproj-dev \
+    libgeos-dev \
+    libsqlite3-dev \
+    libspatialite-dev \
+    libudunits2-dev \
+    gdal-bin \
+    proj-bin
+```
+
+Verify the installations:
+```bash
+gdal-config --version
+proj --version
+```
+
 <p id="gdal"> <h3> Set up the GDAL Conda environment </h3> </p>
 
-SyncroSim needs **GDAL** to work with spatial raster files (such as `.tif`). On Linux, the easiest way to install it is through a Conda environment. The steps below create a small, isolated environment just for this purpose — think of it as a self-contained toolkit that SyncroSim can reach into when it needs to read or write spatial data.
-
+SyncroSim requires GDAL C# bindings (`.dll` files) to interface with spatial raster files. These are provided by the `gdal-csharp` conda package. Note that this conda environment is only used during setup to copy the bindings into the SyncroSim folder — it does not need to be activated at runtime.
 ```bash
 # Create a new environment named "gdal-mono" — do NOT install into base
 conda create -y --name gdal-mono gdal-csharp=1.1.1
 
-# Copy the GDAL helper files into the SyncroSim folder
+# Copy the GDAL C# bindings into the SyncroSim folder
 cp $HOME/miniconda3/envs/gdal-mono/lib/*_csharp.dll $HOME/syncrosim/
 cp $HOME/miniconda3/envs/gdal-mono/lib/*.so* $HOME/syncrosim/
 
-# Remove the conda-forge SQLite libraries; Mono requires the system version
+# Remove libraries that conflict with system versions
 rm $HOME/syncrosim/libsqlite3.so*
+rm -f $HOME/syncrosim/libproj.so*
+rm -f $HOME/syncrosim/libgeos*.so*
+rm -f $HOME/syncrosim/libgdal.so*
+rm -f $HOME/syncrosim/libspatialite.so*
+rm -f $HOME/syncrosim/libcurl.so*
+
+# Create symlink so SyncroSim can find libspatialite
+sudo ln -s /lib/x86_64-linux-gnu/libspatialite.so.8 \
+           /lib/x86_64-linux-gnu/libspatialite.so.7
+sudo ldconfig
 ```
 
-> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files and shared library `.so` files into the SyncroSim folder makes them available when SyncroSim starts up.
-
-> **Important:** Always use a **named environment** (like `gdal-mono`) rather than installing into `base`. Installing GDAL into the base environment has been found to cause library conflicts that prevent SyncroSim from loading spatial tools correctly.
+> **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files into the SyncroSim folder makes them available when SyncroSim starts up. The system spatial libraries installed in the previous step are used at runtime instead of the conda versions, which avoids library conflicts.
 
 Now, tell SyncroSim where your Conda installation lives:
-
 ```bash
 ssim --conda --path="$HOME/miniconda3"
 ```
@@ -192,42 +220,34 @@ This registers the Conda path in SyncroSim's configuration so it can locate the 
 
 <p id="env"> <h3> Configure your environment for runtime </h3> </p>
 
-Before running any spatially explicit model, activate the `gdal-mono` environment and set the library search path:
-
+Before running any spatially explicit model, set the library search path so SyncroSim can find its bundled libraries:
 ```bash
-conda activate gdal-mono
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
-export PROJ_LIB=/usr/share/proj
+export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}
 ```
 
-> **What `LD_LIBRARY_PATH` does:** This tells Linux where to find the GDAL shared libraries bundled in your Conda environment. Without it, SyncroSim will not be able to load the spatial tools and map-related operations will fail. If you see errors about missing libraries, this is usually the first thing to check.
+> ***Note:** Unlike the Windows workflow, you do not need to activate a conda environment before running BurnP3+ on Linux. The conda environment (`gdal-mono`) was only needed during setup to provide the GDAL C# bindings. All spatial operations at runtime use the system libraries installed via `apt`.*
 
-Add these lines to your `~/.bashrc` or to a project-specific activation script if you are running **BurnP3+** frequently.
+Add this line to your `~/.bashrc` if you are running **BurnP3+** frequently:
+```bash
+echo 'export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}' >> ~/.bashrc
+```
 
 ### Install R Package Dependencies
 
-BurnP3+ and FireSTARR require several R packages. Install them from source to ensure they compile against your system libraries:
+BurnP3+ and FireSTARR require the following R packages. Install them from source so they compile against the system spatial libraries installed earlier:
 ```bash
-# Extract all dependencies from installed package scripts and install
-PACKAGES=$(grep -rh "library\|require" \
-    $HOME/syncrosim/Packages/burnP3Plus/2.6.5/*.R \
-    $HOME/syncrosim/Packages/burnP3PlusFireSTARR/1.5.5/*.R 2>/dev/null \
-    | grep -oP "(?<=library\()['\"]?[A-Za-z0-9.]+['\"]?(?=\))|(?<=require\()['\"]?[A-Za-z0-9.]+['\"]?(?=\))" \
-    | tr -d "'\"" | sort -u)
-
-# Verify the package list before installing
-echo "$PACKAGES"
-
 Rscript -e "
-pkgs <- c($(echo "$PACKAGES" | sed "s/.*/'&'/" | paste -sd,))
-pkgs <- pkgs[!pkgs %in% rownames(installed.packages())]
-if (length(pkgs) > 0) install.packages(pkgs, type='source', repos='https://cloud.r-project.org')
+pkgs = c('data.table', 'lubridate', 'rlang', 'rsyncrosim', 'sf', 'terra', 'tidyverse')
+pkgs_to_install = pkgs[!pkgs %in% rownames(installed.packages())]
+if (length(pkgs_to_install) > 0) install.packages(pkgs_to_install, type='source', repos='https://cloud.r-project.org')
 "
+
+# Install a compatible version of arrow — BurnP3+ 2.6.5 requires arrow 22.0.0
+Rscript -e "install.packages('remotes', repos='https://cloud.r-project.org')"
+Rscript -e "remotes::install_version('arrow', version='22.0.0', repos='https://cloud.r-project.org')"
 ```
 
-> Review the output of `echo "$PACKAGES"` before proceeding. It should be a clean list of R package names with no unexpected characters or blank lines. If the list looks correct, run the `Rscript` command to install.
-
-> **Why install from source?** Pre-built R package binaries may link against system library versions that conflict with your Ubuntu installation. Installing from source ensures packages compile against the libraries actually present on your system. Note that the `arrow` package can take 10–15 minutes to compile.
+> **Why install from source?** Installing from source ensures R packages compile against the system spatial libraries (GDAL, PROJ, GEOS) rather than pre-built binaries that may link against incompatible versions. Note that `tidyverse` and `arrow` can take 10–15 minutes to compile.
 
 <br>
 
@@ -256,6 +276,13 @@ ssimpm --list --installed
 ```
 
 You should see `burnP3Plus` and `burnP3PlusFireSTARR` in the output.
+
+After installing the packages, ensure the FireSTARR binary is executable:
+```bash
+chmod +x $HOME/syncrosim/Packages/burnP3PlusFireSTARR/1.5.5/tbd
+```
+
+> **Why this is needed:** On Linux, the FireSTARR executable (`tbd`) is not automatically marked as executable when the package is installed. Without this step, FireSTARR will appear to run but will silently produce no output, causing Transformer 3 to complete in under 2 seconds with no fires burned.
 
 **Offline / Airgapped Install**
 
@@ -315,16 +342,18 @@ Create a `Run_Control.csv` with your iteration settings:
 ```bash
 cat > $HOME/burnp3/Run_Control.csv << 'EOF'
 MinimumIteration,MaximumIteration,MinimumTimestep,MaximumTimestep
-1,10000,1,1
+1,100,1,1
 EOF
 ```
+
+>*Note: Set MaximumJobs to one less than the total number of available CPU cores, leaving one core free for the system. Setting this value higher than the number of available cores can cause FireSTARR jobs to silently produce no output.*
 
 Create a `Multiprocessing.csv` to enable parallel processing:
 
 ```bash
 cat > $HOME/burnp3/Multiprocessing.csv << 'EOF'
 EnableMultiprocessing,MaximumJobs,EnableMultiScenario,EnableCopyExternalFiles
-Yes,8,,
+Yes,7,,
 EOF
 ```
 
@@ -347,9 +376,8 @@ Set `MaximumJobs` to match the number of CPU cores you want to use. On an HPC cl
 <p id="runscenario"> <h3> Running a scenario </h3> </p>
 
 ```bash
-# Activate the GDAL environment first
-conda activate gdal-mono
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
+# Set library path so SyncroSim can find its bundled libraries
+export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}
 
 # Run scenario with ID 1 in your library
 ssim --lib=$SSIMLIB --run --sid=1
@@ -402,7 +430,7 @@ ssim --lib=$SSIMLIB --run --sid=1 \
 
 # Stage 4 — Compute burn probability
 ssim --lib=$SSIMLIB --run --sid=1 \
-     --trx=burnP3Plus_burnProbability --inplace
+     --trx=burnP3Plus_burnProbability --verbose
 ```
 
 > **`--inplace`** writes results back into the parent *scenario* rather than creating a new result *scenario*. Use this when running transformers individually to ensure results accumulate correctly.
@@ -424,15 +452,11 @@ If you are running **BurnP3+** on an HPC cluster running SLURM, a minimal job sc
 #SBATCH --output=burnp3_%j.out
 #SBATCH --error=burnp3_%j.err
 
-# Load user environment
 source ~/.bashrc
-conda activate gdal-mono
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
-export PROJ_LIB=/usr/share/proj
+export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}
 
 SSIMLIB=$HOME/projects/burnp3/my_project.ssim
 
-# Import multiprocessing config to use all allocated cores
 cat > /tmp/mp.csv << EOF
 EnableMultiprocessing,MaximumJobs,EnableMultiScenario,EnableCopyExternalFiles
 Yes,$SLURM_CPUS_PER_TASK,,
@@ -441,13 +465,12 @@ EOF
 ssim --import --lib=$SSIMLIB --sheet=core_Multiprocessing \
      --sid=1 --file='/tmp/mp.csv'
 
-# Run BurnP3+
 ssim --lib=$SSIMLIB --run --sid=1
 
 echo "BurnP3+ run complete."
 ```
 
-> **Note:** Replace `$HOME/projects/` with the appropriate path for your cluster. Many HPC systems provide a `$WORK` or `$SCRATCH`-equivalent variable for project storage — check your cluster's documentation for the recommended location for large data files.
+> ***Note:** Replace `$HOME/projects/` with the appropriate path for your cluster. Many HPC systems provide a `$WORK` or `$SCRATCH`-equivalent variable for project storage — check your cluster's documentation for the recommended location for large data files.*
 
 Submit with:
 
@@ -463,20 +486,17 @@ sbatch run_burnp3.sh
 
 *Symptom:* SyncroSim errors on startup or when opening a spatial *library*, with messages like `Unable to load DLL 'gdal_csharp'` or `GDAL not found`.
 
-*Fix:* The most common cause is `LD_LIBRARY_PATH` not being set. Make sure you have activated the Conda environment and exported the path:
-
-```bash
-conda activate gdal-mono
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
-```
-
-Also verify that the `.dll` files were copied into your SyncroSim directory during setup:
-
+*Fix:* Verify that the `.dll` files were copied into your SyncroSim directory during setup:
 ```bash
 ls $HOME/syncrosim/*_csharp.dll
 ```
 
-If the files are missing, re-run the copy step from the [GDAL setup section](#gdal) above.
+Also ensure `LD_LIBRARY_PATH` includes the SyncroSim directory:
+```bash
+export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}
+```
+
+If the `.dll` files are missing, re-run the copy step from the [GDAL setup section](#gdal) above.
 
 **Mono version issues**
 
@@ -528,6 +548,27 @@ Rscript -e "install.packages(c('terra', 'sf'), type='source', repos='https://clo
 ```
 
 If other packages show the same error, reinstall them from source using the same approach.
+
+**Segfault when loading spatial rasters**
+
+*Symptom:* A transformer crashes with a segfault (`caught segfault, address (nil)`) when trying to open a `.tif` file, with a traceback pointing to `rast()` or `SpatRaster$new()`.
+
+*Fix:* This is caused by conflicting versions of spatial libraries (GDAL, PROJ, GEOS) between the SyncroSim folder and the system. The SyncroSim folder should only contain the GDAL C# bindings, not the full spatial libraries. Remove any conflicting libraries:
+```bash
+rm -f $HOME/syncrosim/libproj.so*
+rm -f $HOME/syncrosim/libgeos*.so*
+rm -f $HOME/syncrosim/libgdal.so*
+rm -f $HOME/syncrosim/libspatialite.so*
+rm -f $HOME/syncrosim/libcurl.so*
+sudo ldconfig
+```
+
+Then verify R packages are linking against system libraries:
+```bash
+ldd $(Rscript -e "cat(system.file('libs/terra.so', package='terra'))") | grep -E "gdal|proj|geos"
+```
+
+All paths should point to `/lib/x86_64-linux-gnu/`.
 
 <br>
 

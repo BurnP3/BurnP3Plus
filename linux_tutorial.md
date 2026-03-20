@@ -9,7 +9,7 @@ title: Running BurnP3+ on Linux
 
 **BurnP3+** is a <a href="https://syncrosim.com/" target="_blank">SyncroSim</a> package that simulates wildfire ignition, spread, and suppression over many thousands of iterations to produce spatially explicit burn probability maps. It uses <a href="https://github.com/CWFMF/FireSTARR" target="_blank">FireSTARR</a> (or other fire growth engines) under the hood and requires spatial inputs including weather streams, fuel grids, topography, and ignition zones. Full **BurnP3+** documentation is available at <a href="https://burnp3.github.io/BurnP3Plus/" target="_blank">https://burnp3.github.io/BurnP3Plus</a>.
 
-Most **BurnP3+** workflows assume you are working through the SyncroSim Studio graphical interface on Windows. However, if you are running analyses on a Linux server, a high-performance computing (HPC) cluster, or an automated pipeline, you need to work headlessly. This guide walks through everything required to get **BurnP3+** running on Linux — from a bare system all the way through a complete model run using both the SyncroSim console and the `rsyncrosim` R package. Throughout this tutorial, terminology associated with SyncroSim will be italicized, and whenever possible, links will be provided to the SyncroSim <a href="https://docs.syncrosim.com/home/index.html" target="_blank">online documentation</a>.
+Most **BurnP3+** workflows assume you are working through the SyncroSim Studio graphical interface on Windows. However, if you are running analyses on a Linux server, a high-performance computing (HPC) cluster, or an automated pipeline, you need to work headlessly. This guide walks through everything required to get **BurnP3+** running on Linux, from a bare system all the way through a complete model run using both the SyncroSim console and the `rsyncrosim` R package. Throughout this tutorial, terminology associated with SyncroSim will be italicized, and whenever possible, links will be provided to the SyncroSim <a href="https://docs.syncrosim.com/home/index.html" target="_blank">online documentation</a>.
 
 <br>
 
@@ -116,6 +116,7 @@ It is good practice to configure `conda-forge` as your primary channel and disab
 
 ```bash
 conda config --remove channels defaults 2>/dev/null || true
+sed -i '/defaults/d' $HOME/miniconda3/.condarc 2>/dev/null || true
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
@@ -128,9 +129,10 @@ Download and extract the SyncroSim Linux build. You can find the latest version 
 
 ```bash
 # Download SyncroSim (adjust version as needed)
-curl -fsSL "https://downloads.syncrosim.com/3-1-28/syncrosim-linux-3-1-28.zip" \
+curl -fsSL "https://downloads.syncrosim.com/3-1-29/syncrosim-linux-3-1-29.zip" \
     -o /tmp/syncrosim.zip
 
+sudo apt install unzip
 unzip -q /tmp/syncrosim.zip -d $HOME/syncrosim
 rm /tmp/syncrosim.zip
 
@@ -179,14 +181,14 @@ sudo apt-get install -y \
 Verify the installations:
 ```bash
 gdal-config --version
-proj --version
+proj
 ```
 
 <p id="gdal"> <h3> Set up the GDAL Conda environment </h3> </p>
 
 SyncroSim requires GDAL C# bindings (`.dll` files) to interface with spatial raster files. These are provided by the `gdal-csharp` conda package. Note that this conda environment is only used during setup to copy the bindings into the SyncroSim folder — it does not need to be activated at runtime.
 ```bash
-# Create a new environment named "gdal-mono" — do NOT install into base
+# Create a new environment named "gdal-mono" (do not install gdal into base environment)
 conda create -y --name gdal-mono gdal-csharp=1.1.1
 
 # Copy the GDAL C# bindings into the SyncroSim folder
@@ -208,6 +210,7 @@ sudo ldconfig
 ```
 
 > **What this does:** The `gdal-csharp` package provides the "glue" between SyncroSim (a .NET application) and GDAL (a C library). Copying the `.dll` files into the SyncroSim folder makes them available when SyncroSim starts up. The system spatial libraries installed in the previous step are used at runtime instead of the conda versions, which avoids library conflicts.
+
 
 Now, tell SyncroSim where your Conda installation lives:
 ```bash
@@ -234,17 +237,39 @@ echo 'export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}' >> ~/.bashrc
 
 ### Install R Package Dependencies
 
-BurnP3+ and FireSTARR require the following R packages. Install them from source so they compile against the system spatial libraries installed earlier:
+BurnP3+ and FireSTARR require the following R packages. First install R and all required system dependencies:
 ```bash
-Rscript -e "
-pkgs = c('data.table', 'lubridate', 'rlang', 'rsyncrosim', 'sf', 'terra', 'tidyverse')
+# Install R
+sudo apt-get install -y r-base r-base-dev
+R --version
+
+# Install system dependencies required for R spatial packages
+sudo apt-get install -y \
+    cmake \
+    libssl-dev \
+    libabsl-dev \
+    libfontconfig1-dev \
+    libfreetype-dev \
+    libharfbuzz-dev \
+    libfribidi-dev
+```
+
+Then install the R packages from source so they compile against the system spatial libraries installed earlier:
+```bash
+sudo Rscript -e "
+pkgs = c('data.table', 'lubridate', 'rlang', 'rsyncrosim', 's2', 'sf', 'terra', 'tidyverse')
 pkgs_to_install = pkgs[!pkgs %in% rownames(installed.packages())]
 if (length(pkgs_to_install) > 0) install.packages(pkgs_to_install, type='source', repos='https://cloud.r-project.org')
 "
 
-# Install a compatible version of arrow — BurnP3+ 2.6.5 requires arrow 22.0.0
-Rscript -e "install.packages('remotes', repos='https://cloud.r-project.org')"
-Rscript -e "remotes::install_version('arrow', version='22.0.0', repos='https://cloud.r-project.org')"
+# Install a compatible version of arrow — BurnP3+ 2.6.5 requires arrow >= 14.0.1
+sudo Rscript -e "install.packages('arrow', type='source', repos='https://cloud.r-project.org')"
+
+# Verify all packages installed correctly
+sudo Rscript -e "
+pkgs = c('data.table', 'lubridate', 'rlang', 'rsyncrosim', 'sf', 'terra', 'tidyverse', 'arrow')
+for (p in pkgs) cat(p, ':', as.character(packageVersion(p)), '\n')
+"
 ```
 
 > **Why install from source?** Installing from source ensures R packages compile against the system spatial libraries (GDAL, PROJ, GEOS) rather than pre-built binaries that may link against incompatible versions. Note that `tidyverse` and `arrow` can take 10–15 minutes to compile.
@@ -279,7 +304,7 @@ You should see `burnP3Plus` and `burnP3PlusFireSTARR` in the output.
 
 After installing the packages, ensure the FireSTARR binary is executable:
 ```bash
-chmod +x $HOME/syncrosim/Packages/burnP3PlusFireSTARR/1.5.5/tbd
+chmod +x $HOME/syncrosim/Packages/burnP3PlusFireSTARR/*/tbd
 ```
 
 > **Why this is needed:** On Linux, the FireSTARR executable (`tbd`) is not automatically marked as executable when the package is installed. Without this step, FireSTARR will appear to run but will silently produce no output, causing Transformer 3 to complete in under 2 seconds with no fires burned.
@@ -317,6 +342,8 @@ Then, back on the server, install from the local package files:
 ssimpm --finstall="$HOME/burnp3/burnP3Plus-2-6-5.ssimpkg"
 ssimpm --finstall="$HOME/burnp3/burnP3PlusFireSTARR-1-5-5.ssimpkg"
 ssimpm --list --installed
+
+chmod +x $HOME/syncrosim/Packages/burnP3PlusFireSTARR/*/tbd
 ```
 
 <br>
@@ -328,7 +355,8 @@ With SyncroSim and **BurnP3+** installed, you can run any **BurnP3+** *library* 
 A SyncroSim *library* (`.ssim` file) is the top-level container for a modeling project. Inside a *library*, you have one or more *projects*, and within each *project*, one or more *scenarios*. A *scenario* defines all the model inputs and configuration for a single run. When running from the console, you reference *scenarios* by their **scenario ID** — an integer assigned when the *scenario* is created. To list the *scenarios* available in a *library*:
 
 ```bash
-ssim --lib=/path/to/burnp3.ssim --list --scenarios
+SSIMLIB=/path/to/your/burnp3.ssim
+ssim --lib=$SSIMLIB --list --scenarios
 ```
 
 <br>
@@ -346,8 +374,6 @@ MinimumIteration,MaximumIteration,MinimumTimestep,MaximumTimestep
 EOF
 ```
 
->*Note: Set MaximumJobs to one less than the total number of available CPU cores, leaving one core free for the system. Setting this value higher than the number of available cores can cause FireSTARR jobs to silently produce no output.*
-
 Create a `Multiprocessing.csv` to enable parallel processing:
 
 ```bash
@@ -357,11 +383,11 @@ Yes,7,,
 EOF
 ```
 
+> ***Note:** Set `MaximumJobs` to one less than the total number of available CPU cores, leaving one core free for the system. The example above uses 7, appropriate for an 8-core machine. Setting this value higher than the number of available cores can cause FireSTARR jobs to silently produce no output.*
+
 Then import them into your *scenario* before running:
 
 ```bash
-SSIMLIB=/path/to/your/burnp3.ssim
-
 ssim --import --lib=$SSIMLIB --sheet=burnP3Plus_RunControl \
      --sid=1 --file=$HOME/burnp3/Run_Control.csv
 
@@ -380,8 +406,10 @@ Set `MaximumJobs` to match the number of CPU cores you want to use. On an HPC cl
 export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}
 
 # Run scenario with ID 1 in your library
-ssim --lib=$SSIMLIB --run --sid=1
+ssim --lib=$SSIMLIB --run --sid=1 --verbose
 ```
+
+> *Note: if you have not signed into your syncrosim account, run `ssim --signin` and follow the prompts to complete the sign-in process before running the scenario*
 
 The table below summarizes the most useful console flags. For a complete reference, see <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.
 
@@ -544,7 +572,7 @@ sudo ldconfig
 
 Then reinstall the affected R packages from source so they compile against the correct libraries:
 ```bash
-Rscript -e "install.packages(c('terra', 'sf'), type='source', repos='https://cloud.r-project.org')"
+sudo Rscript -e "install.packages(c('terra', 'sf'), type='source', repos='https://cloud.r-project.org')"
 ```
 
 If other packages show the same error, reinstall them from source using the same approach.
@@ -565,7 +593,7 @@ sudo ldconfig
 
 Then verify R packages are linking against system libraries:
 ```bash
-ldd $(Rscript -e "cat(system.file('libs/terra.so', package='terra'))") | grep -E "gdal|proj|geos"
+ldd $(sudo Rscript -e "cat(system.file('libs/terra.so', package='terra'))") | grep -E "gdal|proj|geos"
 ```
 
 All paths should point to `/lib/x86_64-linux-gnu/`.

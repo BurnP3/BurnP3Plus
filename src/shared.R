@@ -467,6 +467,7 @@ sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultM
 # - This function uses the number of hours burning of each fire to estimate run time and allocate jobs accordingly
 # - Future work could also consider wind speed, curing, green up, FFMC, DMC, DC
 splitFiresByJob <- function() {
+
   DeterministicBurnCondition %>%
 
     # Identify how many days and hours each fire consists of as an estimate of simulation time
@@ -484,6 +485,7 @@ splitFiresByJob <- function() {
 
 # Define function to determine if the current job is multiprocessed
 getRunContext <- function() {
+
   libraryPath <- ssimEnvironment()$LibraryFilePath %>% normalizePath()
   libraryName <- libraryPath %>% basename %>% {tools::file_path_sans_ext(.)}
 
@@ -491,18 +493,17 @@ getRunContext <- function() {
   isParallel <- libraryPath %>%
     str_split("/|(\\\\)") %>%
     pluck(1) %>%
-    str_detect("MultiProc") %>%
+    str_detect("MultiProc|SSimJobs") %>%
     any %>%
     `&`(str_detect(libraryName, "Job-\\d"))
 
-  # Return if false
   if (!isParallel)
     return(list(isParallel = F, numJobs = 1, jobIndex = 1))
-
+    
   # Otherwise parse number of jobs and current job index
   numJobs <- libraryPath %>%
     dirname() %>%
-    list.files("Job-\\d+.ssim.temp") %>%
+    list.files("Job-\\d+.ssim$") %>%
     length()
   jobIndex <- str_extract(libraryName, "\\d+") %>% as.integer()
 

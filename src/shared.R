@@ -130,6 +130,43 @@ getResampleStatus <- function(burnSummary) {
     return()
 }
 
+# Function to drop duplicate / conflicting records in datasheets by columns that must be unique
+# - This could for example result from using the "Merge Dependencies" feature in SyncroSim
+dropDuplicateRecords <- function(inputData, keyCols, cleanName) {
+  # Handle null case
+  if (isDatasheetEmpty(inputData))
+    return(inputData)
+
+  outputData <- inputData %>%
+    # Group data by unique values of the key columns
+    group_by(across(all_of(keyCols))) %>%
+    summarise(
+      # Only keep the first record for every unique combination of key cols
+      across(everything(), \(x) head(x, 1)),
+      # Also record how many records were present
+      record_count = n()) %>%
+    ungroup() %>%
+    # Prevents some issues when saving data back to SyncroSim
+    as.data.frame()
+  
+  if(any(outputData$record_count > 1)) {
+    # Report presence of duplicates and return cleaned data if needed
+    updateRunLog(
+      "Duplicate or conflicting records found in the ", cleanName, " datasheet. ",
+      "\nUsing only the first record for any problematic records.",
+      "\nPlease double check this datasheet to ensure this is appropriate.",
+      type = "warning")
+  
+    # Remove record count before returning
+    outputData %>%
+      dplyr::select(-record_count) %>%
+      return
+  } else {
+    # Otherwise jsut return input data
+    return(inputData)
+  }
+}
+
 # Function for preparing input data for iterating over primary burn loop
 # - ignitionLocation will be structured differently based on the fire growth model, but should be joinable to the burn condition by iteration and fire id
 generateFireGrowthInputs <- function(firesToBurn, DeterministicBurnCondition, ignitionLocation) {
@@ -1001,7 +1038,10 @@ validateAndParseData <- list(
       OutputOptionFBPSpatial <<- OutputOptionFBPSpatial %>%
         mutate(across(
           any_of(c("Average", "Minimum", "Maximum", "Median", "Individual")),
-          \(x) replace_na(x, FALSE)))
+          \(x) replace_na(x, FALSE))) %>%
+        dropDuplicateRecords(
+          keyCols = "Variable",
+          cleanName = "FBP Spatial Output Options")
   
       saveDatasheet(myScenario, OutputOptionFBPSpatial, "burnP3Plus_OutputOptionFBPSpatial")
   

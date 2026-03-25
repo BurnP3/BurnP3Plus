@@ -47,7 +47,7 @@ If using the Prometheus fire growth model, you will need to install both [Promet
 
 For a guided tutorial on **BurnP3+**, including installation, set up, model run, and output visualization, see [Getting Started](https://burnp3.github.io/BurnP3Plus/getting_started.html). <br>
 
-The **BurnP3+** training manual and materials from the most recent in-person training session are available upon request. For access, please contact Chris Stockdale (info@burnp3plus.ca).
+The **BurnP3+** training manual and materials from the most recent in-person training session are available upon request. For access, please contact info@burnp3plus.ca.
 
 <br>
 

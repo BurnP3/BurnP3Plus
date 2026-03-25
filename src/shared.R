@@ -521,7 +521,8 @@ splitFiresByJob <- function() {
     # Split fires into approximately equal total hours burning
     mutate(JobIndex = rep(c(seq(runContext$numJobs), rev(seq(runContext$numJobs))), length.out = length(HoursBurning))) %>%
     dplyr::filter(JobIndex == runContext$jobIndex) %>%
-    dplyr::select(Iteration, FireID)
+    dplyr::select(Iteration, FireID) %>%
+    dplyr::arrange(Iteration, FireID)
 }
 
 # Define function to determine if the current job is multiprocessed

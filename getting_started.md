@@ -9,6 +9,11 @@ title: Getting started
 
 **BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
 
+This tutorial was built using the following software versions:
+* SyncroSim version 3.1.29
+* burnP3Plus version 2.3.0
+* burnP3PlusCell2Fire version 2.2.0
+
 <br>
 
 ## **BurnP3+** Quickstart Tutorial
@@ -29,7 +34,7 @@ This Quickstart tutorial will introduce you to the basics of working with **Burn
 
 <p id="step1"> <h2> <b>Step 1: Installing the BurnP3+ package</b> </h2> </p>
 
-Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.0.9 or later). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
+Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.1.0 or later). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
 
 In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} SyncroSim [packages](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+Cell2Fire** package uses the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} fire growth model.
 

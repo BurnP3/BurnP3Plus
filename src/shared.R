@@ -132,7 +132,7 @@ getResampleStatus <- function(burnSummary) {
 
 # Function to drop duplicate / conflicting records in datasheets by columns that must be unique
 # - This could for example result from using the "Merge Dependencies" feature in SyncroSim
-dropDuplicateRecords <- function(inputData, keyCols, cleanName) {
+dropDuplicateRecords <- function(inputData, keyCols, cleanName, datasheetName = "", updateLibrary = T ) {
   # Handle null case
   if (isDatasheetEmpty(inputData))
     return(inputData)
@@ -158,13 +158,17 @@ dropDuplicateRecords <- function(inputData, keyCols, cleanName) {
       type = "warning")
   
     # Remove record count before returning
-    outputData %>%
-      dplyr::select(-record_count) %>%
-      return
+    outputData <- outputData %>%
+      dplyr::select(-record_count)
   } else {
     # Otherwise jsut return input data
-    return(inputData)
+    outputData <- inputData
   }
+  
+  if (updateLibrary)
+    saveDatasheet(myScenario, outputData, datasheetName)
+
+  return(outputData)
 }
 
 # Function for preparing input data for iterating over primary burn loop
@@ -844,9 +848,17 @@ validateAndParseData <- list(
     }
 
     # Fill in missing season values
-    ProbabilisticIgnitionLocation <<- fill_season(ProbabilisticIgnitionLocation, "burnP3Plus_ProbabilisticIgnitionLocation", TRUE)
+    ProbabilisticIgnitionLocation <<- fill_season(ProbabilisticIgnitionLocation, "burnP3Plus_ProbabilisticIgnitionLocation", TRUE) %>%
+      dropDuplicateRecords(
+        keyCols = c("Season","Cause"),
+        cleanName = "Probabilistic Ignition Location",
+        datasheetName = "burnP3Plus_ProbabilisticIgnitionLocation")
     IgnitionRestriction <<- fill_season(IgnitionRestriction, "burnP3Plus_IgnitionRestriction", TRUE)
-    IgnitionDistribution <<- fill_season(IgnitionDistribution, "burnP3Plus_IgnitionDistribution", TRUE)
+    IgnitionDistribution <<- fill_season(IgnitionDistribution, "burnP3Plus_IgnitionDistribution", TRUE) %>%
+      dropDuplicateRecords(
+        keyCols = c("Season","Cause", "FireZone"),
+        cleanName = "Ignition Distribution",
+        datasheetName = "burnP3Plus_IgnitionDistribution")
 
     # Decide if sampling based on a distribution
     byDistribution <- any(!is.na(IgnitionsPerIteration$DistributionType))
@@ -933,8 +945,17 @@ validateAndParseData <- list(
     }
 
     # Fill missing seasons
-    FireDurationTable <<- fill_season(FireDurationTable, "burnP3Plus_FireDuration", TRUE)
-    HoursBurningTable <<- fill_season(HoursBurningTable, "burnP3Plus_HoursPerDayBurning", TRUE)
+    FireDurationTable <<- fill_season(FireDurationTable, "burnP3Plus_FireDuration", TRUE) %>%
+      dropDuplicateRecords(
+        keyCols = c("Season", "FireZone"),
+        cleanName = "Spread Event Days",
+        datasheetName = "burnP3Plus_FireDuration")
+
+    HoursBurningTable <<- fill_season(HoursBurningTable, "burnP3Plus_HoursPerDayBurning", TRUE) %>%
+      dropDuplicateRecords(
+        keyCols = "Season",
+        cleanName = "Daily Hours Burning",
+        datasheetName = "burnP3Plus_HoursPerDayBurning")
     WeatherStream <<- fill_season(WeatherStream, "burnP3Plus_WeatherStream", TRUE)
 
   },
@@ -943,13 +964,24 @@ validateAndParseData <- list(
     if(isDatasheetEmpty(DeterministicIgnitionLocation)) {
       stop("No Deterministic Ignition Location data found. Please ensure you have sampled ignitions prior to running the fire growth transformer.")
     }
-    DeterministicIgnitionLocation <<- fill_season(DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", update_library = TRUE)
+    DeterministicIgnitionLocation <<- fill_season(DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", update_library = TRUE) %>%
+      dropDuplicateRecords(
+        keyCols = c("Iteration", "FireID"),
+        cleanName = "Deterministic Ignition Location",
+        datasheetName = "burnP3Plus_DeterministicIgnitionLocation")
   },
   
   DeterminsiticBurnConditions = function() {
     if(isDatasheetEmpty(DeterministicBurnCondition)) {
       stop("No Deterministic Burn Condition data found. Please ensure you have sampled burning conditions prior to running the fire growth transformer.")
     }
+
+    DeterministicBurnCondition <<- DeterministicBurnCondition %>%
+      dropDuplicateRecords(
+        keyCols = c("Iteration", "FireID", "BurnDay"),
+        cleanName = "Deterministic Burn Condition",
+        datasheetName = "burnP3Plus_DeterministicBurnCondition")
+
   },
   
   OutputOptions = function() {
@@ -1041,9 +1073,8 @@ validateAndParseData <- list(
           \(x) replace_na(x, FALSE))) %>%
         dropDuplicateRecords(
           keyCols = "Variable",
-          cleanName = "FBP Spatial Output Options")
-  
-      saveDatasheet(myScenario, OutputOptionFBPSpatial, "burnP3Plus_OutputOptionFBPSpatial")
+          cleanName = "FBP Spatial Output Options",
+          datasheetName =  "burnP3Plus_OutputOptionFBPSpatial")
   
       # Parse table to determine which outputs should be generated
       outputComponentsToKeepDisplayName <<- OutputOptionFBPSpatial %>%

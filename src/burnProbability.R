@@ -19,7 +19,7 @@ FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookup
 FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", lookupsAsFactors = F, optional = T, returnInvisible = T)
 OutputOptions <- datasheet(myScenario, "burnP3Plus_OutputOption", returnInvisible = T, optional = T)
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T, optional = T) %>% mutate(BurnPerimeter = as.character(BurnPerimeter))
-OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable)) %>% distinct()
+OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable))
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T, optional = T) %>% arrange(Iteration, FireID)
 OutputRawTabular <- datasheet(myScenario, "burnP3Plus_OutputRawTabular", optional = T, returnInvisible = T)
 OutputFirePerimeter <- datasheet(myScenario, "burnP3Plus_OutputFirePerimeter", returnInvisible = T, optional = T)
@@ -888,7 +888,7 @@ if (saveFBPMaps) {
       as.list()
 
     # Save individual maps if requested
-    if (!is.null(componentOutputOptions$Individual) && length(componentOutputOptions$Individual) == 1 && !is.na(componentOutputOptions$Individual) && componentOutputOptions$Individual) {
+    if (!is.na(componentOutputOptions$Individual) & componentOutputOptions$Individual) {
       progressBar("begin", totalSteps = nrow(firesToSummarize))
       progressBar(type = "message", message = str_c("Writing per-fire ", lookup(component, FBPVariableTable$Name, FBPVariableTable$DisplayName), " maps..."))
 
@@ -918,7 +918,7 @@ if (saveFBPMaps) {
       statistic <- statisticDisplayName %>% str_replace(" ", "") # Percentile1, Percentile2, and Percentile3 all have spaces in their display names, but not in keys
 
       # Skip if this statistic is not requested for this FBP variable
-      if (is.null(componentOutputOptions[[statistic]]) || length(componentOutputOptions[[statistic]]) == 0 || (length(is.na(componentOutputOptions[statistic])) == 1 && is.na(componentOutputOptions[statistic])) || !isTRUE(as.logical(componentOutputOptions[[statistic]])))
+      if (is.na(componentOutputOptions[statistic]) | !as.logical(componentOutputOptions[[statistic]]))
         next
 
       # Add progress bar with steps per tile plus one for writing to tif

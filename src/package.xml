@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.6.8" minSyncroSimVersion="3.1.9">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.6.9" minSyncroSimVersion="3.1.9">
 
 	<!--Library Datasheets-->
 

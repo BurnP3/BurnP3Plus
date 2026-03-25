@@ -1,59 +1,25 @@
-# Clean global environment variables
-native_proj_lib <- Sys.getenv("PROJ_LIB")
-Sys.unsetenv("PROJ_LIB")
-options(scipen = 999)
-
-# Check and load packages ----
-library(rsyncrosim)
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(terra))
-suppressPackageStartupMessages(library(sf))
-
-checkPackageVersion <- function(packageString, minimumVersion){
-  result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
-  if (result < 0) {
-    updateRunLog("The R package ", packageString, " (",
-         as.character(packageVersion(packageString)),
-         ") does not meet the minimum requirements (", minimumVersion,
-         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.",
-         type = "warning")
-  } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (",
-                 as.character(packageVersion(packageString)),
-                 ") than BurnP3+ was built against (",
-                 minimumVersion, ").", type = "info")
-  }
-}
-
-checkPackageVersion("rsyncrosim", "2.1.0")
-checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("dplyr",      "1.1.2")
-checkPackageVersion("codetools",  "0.2.19")
-checkPackageVersion("terra",      "1.5.21")
-checkPackageVersion("sf",         "1.0.7")
-
 # Setup ----
-progressBar(type = "message", message = "Preparing inputs...")
+Sys.unsetenv("PROJ_LIB")
+library(rsyncrosim)
 
-# Initialize first breakpoint for timing code
-currentBreakPoint <- proc.time()
+# Find location of shared function definitions and source
+getSharedDefinitionsPath <- function() {
+  sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
+  return(sharedDefinitionsPath)
+}
+source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----
 
-myScenario <- scenario()
-
-# Load Run Controls and identify iterations to run
+# Load relevant datasheets
 RunControl <- datasheet(myScenario, "burnP3Plus_RunControl", returnInvisible = T)
-
-# Load remaining datasheets
-FuelTypeTable <- datasheet(myScenario, "burnP3Plus_FuelType")
+FuelType <- datasheet(myScenario, "burnP3Plus_FuelType")
 FireZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
+WeatherZoneTable <- datasheet(myScenario, "burnP3Plus_FireZone")
 DistributionType <- datasheet(myScenario, "burnP3Plus_Distribution", lookupsAsFactors = F, returnInvisible = T)
 DistributionValue <- datasheet(myScenario, "burnP3Plus_DistributionValue", optional = T, lookupsAsFactors = F)
-SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% filter(is.na(IsAuto))
+SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", returnInvisible = T) %>% dplyr::filter(is.na(IsAuto) | IsAuto == 0)
 CauseTable  <- datasheet(myScenario, "burnP3Plus_Cause")
-
-# Load relevant ignition datasheets
 IgnitionsPerIteration <- datasheet(myScenario, "burnP3Plus_IgnitionsPerIteration", optional = T, lookupsAsFactors = F, returnInvisible = T)
 ResampleOption <- datasheet(myScenario, "burnP3Plus_FireResampleOption", optional = T) %>% dplyr::select(-starts_with("Scenario"))
 ProbabilisticIgnitionLocation <- datasheet(myScenario, "burnP3Plus_ProbabilisticIgnitionLocation", optional = T, lookupsAsFactors = F, returnInvisible = T)
@@ -61,243 +27,59 @@ IgnitionRestriction <- datasheet(myScenario, "burnP3Plus_IgnitionRestriction", o
 IgnitionDistribution <- datasheet(myScenario, "burnP3Plus_IgnitionDistribution", optional = T, lookupsAsFactors = F, returnInvisible = T)
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", optional = T, returnInvisible = T) %>% unique
 
-# Create function to test if datasheets are empty
-isDatasheetEmpty <- function(ds){
-  if (nrow(ds) == 0) {
-    return(TRUE)
-  }
-  if (all(is.na(ds))) {
-    return(TRUE)
-  }
-  return(FALSE)
-}
-
 # Import relevant rasters, allowing for missing values
-fuelsRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]])
-fireZoneRaster <- tryCatch(
-  rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FireZoneGridFileName"]]),
-  error = function(e) NULL)
+fuelsRaster <- loadSpatial$fuels()
+fireZoneRaster <- loadSpatial$firezone()
 
-## Handle empty values ----
-if(isDatasheetEmpty(FuelTypeTable)) {
-  updateRunLog("No fuel table found! Using default Canadian Forest Service fuel codes.", type = "warning")
-  FuelTypeTable <- read_csv(file.path(ssimEnvironment()$PackageDirectory, "Default Fuel Types.csv")) %>% as.data.frame()
-  saveDatasheet(myScenario, FuelTypeTable, "burnP3Plus_FuelType")
-}
+## Parse and validate datasheets ----
+validateAndParseData$FuelType()
+validateAndParseData$Season()
+validateAndParseData$Cause()
+validateAndParseData$Zones()
+validateAndParseData$RunControl()
+validateAndParseData$ResampleOptions()
+validateAndParseData$IgnitionSampling()
 
-if(isDatasheetEmpty(RunControl)) {
-  updateRunLog("No iteration count provided, defaulting to 1 iteration.", type = "warning")
-  RunControl[1,] <- c(1,1,0,0)
-  saveDatasheet(myScenario, RunControl, "burnP3Plus_RunControl")
-}
-
-if(isDatasheetEmpty(IgnitionsPerIteration)) {
-  updateRunLog("No Ignitions per Iteration values found. Defaulting to 1 ignition per iteration.", type = "info")
-  IgnitionsPerIteration[1,"Mean"] <- 1
-  saveDatasheet(myScenario, IgnitionsPerIteration, "burnP3Plus_IgnitionsPerIteration")
-}
-
-if(isDatasheetEmpty(ResampleOption)) {
-  updateRunLog("No Minimum Fire Size chosen.\nDefaulting to a Minimum Fire Size of 0ha and with no extra fires. \nPlease see the Fire Resampling Options table for more details.", type = "info")
-  ResampleOption[1,] <- c(0,0)
-  saveDatasheet(myScenario, ResampleOption, "burnP3Plus_FireResampleOption")
-}
-
-if(any(is.na(ProbabilisticIgnitionLocation$IgnitionGridFileName))) {
-  stop("Not all Probabilistic Ignition Grids specified in the Ignition Location datasheet.")
-}
-
-# Check for ignition count distribution
-for (i in 1:nrow(IgnitionsPerIteration)){
-  distName <- IgnitionsPerIteration$DistributionType[i]
-  if (is.na(distName) | distName == "Gamma" | distName == "Normal") next
-  distValues <- DistributionValue %>% filter(Name == distName)
-  if (nrow(distValues) == 0){
-    stop(paste0("No values found in Distribution datasheet for Ignition Count distribution: ", distName))
-  }
-}
-
-# Check if values in Deterministic Ignition Locations is empty
-if (!isDatasheetEmpty(DeterministicIgnitionLocation)) {
-  updateRunLog("Values in Deterministic Ignition Location datasheet are overwritten.", type = "warning")
-}
-
-# If the ignition distribution table is used but one or more season, cause, or firezone are defined but not explicitly listed,
-# these values will be randomly assigned to each ignition with equal probability. Warn users if this behaviour is used.
-if (!isDatasheetEmpty(IgnitionDistribution)) {
-  if (
-    (!isDatasheetEmpty(SeasonTable)   & any(is.na(IgnitionDistribution$Season))) |
-    (!isDatasheetEmpty(CauseTable)    & any(is.na(IgnitionDistribution$Cause))) |
-    (!isDatasheetEmpty(FireZoneTable) & any(is.na(IgnitionDistribution$FireZone))))
-      updateRunLog("One or more of Season, Cause, and Fire Zone are defined at the project scope but not completely described by the Ignition Distribution table. Unspecified values will be drawn randomly where appropriate.", type = "warning")
-}
-
-# Fill missing season values
-
-# Define function to fill missing season values and save changes back to library
-fill_season <- function(datasheet, datasheet_name = "", update_library = F) {
-  datasheet <- datasheet %>%
-    mutate(
-      Season = if(!exists("Season", where = .)) NA_character_ else as.character(Season),
-      Season = replace_na(Season, "All"))
-
-  if (update_library & !isDatasheetEmpty(datasheet))
-    saveDatasheet(myScenario, datasheet, datasheet_name)
-
-  return(datasheet)
-}
-
-ProbabilisticIgnitionLocation <- fill_season(ProbabilisticIgnitionLocation, "burnP3Plus_ProbabilisticIgnitionLocation", TRUE)
-IgnitionRestriction <- fill_season(IgnitionRestriction, "burnP3Plus_IgnitionRestriction", TRUE)
-IgnitionDistribution <- fill_season(IgnitionDistribution, "burnP3Plus_IgnitionDistribution", TRUE)
-
-## Check raster inputs for consistency ----
-
-test.point <- vect(xyFromCell(fuelsRaster,1), crs = crs(fuelsRaster))
-# Ensure fuels crs can be converted to Lat / Long
-if(test.point %>% is.lonlat){stop("Incorrect coordinate system. Projected coordinate system required, please reproject your grids.")}
-tryCatch(test.point %>% project("epsg:4326"), error = function(e) stop("Error parsing provided Fuels map. Cannot calculate Latitude and Longitude from provided Fuels map, please check CRS."))
-
-# Define function to check input raster for consistency
-checkSpatialInput <- function(x, name, checkProjection = T, warnOnly = F) {
-  # Only check if not null
-  if(!is.null(x)) {
-    # Ensure comparable number of rows and cols in all spatial inputs
-      if(nrow(fuelsRaster) != nrow(x) | ncol(fuelsRaster) != ncol(x))
-        if(warnOnly) {
-          updateRunLog("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.", type = "warning")
-          invisible(NULL) # Return null silently to mimic behaviour of missing input
-        } else
-          stop("Number of rows and columns in ", name, " map do not match Fuels map. Please check that the extent and resolution of these maps match.")
-
-    # Info if CRS is not matching
-    if(checkProjection)
-      if(crs(x) != crs(fuelsRaster))
-        updateRunLog("Projection of ", name, " map does not match Fuels map. Please check that the CRS of these maps match.", type = "info")
-  }
-
-  # Silently return for clean pipelining
-  invisible(x)
-}
-
-# Check optional inputs
-checkSpatialInput(fireZoneRaster, "Fire Zone")
 
 ## Parse distributions ----
 
-# Decide if sampling based on a distribution
-byDistribution <- any(!is.na(IgnitionsPerIteration$DistributionType))
-
-# If so, ensure only one distribution is specified
-if(byDistribution & nrow(IgnitionsPerIteration) > 1)
-  stop("If sampling Ignitions per Iteration from a distribution, only one record is accepted.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
-
-# Identify the name and type of distribution
-distributionName <- IgnitionsPerIteration$DistributionType
-isAuto <- DistributionType %>% filter(Name == distributionName) %>% pull(IsAuto) %>% replace_na(0) %>% `==`(-1)
-distributionData <- DistributionValue %>% filter(Name == distributionName)
-
-if(byDistribution) {
-  # If using a built-in distribution, ensure Mean and SD are provided
-  if(isAuto)
-    if(is.na(IgnitionsPerIteration$Mean) | is.na(IgnitionsPerIteration$DistributionSD))
-      stop("Please specify a Mean and SD to use this built-in distribution to sample Ignitions per Iteration")
-
-  # If using a user-defined distribution, ensure there is a corresponding definition and warn user about unrespected fields
-  if(!isAuto) {
-    if(isDatasheetEmpty(distributionData))
-      stop("No distribution definition found for the user-defined distribution in Ignitions per Iteration.\nTo modify a user-defined distribution, please edit the 'Distributions' datasheet \nunder the 'Advanced' tab in the scenario properties.")
-
-    if(!is.na(IgnitionsPerIteration$Mean) | !is.na(IgnitionsPerIteration$DistributionSD))
-       updateRunLog("Found Mean or SD values for a user-defined distribution in Ignitions per Iteration.\nThese values will not be respected during sampling. To modify a user-defined distribution, \nplease edit the 'Distributions' datasheet under the 'Advanced' tab in the scenario properties.", type = "warning")
-  }
-}
 ## Extract relevant parameters ----
-iterations <- seq(RunControl$MinimumIteration, RunControl$MaximumIteration)
+iterations <- rlang::seq2(RunControl$MinimumIteration, RunControl$MaximumIteration)
 numIterations <- length(iterations)
 proportionExtraIgnitions <- 0
 if (!is.na(ResampleOption$ProportionExtraIgnition))
   proportionExtraIgnitions <- ResampleOption$ProportionExtraIgnition
 
-## Handle empty tables ----
-if(isDatasheetEmpty(FireZoneTable))
-  FireZoneTable <- data.frame(Name = "", ID = 0)
-if(isDatasheetEmpty(CauseTable))
-  CauseTable <- data.frame(Name = "")
-if(isDatasheetEmpty(SeasonTable))
-  SeasonTable <- data.frame(Name = "All")
+# Handle case where user is only sampling extra ignitions
+# - In this case, we want to update run controls so that an appropriate number of jobs are spawned during the fire growth transformer
+# - Note that sampling ignitions is the only BP3+ transformer that reads the run controls datasheet
+if (RunControl$MaximumIteration == 0) {
+  saveDatasheet(
+    myScenario,
+    data.frame(
+      MinimumIteration = 1,
+      MaximumIteration = datasheet(myScenario, "core_Multiprocessing")$MaximumJobs),
+    "burnP3Plus_RunControl")
+}
 
 ## Function Definitions ----
-
-# Function to time code by returning a clean string of time since this function was last called
-updateBreakpoint <- function() {
-  # Calculate time since last breakpoint
-  newBreakPoint <- proc.time()
-  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
-
-  # Update current breakpoint
-  currentBreakPoint <<- newBreakPoint
-
-  # Return cleaned elapsed time
-  if (elapsed < 60) {
-    return(str_c(round(elapsed), "sec"))
-  } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), "min"))
-  } else
-    return(str_c(round(elapsed / 60 / 60, 1), "hr"))
-}
-
-# Function to parse a table defining a normal distribution and sample accordingly
-sampleNorm <- function(df, numSamples, defaultMean = 1, defaultSD = 0, defaultMin = 1, defaultMax = Inf) {
-
-  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
-  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
-  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-
-  rnorm(numSamples, distributionMean, distributionSD) %>%
-    round(0) %>%
-    pmax(distributionMin) %>%
-    pmin(distributionMax) %>%
-    return
-}
-
-# Function to parse a table defining a gamma distribution and sample accordingly
-sampleGamma <- function(df, numSamples, defaultMean = 1, defaultSD = 1, defaultMin = 1, defaultMax = Inf) {
-
-  distributionMean <- ifelse(is.na(df$Mean),            defaultMean, df$Mean)
-  distributionSD   <- ifelse(is.na(df$DistributionSD),  defaultSD,   df$DistributionSD)
-  distributionMin  <- ifelse(is.na(df$DistributionMin), defaultMin,  df$DistributionMin)
-  distributionMax  <- ifelse(is.na(df$DistributionMax), defaultMax,  df$DistributionMax)
-
-  # Calculate shape and rate from mean and sd
-  # - Derivation from: https://math.stackexchange.com/questions/1810257/gamma-functions-mean-and-standard-deviation-through-shape-and-rate
-  shape <- (distributionMean / distributionSD)^2
-  rate  <- distributionMean / (distributionSD^2)
-
-  rgamma(numSamples, shape = shape, rate = rate) %>%
-    round(0) %>%
-    pmax(distributionMin) %>%
-    pmin(distributionMax) %>%
-    return
-}
 
 # Define function to sample locations given season, cause, and fire zone
 sampleLocations <- function(season, cause, firezone, data) {
   # Convert firezone to ID value
-  firezoneID <- FireZoneTable %>% filter(Name == firezone) %>% pull(ID)
+  firezoneID <- FireZoneTable %>% dplyr::filter(Name == firezone) %>% pull(ID)
 
   # Determine the restricted fuel types for the given season, cause, firezone
   restrictedFuels <- IgnitionRestriction %>%
-    filter(
-      Season == season | is.na(Season) | Season == "All",
+    dplyr::filter(
+      Season == season | is.na(Season) | Season == "All" | season == "All",
       Cause == cause | is.na(Cause),
       FireZone == firezone | is.na(FireZone)) %>%
     pull(FuelType)
 
   # Convert restricted fuels list to IDs, add NA as restricted fuel
-  restrictedFuelIDs <- FuelTypeTable %>%
-    filter(Name %in% restrictedFuels) %>%
+  restrictedFuelIDs <- FuelType %>%
+    dplyr::filter(Name %in% restrictedFuels) %>%
     pull(ID) %>%
     c(NA)
 
@@ -306,7 +88,7 @@ sampleLocations <- function(season, cause, firezone, data) {
   maskedProbability <- ProbabilisticIgnitionLocation %>%
 
     # Start by finding the relevant probabilistic ignition grid
-    filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
+    dplyr::filter(Cause %in% c(cause, NA), Season %in% c(season, NA, "All")) %>%
     pull(IgnitionGridFileName) %>%
 
     # Warn if multiple probabilistic ignition grids are specified
@@ -362,7 +144,7 @@ if(is.na(distributionName)) {
 
 # Otherwise sample from a user distribution
 } else {
-  ignitionCountDistribution <- DistributionValue %>% filter(Name == distributionName)
+  ignitionCountDistribution <- DistributionValue %>% dplyr::filter(Name == distributionName)
   
   if (nrow(ignitionCountDistribution) == 1) {
     numIgnitions <- rep(IgnitionsPerIteration$Value, numIterations)
@@ -371,11 +153,10 @@ if(is.na(distributionName)) {
   }
 }
 
-saveDatasheet(myScenario, data.frame(Iteration = iterations, Ignitions = numIgnitions), "burnP3Plus_DeterministicIgnitionCount", append = T)
-
 # Prepend extra ignitions for resampling to vector of ignition counts if requested (to be assigned to iteration 0)
 numIgnitions <- numIgnitions %>%
   sum %>%
+  max(1) %>% # If 0 ignitions are requested, user still might want extra ignitions to merge into a run with insufficient fires
   prod(proportionExtraIgnitions) %>%
   ceiling %>%
   c(numIgnitions)

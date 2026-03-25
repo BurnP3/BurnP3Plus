@@ -1,271 +1,105 @@
-# Clean global environment variables
-native_proj_lib <- Sys.getenv("PROJ_LIB")
-Sys.unsetenv("PROJ_LIB")
-options(scipen = 999)
-
-# Check and load packages ----
-library(rsyncrosim)
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(terra))
-suppressPackageStartupMessages(library(sf))
-suppressPackageStartupMessages(library(data.table))
-suppressPackageStartupMessages(library(arrow))
-
-checkPackageVersion <- function(packageString, minimumVersion){
-  result <- compareVersion(as.character(packageVersion(packageString)), minimumVersion)
-  if (result < 0) {
-    updateRunLog("The R package ", packageString, " (", 
-         as.character(packageVersion(packageString)), 
-         ") does not meet the minimum requirements (", minimumVersion, 
-         ") for this version of BurnP3+. Please upgrade this package if the scenario fails to run.", 
-         type = "warning")
-  } else if (result > 0) {
-    updateRunLog("Using a newer version of ", packageString, " (", 
-                 as.character(packageVersion(packageString)), 
-                 ") than BurnP3+ was built against (", 
-                 minimumVersion, ").", type = "info")
-  }
-}
-
-checkPackageVersion("rsyncrosim", "2.1.0")
-checkPackageVersion("tidyverse",  "2.0.0")
-checkPackageVersion("dplyr",      "1.1.2")
-checkPackageVersion("codetools",  "0.2.19")
-checkPackageVersion("data.table", "1.14.8")
-checkPackageVersion("terra",      "1.5.21")
-checkPackageVersion("sf",         "1.0.7")
-
 # Setup ----
-progressBar(type = "message", message = "Preparing inputs...")
+Sys.unsetenv("PROJ_LIB")
+library(rsyncrosim)
 
-# Initialize first breakpoint for timing code
-currentBreakPoint <- proc.time()
+# Find location of shared function definitions and source
+getSharedDefinitionsPath <- function() {
+  sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
+  return(sharedDefinitionsPath)
+}
+source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----
 
-myScenario <- scenario()
-
 # Load relevant datasheets
 SeasonTable <- datasheet(myScenario, "burnP3Plus_Season", lookupsAsFactors = F, optional = T, includeKey = T, returnInvisible = T)
-RunControl <- datasheet(myScenario, "burnP3Plus_RunControl", returnInvisible = T)
 DeterministicIgnitionLocation <- datasheet(myScenario, "burnP3Plus_DeterministicIgnitionLocation", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 DeterministicBurnCondition <- datasheet(myScenario, "burnP3Plus_DeterministicBurnCondition", lookupsAsFactors = F, optional = T, returnInvisible = T) %>% unique
 FBPVariableTable <- datasheet(myScenario, "burnP3Plus_FBPOutputVariable", lookupsAsFactors = F, optional = T, returnInvisible = T)
 FBPStatisticTable <- datasheet(myScenario, "burnP3Plus_FBPOutputStatistic", lookupsAsFactors = F, optional = T, returnInvisible = T)
-AllPerim <- datasheet(myScenario, "burnP3Plus_OutputAllPerim", returnInvisible = T)
-AllPerimTabular <- datasheet(myScenario, "burnP3Plus_OutputAllPerimTabular", optional = T, returnInvisible = T)
-FBPTabular <- datasheet(myScenario, "burnP3Plus_OutputFBPTabular",  optional = T, returnInvisible = T)
-OutputBurnMap <- datasheet(myScenario, "burnP3Plus_OutputBurnMap", returnInvisible = T)
+OutputOptions <- datasheet(myScenario, "burnP3Plus_OutputOption", returnInvisible = T, optional = T)
 OutputOptionsSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionSpatial", returnInvisible = T, optional = T) %>% mutate(BurnPerimeter = as.character(BurnPerimeter))
 OutputOptionFBPSpatial <- datasheet(myScenario, "burnP3Plus_OutputOptionFBPSpatial", optional = T, returnInvisible = T) %>% mutate(Variable = as.character(Variable))
 OutputFireStatistic <- datasheet(myScenario, "burnP3Plus_OutputFireStatistic", returnInvisible = T, optional = T) %>% arrange(Iteration, FireID)
+OutputRawTabular <- datasheet(myScenario, "burnP3Plus_OutputRawTabular", optional = T, returnInvisible = T)
 OutputFirePerimeter <- datasheet(myScenario, "burnP3Plus_OutputFirePerimeter", returnInvisible = T, optional = T)
 
-# Create function to test if datasheets are empty
-isDatasheetEmpty <- function(ds){
-  if (nrow(ds) == 0) {
-    return(TRUE)
-  }
-  if (all(is.na(ds))) {
-    return(TRUE)
-  }
-  return(FALSE)
-}
-
 ## Handle empty values ----
-if(isDatasheetEmpty(OutputOptionsSpatial)) {
-  updateRunLog("No spatial output options chosen. Defaulting to keeping all spatial outputs and final burn perimeters.", type = "info")
-  OutputOptionsSpatial[1,] <- rep(TRUE, length(OutputOptionsSpatial[1,]))
-  OutputOptionsSpatial$BurnPerimeter <- "Final"
-  saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
-} else if (any(is.na(OutputOptionsSpatial))) {
-  updateRunLog("Missing one or more spatial output options. Defaulting to keeping unspecified spatial outputs.", type = "info")
-  OutputOptionsSpatial <- OutputOptionsSpatial %>%
-    replace(is.na(.), TRUE)
-  OutputOptionsSpatial$BurnPerimeter <- replace(OutputOptionsSpatial$BurnPerimeter, OutputOptionsSpatial$BurnPerimeter == TRUE, "Final")
-  saveDatasheet(myScenario, OutputOptionsSpatial, "burnP3Plus_OutputOptionSpatial")
-}
+validateAndParseData$DeterminsiticIgnitions()
+validateAndParseData$DeterminsiticBurnConditions()
+validateAndParseData$OutputOptions()
+validateAndParseData$FBPOutputOptions()
 
-if (!isDatasheetEmpty(OutputOptionFBPSpatial)) {
-  # Fill missing values for all but Percentile outputs, which are left as NA to indicate non-use
-  OutputOptionFBPSpatial <- OutputOptionFBPSpatial %>%
-    mutate(across(
-      any_of(c("Average", "Minimum", "Maximum", "Median", "Individual")),
-      \(x) replace_na(x, FALSE)))
-  
-  saveDatasheet(myScenario, OutputOptionFBPSpatial, "burnP3Plus_OutputOptionFBPSpatial")
-
-  # Parse table to determine which outputs should be generated
-  outputComponentsToKeepDisplayName <- OutputOptionFBPSpatial %>%
-    dplyr::filter(any(Average, Minimum, Maximum, Median, Individual, as.logical(c(Percentile1, Percentile2, Percentile3)))) %>%
-    pull(Variable)
-} else {
-  # Set flags to not save FBP outputs
-  outputComponentsToKeepDisplayName <- character(0)
-}
-
-## Parse multiprocessing options ----
-# num_cores <- 1
-# MultiProcessing <- datasheet(myScenario, "core_Multiprocessing")
-# if (MultiProcessing$EnableMultiprocessing)
-#   num_cores <- MultiProcessing$MaximumJobs
-  
 ## Setup files and folders ----
 
-# Create temp folder, ensure it is empty
-tempDir <- ssimEnvironment()$TempDirectory %>%
-  str_replace_all("\\\\", "/") %>%
-  file.path("summary")
-allPerimDir <- file.path(tempDir, "allPerim")
-burnMapDir <- file.path(tempDir, "burnMap")
+generateSharedTempFilePaths("summary")
 
-# Create path for geopackage for storing vector outputs
-geopackage_path <- file.path(tempDir, "burn-perimeters.gpkg")
-# Note geopackage recommends `_` for word separation in table, feature, etc names
-geopackage_layer_name <-
-  str_c(
-    str_to_lower(OutputOptionsSpatial$BurnPerimeter),
-    "_burn_perimeters"
-  )
-
-# Create path for parquet files to hold tabular per-fire burn metrics
-allPerimTablePath <- file.path(tempDir, "all-perim-tabular.parquet")
-fbpTablePath <- file.path(tempDir, "fbp-tabular.parquet")
-
-unlink(tempDir, recursive = T, force = T)
-dir.create(tempDir, showWarnings = F)
+fbpIndividualDir <- generateTempSubDir("fbpIndividual")
+allPerimDir      <- generateTempSubDir("allPerim")
+burnMapDir       <- generateTempSubDir("burnMap")
 
 # Generate filename prefixes for potential outputs
-burnCountFilePrefix <- file.path(tempDir, "burnCount")
-burnProbabilityFilePrefix <- file.path(tempDir, "burnProbability")
-relativeBurnProbabilityFilePrefix <- file.path(tempDir, "relativeBurnProbability")
-fbpSummaryFilePrefix <- file.path(tempDir, "fbpSummary")
+burnCountFilePrefix               <- file.path(gridOutputFolder, "burnCount")
+burnProbabilityFilePrefix         <- file.path(gridOutputFolder, "burnProbability")
+relativeBurnProbabilityFilePrefix <- file.path(gridOutputFolder, "relativeBurnProbability")
+fbpSummaryFilePrefix              <- file.path(gridOutputFolder, "fbpSummary")
 
 ## Function definitions ----
-
-### Convenience and conversion functions ----
-
-# Function to time code by returning a clean string of time since this function was last called
-updateBreakpoint <- function() {
-  # Calculate time since last breakpoint
-  newBreakPoint <- proc.time()
-  elapsed <- (newBreakPoint - currentBreakPoint)['elapsed']
-  
-  # Update current breakpoint
-  currentBreakPoint <<- newBreakPoint
-  
-  # Return cleaned elapsed time
-  if (elapsed < 60) {
-    return(str_c(round(elapsed), " seconds"))
-  } else if (elapsed < 60^2) {
-    return(str_c(round(elapsed / 60, 1), " minutes"))
-  } else
-    return(str_c(round(elapsed / 60 / 60, 1), " hours"))
-}
-
-# Define a function to facilitate recoding values using a lookup table
-lookup <- function(x, old, new) dplyr::recode(x, !!!set_names(new, old))
-
-# Function to move a folder while minimizing temporary space on disk
-# - Not currently set up for recursive folders
-dir.move <- function(source, target) {
-  # Ensure traget exists
-  dir.create(target, showWarnings = F)
-
-  # Move files one at a time
-  for(f in list.files(source, full.names = T)) {
-    file.copy(f, file.path(target, basename(f)))
-    unlink(f, force = T)
-  }
-}
 
 ### Update functions ----
 # Function to reassign Iterations and FireIDs from resampling
 updateResampledFireIDs <- function(data, firesToReplace) {
-  if (is.data.frame(data)) {
-    data %>%
-      left_join(firesToReplace) %>%
-      mutate(
-        Iteration = if_else(!is.na(NewIteration), NewIteration, Iteration),
-        FireID    = if_else(!is.na(NewFireID), NewFireID, FireID)) %>%
-      dplyr::select(-NewIteration, -NewFireID) %>%
-      arrange(Iteration, FireID) %>%
-      return()
-  } else if (is.character(data) && file.exists(data)) {
-    data %>%
-      arrow::open_dataset() %>%
-      left_join(firesToReplace) %>%
-      mutate(
-        Iteration = if_else(!is.na(NewIteration), NewIteration, Iteration),
-        FireID    = if_else(!is.na(NewFireID), NewFireID, FireID)) %>%
-      dplyr::select(-NewIteration, -NewFireID) %>%
-      arrange(Iteration, FireID) %>%
-      write_parquet(data)
-  } else {
-     stop("Got unexpected datatype: ", class(data)[1], " while trying to update resampled FireIDs.\nVariable names: ", names(data), "\nData: ", head(data, 1))
-  }
+  data %>%
+    left_join(firesToReplace) %>%
+    mutate(
+      Iteration = coalesce(NewIteration, Iteration),
+      FireID    = coalesce(NewFireID, FireID)) %>%
+    dplyr::select(-NewIteration, -NewFireID) %>%
+    arrange(Iteration, FireID) %>%
+    return()
 }
 
-# Function to add reassigned extra fires to existing burn maps
-updateBurnMap <- function(NewIteration, data, OutputBurnMap, DeterministicIgnitionLocation, allPerimTablePath) {
-  # Initialize a temp file name
-  tempFilename <- file.path(burnMapDir, "temp.tif")
+# Function to reassign Iterations and FireIDs from resampling
+# - Also is responsible for repartitioning the raw tabular parquet file spatially for memory-safe analysis
+updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, firesToSummarize, output_parquet_path) {
+  if (!is.character(input_parquet_path) | !all(file.exists(input_parquet_path)))
+    stop("Received incorrect data type while trying to reassign extra fires in raw tabular output from resampling.") 
 
-  # Consider only burn maps for this iteration (up to one per season)
-  OutputBurnMap <- OutputBurnMap %>%
-    filter(Iteration == NewIteration)
-  
-  # Join season info to the individual burn maps of extra fires
-  data <- DeterministicIgnitionLocation %>%
-    dplyr::select(Iteration, FireID, Season) %>%
-    right_join(data, by = c("Iteration", "FireID"))
+  input_parquet_path %>%
+    open_dataset() %>%
+    left_join(firesToReplace) %>%
+    mutate(
+        Iteration = coalesce(NewIteration, Iteration),
+        FireID    = coalesce(NewFireID, FireID)) %>%
+    dplyr::select(-NewIteration, -NewFireID) %>%
+    inner_join(firesToSummarize) %>%
+    mutate(
+      BatchID = (Iteration - 1) %/% iterations_per_batch,
+      TileID  = (CellID - 1) %/% cells_per_tile,
+      CellID = as.integer(CellID)) %>%
+    group_by(TileID, BatchID) %>%
+    write_dataset(
+      path = output_parquet_path,
+      format = "parquet")
+  gc()
+}
 
-  # Update burn maps one season at a time
-  for(thisSeason in OutputBurnMap$Season) {
-    # Load relevant burn map
-    currentBurnMapFilename <- OutputBurnMap %>% filter(Season == thisSeason) %>% pull(FileName)
-
-    if(length(currentBurnMapFilename) > 1) 
-      stop("Found multiple burn maps for the ", thisSeason, " Season, iteration ", NewIteration, ".")
-
-    burnMap <- tryCatch(
-      rast(currentBurnMapFilename),
-      error = function(e) stop("Could not find the ", thisSeason, " Season burn map for iteration ", NewIteration, " while reassigning extra fires to incomplete iterations."))
-  
-    # Iterate over extra fires
-    for(extraIgnitionID in data$FireID) {
-      # Only add relevant maps for this season
-      if(thisSeason == "All" | lookup(extraIgnitionID, data$FireID, data$Season) == thisSeason) {
-        # Pull
-        cellIDs <- arrow::open_dataset(allPerimTablePath) %>%
-          dplyr::filter(Iteration == 0, FireID == extraIgnitionID)  %>%
-          pull(CellID, as_vector = TRUE)
-
-        burnMap[cellIDs] <- 1
-      }
-    }
-
-    # Write to temp file and overwrite old burn map
-    terra::writeRaster(x = burnMap,
-                       filename = tempFilename,
-                       overwrite = T,
-                       filetype = "GTiff",
-                       datatype = "INT2S",
-                       gdal = c("COMPRESS=LZW",
-                                "TFW=YES"),
-                       NAflag = -9999)
-
-    file.copy(tempFilename, currentBurnMapFilename, overwrite = T)
-    unlink(tempFilename, force = T)
-  }
+# Function to quickly identify unique parition IDs by name
+# - Assumes values are integers
+getPartitionLevels <- function(dataset_path, key) {
+  list.files(dataset_path, full.names = T, recursive = T) %>%
+    str_extract(str_c(key, "=", "\\d+")) %>%
+    str_extract("\\d+") %>%
+    as.integer() %>%
+    unique %>%
+    sort()
 }
 
 ### Summary functions ----
 
 # Taken from Brett's helper package
 # - Consider importing package instead
-mean_bp_classification <- function(input, output_filename, seasonName){
-  
+mean_bp_classification <- function(input, output_filename){
   if ( grepl("SpatRast", class(input)) ) { bp <- input }
   if ( grepl("character", class(input)) ) { bp <- terra::rast(input) }
   if ( !grepl("SpatRast|character", class(input)) ) { message("Reference Grid must be the directory of the raster or a raster object.") }
@@ -293,7 +127,7 @@ mean_bp_classification <- function(input, output_filename, seasonName){
                                rcl = matrix(ncol = 2,
                                             byrow = T,
                                             data = c(NA, 0))) %>%
-    terra::mask(burnCountRasters[[seasonName]])
+    terra::mask(input)
   
   terra::writeRaster(x = mean_bp.r,
                      filename = output_filename,
@@ -306,17 +140,349 @@ mean_bp_classification <- function(input, output_filename, seasonName){
   )
 }
 
-summarizeFBPFromTabular <- function(data, summaryFunction, outputFileName, template) {
-  # Calculate summary using data.table interface
-  summarizedTabular <- data[ , .(Value = summaryFunction(Value, na.rm = TRUE)), by = CellID]
-
+# Function to convert and write a tabular spatial dataset to tif
+# - Expects a CellID and Value column to decide what values (Value) to write where (CellID)
+# - A raster template is also required to define resolution, crs, etc
+# - CellIDs are 1-indexed, row-major as is the default for R matrices. This is not the default in Python and most other languages!
+writeTabularToSpatial <- function(tabularInput, outputFileName, template, datatype = "FLT4S") {
   # Corece into spatial
-  summarizedSpatial <- rast(template)
-  names(summarizedSpatial) <- outputFileName %>% basename %>% tools::file_path_sans_ext()
-  summarizedSpatial[summarizedTabular$CellID] <- summarizedTabular$Value
+  spatialOutput <- rast(template)
+  names(spatialOutput) <- outputFileName %>% basename %>% tools::file_path_sans_ext()
+  tabularInput <- tabularInput %>% filter(!is.na(CellID))
+  spatialOutput[tabularInput$CellID] <- tabularInput$Value
 
   # Save to disk
-  summarizedSpatial %>%
+  spatialOutput %>%
+    terra::writeRaster(
+      filename = outputFileName,
+      overwrite = T,
+      filetype = "GTiff",
+      datatype = datatype,
+      gdal = c("COMPRESS=LZW",
+               "TFW=YES"),
+      NAflag = -9999)
+
+  # Increment progress bar if present
+  progressBar()
+  gc()
+}
+
+# Function to apply a summary funciton to tabular FBP data and write to a tif file
+# - Note that FBP summaries are calculated per fire. Iteration membership is not considered in any way, unlike for burn map summaries
+summarizeFBPFromTabular <- function(data, data_path, component, statistic, statisticDisplayName, outputFilePrefix, tempfilePath, template) {
+  # Generate file name from the FBP componenet name and summary statistic
+  outputFileName <- str_c(outputFilePrefix, "-", component, "-", statistic, ".tif")
+
+  # Get vectory of unique tile IDs
+  tileIDs <- getPartitionLevels(data_path, key = "TileID")
+
+  # Prep for subtiling if necessary
+  subtileTempfilePath <- str_c(tempfilePath, "-subtiles")
+
+  # Reset temp file path
+  unlink(tempfilePath, recursive = T)
+
+  # TODO: maybe iterate over batches of iterations too?
+  for(tileID in tileIDs) {
+    # Build a query for just the cells in this tile
+    query <- data %>%
+      filter(TileID == tileID) %>%
+      group_by(TileID, CellID)
+
+    # Add the summary to the query
+    if(statistic == "Average") {
+      query <- query %>%
+        summarize(Value = mean(Value, na.rm = T))
+    } else if(statistic == "Minimum") {
+      query <- query %>%
+        summarize(Value = min(Value, na.rm = T))
+    } else if(statistic == "Maximum") {
+      query <- query %>%
+        summarize(Value = max(Value, na.rm = T))
+    } else if(statistic == "Median") {
+      # Clear out past subtile temp path
+      unlink(subtileTempfilePath, recursive = T)
+
+      # Add subtile index
+      query <- query %>%
+        mutate(SubtileID = as.integer(((CellID) - (TileID * cells_per_tile) - 1) %/% cells_per_subtile))
+      
+      # Iterate over subtiles calculating summary
+      for (subtileID in (seq(subtiles_per_tile) - 1)) {
+        query %>%
+          filter(SubtileID == subtileID) %>%
+          group_by(TileID, SubtileID, CellID) %>%
+          summarize(Value = median(Value, na.rm = T)) %>%
+          write_dataset(
+            path = subtileTempfilePath,
+            format = "parquet",
+            existing_data_behavior = "delete_matching")
+      }
+
+      # Update query to point to subtile summaries, grouped by Tile ID
+      # - This will be reset for each tile after writing out a tile
+      query <- open_dataset(subtileTempfilePath, partitioning = c("TileID", "SubtileID")) %>%
+        select(-SubtileID) %>%
+        group_by(TileID)
+    } else if (str_detect(statistic, "Percentile")) {
+      # Clear out past subtile temp path
+      unlink(subtileTempfilePath, recursive = T)
+
+      # Identify quantile to calculate
+      quantile_prob <- head(componentOutputOptions[[statistic]] / 100, 1)
+
+      # Add subtile index
+      query <- query %>%
+        mutate(SubtileID = as.integer(((CellID) - (TileID * cells_per_tile) - 1) %/% cells_per_subtile))
+      
+      # Iterate over subtiles calculating summary
+      for (subtileID in (seq(subtiles_per_tile) - 1)) {
+        query %>%
+          filter(SubtileID == subtileID) %>%
+          group_by(TileID, SubtileID, CellID) %>%
+        summarize(Value = quantile(Value, probs = quantile_prob, na.rm = T)) %>%
+          write_dataset(
+            path = subtileTempfilePath,
+            format = "parquet",
+            existing_data_behavior = "delete_matching")
+      }
+
+      # Update query to point to subtile summaries, grouped by Tile ID
+      # - This will be reset for each tile after writing out a tile
+      query <- open_dataset(subtileTempfilePath, partitioning = c("TileID", "SubtileID")) %>%
+        select(-SubtileID) %>%
+        group_by(TileID)
+    } else {
+      updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
+      return(tibble())
+    }
+    
+    # Evaluate the query and write the summarized tile
+    query %>%
+      write_dataset(
+        path = tempfilePath,
+        format = "parquet",
+        existing_data_behavior = "delete_matching")
+    
+    # Increment progress bar if present
+    progressBar()
+  }
+
+  # Write values to spatial
+  writeTabularToSpatial(
+    tabularInput = open_dataset(tempfilePath) %>% collect(),
+    outputFileName = outputFileName,
+    template = template,
+    datatype = "FLT4S")
+
+  # Reset temp file paths
+  unlink(tempfilePath, recursive = T)
+  unlink(subtileTempfilePath, recursive = T)
+
+  # Return records of where the files are for import into SyncroSim
+  return(
+    tibble(
+      Summary = statisticDisplayName,
+      Iteration = 0,
+      Timestep = 0,
+      FileName = outputFileName))
+}
+
+# Function to generate clean file names that include the season
+# - season IDs are used since season names might include invalid characters for file names
+generateSeasonalOutputFileName <- function(season, outputFilePrefix) {
+  str_c(
+    outputFilePrefix,
+    "-sn",
+    lookup(season, SeasonTable$Name, SeasonTable$SeasonId), ".tif")
+}
+
+# Backend for generating maps for a single fire from tabular data
+generatePerFireMap <- function(iteration, fireid, data, outputFilePrefix, template) {
+  # Generate file name based on iteration and fire id
+  outputFileName <- str_c(outputFilePrefix, "it", iteration, "-fid", fireid, ".tif")
+
+  # Filter and select data as needed
+  tabularData <- data %>%
+    dplyr::filter(
+      Iteration == iteration,
+      FireID == fireid) %>%
+    dplyr::select(CellID, Value) %>%
+    collect()
+
+  # Write values to spatial
+  writeTabularToSpatial(
+    tabularInput = tabularData,
+    outputFileName = outputFileName,
+    template = template)
+  
+  # Return file name and location
+  return(
+    tibble(
+      Iteration = iteration,
+      Timestep = fireid,
+      FireID = fireid,
+      FileName = outputFileName))
+}
+
+# Wrapper for `generatePerFireMap` for generating the AllPerim maps
+generatePerFireBurnMap <- function(Iteration, FireID, Season, data, outputFilePrefix, template) {
+  tabularData <- data %>%
+    mutate(Value = 1)
+  
+  return(
+    generatePerFireMap(
+      iteration = Iteration,
+      fireid = FireID,
+      data = tabularData,
+      outputFilePrefix = str_c(outputFilePrefix, "/"),
+      template = template))
+}
+
+# Wrapper for `generatePerFireMap` for generating per-fire FBP maps
+generatePerFireFBPMap <- function(Iteration, FireID, Season, data, outputFilePrefix, template) {
+  return(
+    generatePerFireMap(
+      iteration = Iteration,
+      fireid = FireID,
+      data = data,
+      outputFilePrefix = outputFilePrefix,
+      template = template))
+}
+
+# Function to generate a single per-iteration burn maps from tabular data
+generateBurnMap <- function(iteration, data, season, outputFilePrefix, template) {
+  # Generate file name based on iteration and season
+  outputFileName <- generateSeasonalOutputFileName(season, str_c(outputFilePrefix, "/it", iteration))
+
+  # Filter data and add a value column for writing to spatial
+  burnMapData <- data %>%
+    dplyr::filter(Iteration == iteration) %>%
+    mutate(Value = 1) %>%
+    collect()
+
+  # Output file to disk
+  writeTabularToSpatial(
+    tabularInput = burnMapData,
+    outputFileName = outputFileName,
+    template = template,
+    datatype = "INT2S")
+  
+  # Return a table row for import back to SyncroSim
+  return(
+    tibble(
+      Iteration = iteration,
+      Timestep = 0,
+      Season = season,
+      FileName = outputFileName))
+}
+
+# Wrapper around `generateBurnMap` to generate all per-iteration burn maps for a single season 
+generateBurnMaps <- function(season, data, outputFilePrefix, template) {
+  summarizedTabular <- data %>%
+    # Filter by season if not "All"
+    filter(Season == season | season == "All") %>%
+    # Group by cell data and iteration
+    group_by(Iteration, CellID) %>%
+    # Use summarize to drop multiple burns of the same cell within an iteration
+    summarize()
+  
+  # Safer implementation of seq to handle case where no burn maps should be produced
+  iterations <- rlang::seq2(1, MaximumIteration)
+  
+  # Generate a map per iteration and record where the files were written
+  OutputBurnMap <- map_dfr(
+    iterations, 
+    generateBurnMap,
+    data = summarizedTabular,
+    season = season,
+    outputFilePrefix = outputFilePrefix,
+    template = template)
+
+  # Return table specifying where outputs written for import into SyncroSim
+  return(OutputBurnMap)
+}
+
+# Function to generate burn count maps from tabular data
+# - These maps are used in turn to produce burn probability and relative burn probability maps
+# - Data is also filtered by season, but the "All" season is also accepted to not filter the data
+summarizeBurnCountFromTabular <- function(season, data, data_path, outputFilePrefix, tempfilePath, template) {
+  # Generate output file name
+  outputFileName <- generateSeasonalOutputFileName(season, outputFilePrefix)
+
+  batchedTempfilePath <- str_c(tempfilePath, "-batched")
+
+  # Get vectory of unique tile and batch IDs
+  tileIDs <- getPartitionLevels(rawTablePath, key = "TileID")
+  batchIDs <- getPartitionLevels(rawTablePath, key = "BatchID")
+
+  # Reset temp file path
+  unlink(tempfilePath, recursive = T)
+  unlink(batchedTempfilePath, recursive = T)
+
+  # Add progress bar with steps per tile plus one for writing to tif
+  progressBar("begin", totalSteps = 2 * length(tileIDs) + 1)
+  progressBar(type = "message", message = str_c("Summarizing raw burn data for season: ", season))
+
+  # Calculate burn count for each tile and batch
+  for(tileID in tileIDs) {
+    for(batchID in batchIDs) {
+      # Calculate burn count for this tile and batch, save to a unique partition of temp parquet file
+      data %>%
+        dplyr::filter(TileID == tileID, BatchID == batchID) %>%
+        dplyr::filter(Season == season | season == "All") %>%
+        group_by(TileID, BatchID, CellID) %>%
+        summarize(Value = n_distinct(Iteration)) %>%
+        write_dataset(
+          path = batchedTempfilePath,
+          format = "parquet",
+          existing_data_behavior = "delete_matching")
+    
+      progressBar()
+    }
+  }
+
+  # Combine burn count summaries from all batches
+  # - This works since no iterations are shared across batches
+  # - Although slower, helps limit memory use for runs with very large counts of iterations
+  temp_parquet <- open_dataset(batchedTempfilePath, partitioning = c("TileID", "BatchID"))
+  for(tileID in tileIDs) {
+    # Calculate burn count for this tile, save to a unique partition of temp parquet file
+    temp_parquet %>%
+      dplyr::filter(TileID == tileID) %>%
+      group_by(TileID, CellID) %>%
+      summarize(Value = sum(Value)) %>%
+      write_dataset(
+        path = tempfilePath,
+        format = "parquet",
+        existing_data_behavior = "delete_matching")
+   
+    progressBar()
+  }
+
+  # Write burn count map for this season to spatial
+  writeTabularToSpatial(
+    tabularInput = open_dataset(tempfilePath) %>% collect(),
+    outputFileName = outputFileName,
+    template = template,
+    datatype = "INT2S")
+  
+  rm(temp_parquet)
+  unlink(tempfilePath, recursive = T)
+  unlink(batchedTempfilePath, recursive = T)
+
+  return(outputFileName)
+}
+
+# Function to calculate burn probability using the corresponding burn count map
+summarizeBurnProbability <- function(season, burnCountFileName, outputFilePrefix) {
+  # Generate output file name
+  outputFileName <- generateSeasonalOutputFileName(season, outputFilePrefix)
+
+  # Calculate burn probability and write to file
+  burnCountFileName %>%
+    rast() %>%
+    `/`(as.double(max(MaximumIteration - length(incompleteIterations), 1))) %>%
     terra::writeRaster(
       filename = outputFileName,
       overwrite = T,
@@ -325,86 +491,104 @@ summarizeFBPFromTabular <- function(data, summaryFunction, outputFileName, templ
       gdal = c("COMPRESS=LZW",
                "TFW=YES"),
       NAflag = -9999)
+
+  # Increment progress bar if present
+  progressBar()
+
+  return(outputFileName)
 }
 
-updateRunLog("Finished preparing inputs in ", updateBreakpoint())
+# Function to calculate relative burn probability using the corresponding burn probability map
+# - Essentially a wrapper around `mean_bp_classification`
+summarizeRelativeBurnProbability <- function(season, burnProbabilityFileName, outputFilePrefix) {
+  # Generate output file name
+  outputFileName <- generateSeasonalOutputFileName(season, outputFilePrefix)
+
+  # Calculate relative burn probability and write to file
+  burnProbabilityFileName %>%
+    rast() %>%
+    mean_bp_classification(output_filename = outputFileName)
+
+  # Increment progress bar if present
+  progressBar()
+
+  return(outputFileName)
+}
 
 # Extract relevant parameters ----
-# Decide whether or not to save spatial summary outputs
-saveBurnMaps <- any(OutputOptionsSpatial$BurnProbability, OutputOptionsSpatial$SeasonalBurnProbability,
-                    OutputOptionsSpatial$RelativeBurnProbability, OutputOptionsSpatial$SeasonalRelativeBurnProbability,
-                    OutputOptionsSpatial$BurnCount, OutputOptionsSpatial$SeasonalBurnCount)
 
-# Decide whether or not to save seasonal spatial summary outputs
-saveSeasonalBurnMaps <- any(OutputOptionsSpatial$SeasonalBurnProbability,
-                            OutputOptionsSpatial$SeasonalRelativeBurnProbability,
-                            OutputOptionsSpatial$SeasonalBurnCount)
+# Identify total number of iterations
+# - Note that run control might be out of date after a merge
+MaximumIteration <- OutputFireStatistic %>%
+  pull(Iteration) %>%
+  max
 
-saveBurnPerimeters <- OutputOptionsSpatial$BurnPerimeter != "No"
+# Load a spatial template to determine a tiling schema
+# - also set the background to 0 where the fuels map is defined
+templateRaster <- rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]]) %>%
+  classify(matrix(c(-Inf, Inf, 0), nrow = 1))
 
-# Set a flag to decide whether or not to handle secondary outputs
-saveFBPMaps <- length(outputComponentsToKeepDisplayName) > 0
-
-# Load and consolidate individual fires if needed ----
-if (!isDatasheetEmpty(AllPerimTabular)) {
-  AllPerimTabular$FileName %>%
-    arrow::open_dataset() %>%
-    write_parquet(allPerimTablePath)
-  unlink(AllPerimTabular$FileName, force = T)
-}  else {
-  data.frame(Iteration = integer(0), FireID = integer(0), CellID = integer(0)) %>%
-    write_parquet(allPerimTablePath)
-}
-AllPerimTabular <-
-  tibble(
-    FileName = allPerimTablePath %>% normalizePath(mustWork = F),
-    Description = "Tabular burn outputs per fire", 
-  ) %>%
-  as.data.frame()
-
-saveDatasheet(myScenario, AllPerimTabular, "burnP3Plus_OutputAllPerimTabular", append = FALSE)
+updateRunLog("Finished preparing inputs in ", updateBreakpoint())
 
 # Reassign extra fires if needed ----
 # - Requires a minimum fire size greater than zero and sampled extra fires
 
-# Placeholder for list of iterations that did not meet ignition targets
+# Default values for fires to include / replace if resampling doesn't wind up being needed
 incompleteIterations <- integer(0)
-firesToReplace <- data.frame()
+firesToReplace <- data.table(
+  Iteration = integer(0),
+  FireID = integer(0),
+  NewIteration = integer(0),
+  NewFireID = integer(0))
+firesToSummarize <- OutputFireStatistic %>%
+  dplyr::filter(Iteration > 0) %>%
+  select(Iteration, FireID, Season) %>%
+  mutate(across(-Season, as.integer)) %>%
+  as.data.table()
 
-# Decide if any resampling is required
-requiresResample <- OutputFireStatistic %>%
+# Identify how many fires are missing for each iteration
+missingFiresByIteration <- OutputFireStatistic %>%
+  # Extra ignitions need not be above minimum fire size
   filter(Iteration > 0) %>%
-  pull(ResampleStatus) %>%
-  str_detect("Discarded") %>%
+  # Some iterations (especially after a merge) might already have been resampled 
+  # - further resampling is only required if there are more discarded fires than reassigned
+  group_by(Iteration) %>%
+  summarize(
+    requiredFires = sum(str_detect(ResampleStatus, "Discarded")) - sum(str_detect(ResampleStatus, "Reassigned")))
+    
+# Decide if any resampling is required
+requiresResample <- missingFiresByIteration %>%
+  mutate(requiresResample = requiredFires > 0) %>%
+  pull(requiresResample) %>%
   any
 
 if(requiresResample) {
+  progressBar(type = "message", message = "Resampling fires...")
+
   # Identify fires available for reassignement
   validExtraFires <- OutputFireStatistic %>%
-    filter(ResampleStatus == "Extra") %>%
+    filter(ResampleStatus == "Extra" | ResampleStatus == "Not Used") %>%
     transmute(
       Iteration = Iteration,
       FireID = FireID,
       UniqueID = row_number())
   
   # Identify new fire IDs required to replace discarded fires
-  requiredFires <- OutputFireStatistic %>%
-    group_by(Iteration) %>%
-    mutate(TargetIgnitions = max(FireID)) %>%
-    filter(
-      Iteration > 0,
-      ResampleStatus == "Discarded") %>%
-    mutate(NewFireID = TargetIgnitions + row_number()) %>%
-    ungroup() %>%
-    transmute(
-      NewIteration = Iteration,
-      NewFireID    = NewFireID,
-      UniqueID     = row_number())
+  requiredFires <- missingFiresByIteration %>%
+    filter(requiredFires > 0) %>%
+    # Join table of missing fires to Output Fire Statistic to calculate new Fire IDs
+    left_join(OutputFireStatistic) %>%
+    dplyr::reframe(
+      NewFireID = seq(requiredFires[1]) + max(FireID),
+      .by = "Iteration") %>%
+    rename(NewIteration = Iteration) %>%
+    mutate(UniqueID = row_number())
 
   # Sequentially re-assign extra fires to new required IDs 
   firesToReplace <- inner_join(validExtraFires, requiredFires, by = "UniqueID", relationship = "one-to-one") %>%
     dplyr::select(-UniqueID) %>%
-    mutate(across(everything(), as.integer))
+    mutate(across(everything(), as.integer)) %>%
+    as.data.table()
 
   # Identify any iterations that could not meet targets after reassignment
   incompleteIterations <- anti_join(requiredFires, validExtraFires, by = "UniqueID") %>%
@@ -419,7 +603,7 @@ if(requiresResample) {
       OriginalFireID = if_else(Iteration == 0, NA, OriginalFireID), # Extra fires that are not resampled don't require original fire id values
       ResampleStatus = case_when(
         ResampleStatus == "Extra" & Iteration == 0 ~ "Not Used",
-        ResampleStatus == "Extra" & Iteration != 0  ~ "Reassigned",
+        (ResampleStatus == "Extra" | ResampleStatus == "Not Used") & Iteration != 0  ~ "Reassigned",
         TRUE ~ ResampleStatus))
 
   saveDatasheet(
@@ -428,56 +612,28 @@ if(requiresResample) {
     "burnP3Plus_OutputFireStatistic",
     append = FALSE)
 
+  # Update fires to include in summaries accordingly
+  firesToSummarize <- OutputFireStatistic %>%
+    dplyr::filter(
+      ResampleStatus %in% c("Kept", "Reassigned"), # Discards unused extra fires and fire below minimum fire size
+      !Iteration %in% incompleteIterations) %>%    # Discards fires from incomplete iterations
+    select(Iteration, FireID, Season) %>%
+    mutate(across(-Season, as.integer)) %>%
+    as.data.table()
+
   # Report iterations that did not meet ignition targets
   if(length(incompleteIterations) > 0)
     updateRunLog("Could not sample enough fires above the specified minimum fire size for ", length(incompleteIterations), " iterations.",
                  "\nPlease increase the 'Proportion of Extra Ignition to Sample' in the Fire Resampling Options or decrease the 'Minimum Fire Size'.",
                  "\nPlease see the Fire Statistics table for details on specific iterations, fires, and burn conditions. Incomplete iterations will not be included in summary burn maps\n", type = "warning") 
 
-  ## Update burn maps if any extra fires were reassigned ----
-  if(nrow(firesToReplace) > 0 & saveBurnMaps) {
-    # Move burn maps to temp folder
-    OutputBurnMap %>%
-      pull(FileName) %>%
-      head(1) %>%
-      dirname %>%
-      dir.move(burnMapDir)
-
-    OutputBurnMap <- OutputBurnMap %>% mutate(FileName = file.path(burnMapDir,  basename(FileName)))
-
-    # Group replacements by iteration and update burn maps in place accordingly
-    firesToReplace %>%
-      group_by(NewIteration) %>%
-      nest() %>%
-      pwalk(updateBurnMap, OutputBurnMap = OutputBurnMap, DeterministicIgnitionLocation = DeterministicIgnitionLocation, allPerimTablePath = allPerimTablePath)
-
-    # Save back to SyncroSim
-    saveDatasheet(myScenario, OutputBurnMap, "burnP3Plus_OutputBurnMap", append = F)
-
-    ## Update All Perim maps to match new assignments ----
-
-    # # TODO Tabular Per-Fire Outputs: Temporarily commenting out spatial per-fire outputs
-    # # - Consider adding logic for deciding when to keep spatial outputs as well
-    if (OutputOptionsSpatial$AllPerim) {
-      updateResampledFireIDs(allPerimTablePath, firesToReplace)
-      saveDatasheet(myScenario, AllPerimTabular, "burnP3Plus_OutputAllPerimTabular", append = FALSE)
-    #   AllPerim <- updateResampledFireIDs(AllPerim, firesToReplace) %>%
-    #     mutate(Timestep = FireID) # Used for plotting Individual Burn Perims in SSim UI
-    #   saveDatasheet(myScenario, AllPerim, "burnP3Plus_OutputAllPerim")
-    } #else { # Otherwise remove any records and maps to avoid confusion
-    #   rsyncrosim::delete(myScenario, datasheet = "burnP3Plus_OutputAllPerim", force = T)
-    #}
-
-    # Note that Burn Perimeters and Individual FBP Maps are reassigned in their respective sections below
-  }
-
-  if(nrow(firesToReplace) > 0 ) {
+  if(nrow(firesToReplace) > 0) {
     ## Update Deterministic Input tables ----
     DeterministicIgnitionLocation <- updateResampledFireIDs(DeterministicIgnitionLocation, firesToReplace)
-    saveDatasheet(myScenario, DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation")
+    saveDatasheet(myScenario, DeterministicIgnitionLocation, "burnP3Plus_DeterministicIgnitionLocation", append = F)
 
     DeterministicBurnCondition <- updateResampledFireIDs(DeterministicBurnCondition, firesToReplace)
-    saveDatasheet(myScenario, DeterministicBurnCondition, "burnP3Plus_DeterministicBurnCondition")
+    saveDatasheet(myScenario, DeterministicBurnCondition, "burnP3Plus_DeterministicBurnCondition", append = F)
   }
 }
 
@@ -488,11 +644,61 @@ updateRunLog("\nBurn Summary:\n",
                round(sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic) * 100, 0), "% of simulated fires were above the minimum fire size.\n",
                round(sum(OutputFireStatistic$ResampleStatus == "Not Used") / max(1, nrow(OutputFireStatistic %>% filter(Iteration == 0))) * 100, 0), "% of extra simulated fires not used because target ignition counts were already met.\n")
 
-# Summarize fires ----
-if(saveBurnMaps) {
+updateRunLog("Finished summarizing burn status and resampling fires in ", updateBreakpoint())
 
-  # Identify seasons in project (always at least includes "All")
-  if(saveSeasonalBurnMaps) {
+# Vector outputs ----
+# Consolidate fire perimeter geopackages if necessary
+if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
+  progressBar(type = "message", message = "Consolidating vector outputs...")
+
+  # Append geopackages one by one to new geopackage path
+  # - also reassign fire ids and iterations if extra fires were resampled
+  for (f in OutputFirePerimeter$FileName) {
+    # There are situations where both daily and final perimeters could exist in the same package. Handle those cases here.
+    layer_names <- st_layers(f)$name
+
+    for(layer in layer_names) {
+      st_read(f, layer = layer, quiet = T) %>%
+        {if(nrow(firesToReplace) > 0) updateResampledFireIDs(., firesToReplace) else .} %>%
+        st_write(
+          dsn = geopackage_path,
+          layer = layer,
+          quiet = TRUE,
+          append = TRUE)
+    }
+  }
+
+  OutputFirePerimeter <-
+    tibble(
+      FileName = geopackage_path %>% normalizePath(mustWork = F),
+      Description = getPerimeterType(geopackage_path)) %>%
+    as.data.frame()
+
+  saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)
+
+  updateRunLog("Finished processing vector outputs in ", updateBreakpoint())
+}
+
+# Raster outputs ----
+if (saveBurnMaps | saveFBPMaps | requiresResample) {
+  # Set up parameters for tiling / subtiling
+  iterations_per_batch <- 5000L
+  tile_size <- 256L
+  cells_per_tile <- as.integer(ncol(templateRaster) * tile_size)
+  cells_per_subtile <- 250000L
+  subtiles_per_tile <- as.integer(ceiling(cells_per_tile / cells_per_subtile))
+
+  ## Repartition output raw tabular for memory-safe spatial analysis
+  # - Resample and filter too if required
+  updateResampledFireIDsParquet(
+    input_parquet_path = OutputRawTabular$FileName,
+    firesToReplace = firesToReplace,
+    firesToSummarize = firesToSummarize,
+    output_parquet_path = rawTablePath)
+  savePartitionedParquetToSyncroSim(rawTablePath)
+
+  # Identify which seasons to generate outputs for
+  if (saveSeasonalBurnMaps) {
     seasonValues <- SeasonTable %>%
       pull(Name) %>%
       unique
@@ -500,247 +706,168 @@ if(saveBurnMaps) {
      seasonValues <- "All"
   }
 
-  # Calculate burn count
+  # Load data by reference
+  tabularBurnData <- arrow::open_dataset(
+    sources = rawTablePath,
+    partitioning = c("TileID", "BatchID"))
+}
 
-  # Start by setting up an empty template
-  emptyTemplate <- NULL
-  if(!isDatasheetEmpty(OutputBurnMap))
-    emptyTemplate <- OutputBurnMap %>%
-      pull(FileName) %>%
-      pluck(1) %>%
-      {tryCatch(rast(.) %>% rast(vals = 0), error = function(e) NULL)}
+## Generate burn maps per fire ----
+if (OutputOptionsSpatial$AllPerim) {
+  progressBar("begin", totalSteps = nrow(firesToSummarize))
+  progressBar(type = "message", message = "Writing per-fire burn maps...")
 
-  # Load in burn maps by season and replace any empty sets with a zero raster
-  burnMapRasters <- 
-    map(seasonValues, function(thisSeason) {
-      # Read in burn maps per season as raster stack
-      tryCatch(
-        OutputBurnMap %>%
-          filter(
-            Season == thisSeason,
-            !Iteration %in% incompleteIterations) %>% # Filter out any iterations that did not meet their ignition targets after reassignment
-          pull(FileName) %>%
-          rast,
-        error = function(e) emptyTemplate) # If no valid maps are found for a given season for the entire run
-    }) %>%
-    set_names(seasonValues) %>%
-    discard(is.null)
+  # Write outputs per iteration to file and get a table of the file paths
+  OutputAllPerim <- pmap_dfr(
+    firesToSummarize,
+    generatePerFireBurnMap,
+    data = tabularBurnData,
+    outputFilePrefix = allPerimDir,
+    template = templateRaster)
+
+  # Save to SyncroSim
+  if (!isDatasheetEmpty(OutputAllPerim))
+    saveDatasheet(
+      myScenario,
+      OutputAllPerim,
+      "burnP3Plus_OutputAllPerim",
+      append = F)
+
+  updateRunLog("Finished writing per-fire burn maps in ", updateBreakpoint())
+  progressBar("end")
+}
+
+## Generate burn maps per iteration ----
+if(OutputOptionsSpatial$BurnMap | OutputOptionsSpatial$SeasonalBurnMap) {
+  # Only save seasonal summaries if requested
+  # - Note that this behaviours is different for other summaries where fewer outputs are created for large runs. See below for details
+  seasonsToRun <- seasonValues
+  if (!OutputOptionsSpatial$SeasonalBurnMap)
+    seasonsToRun <- "All"
+
+  progressBar("begin", totalSteps = MaximumIteration * length(seasonsToRun))
+  progressBar(type = "message", message = "Writing per-iteration burn maps...")
   
-  # Check that there are outputs to summarize
-  if(length(burnMapRasters) > 0) {
-    
-    # Initialize the SyncroSim progress bar
-    progressBar("begin", totalSteps = nlyr(burnMapRasters[[1]]) * length(burnMapRasters))
-    progressBar(type = "message", message = "Summarizing fires...")
-    
-    # Setup counter
-    burnCountRasters <- rast(burnMapRasters[[1]][[1]], vals = 0) %>%
-      list() %>%
-      rep(length(seasonValues)) %>%
-      set_names(names(burnMapRasters))
-    
-    # Sum one layer at a time to avoid loading entire burn stack into memory with `terra::sum()`
-    for(thisSeason in names(burnCountRasters)) {
-      for(thisLayer in seq(nlyr(burnMapRasters[[thisSeason]]))) {
-        # Update progress bar
-        progressBar()
+  # Write outputs per iteration to file and get a table of the file paths
+  OutputBurnMap <- map_dfr(
+    seasonsToRun,
+    generateBurnMaps,
+    data = tabularBurnData,
+    outputFilePrefix = burnMapDir,
+    template = templateRaster)
 
-        burnCountRasters[[thisSeason]] <- burnCountRasters[[thisSeason]] + burnMapRasters[[thisSeason]][[thisLayer]]
-      }
-    }
+  # Save to SyncroSim
+  if (!isDatasheetEmpty(OutputBurnMap))
+    saveDatasheet(
+      myScenario,
+      OutputBurnMap,
+      "burnP3Plus_OutputBurnMap",
+      append = F)
+
+  updateRunLog("Finished writing per-iteration burn maps in ", updateBreakpoint())
+  progressBar("end")
+}
+
+## Generate burn summaries ----
+if (saveBurnMaps) {
+  # Generate burn counts for every season that is required
+  burnCountFileNames <- map_chr(
+    seasonValues,
+    summarizeBurnCountFromTabular,
+    data = tabularBurnData,
+    data_path = rawTablePath,
+    outputFilePrefix = burnCountFilePrefix,
+    tempfilePath = rawTableTempPath,
+    template = templateRaster)
+  gc()
+
+  progressBar("begin", totalSteps = summaryBurnMapCount * length(seasonValues))
+  progressBar(type = "message", message = "Building burn summary maps...")
+
+  # Save back to SyncroSim if requested
+  if(OutputOptionsSpatial$BurnCount | OutputOptionsSpatial$SeasonalBurnCount)
+    saveDatasheet(
+      myScenario,
+      tibble(
+        Iteration = 0,
+        Timestep = 0,
+        FileName = burnCountFileNames %>% normalizePath(),
+        Season = seasonValues) %>%
+        as.data.frame(),
+      "burnP3Plus_OutputBurnCount",
+      append = F)
+
+  # Calculate and save burn probability if requested by user
+  if(OutputOptionsSpatial$BurnProbability         | OutputOptionsSpatial$SeasonalBurnProbability |
+     OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
     
-    # Reclassify NaN to NA for consistency with other layers
-    burnCountRasters <- burnCountRasters %>%
-      map(classify, rcl = matrix(c(NaN, NA), ncol = 2)) 
+    # Generate file names for the burn probability rasters
+    burnProbabilityFileNames <- map2_chr(
+      .x = seasonValues,
+      .y = burnCountFileNames,
+      .f = summarizeBurnProbability,
+      outputFilePrefix = burnProbabilityFilePrefix)
 
-    # Write out all relevant burn count rasters
-    progressBar(type = "message", message = "Writing spatial outputs...")
-
-    # Build up burn count raster file names
-    burnCountFilenames <- names(burnCountRasters) %>%
-      map_chr(function(seasonName) str_c(burnCountFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
-      set_names(names(burnCountRasters))
-
-    # Write out count rasters by season
-    walk2(burnCountRasters, burnCountFilenames,
-      function(burnCountRaster, burnCountFilename) {
-        terra::writeRaster(burnCountRaster, 
-                           filename = burnCountFilename, 
-                           wopt = list(filetype = "GTiff",
-                                       datatype = "INT4S",
-                                       gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")), 
-                           NAflag = -9999, overwrite = T)
-      })
-    
-    # Save burn count if requested by user
-    if(OutputOptionsSpatial$BurnCount)
+    # Save back to SyncroSim if requested
+    if(OutputOptionsSpatial$BurnProbability | OutputOptionsSpatial$SeasonalBurnProbability)
       saveDatasheet(
         myScenario,
         tibble(
           Iteration = 0,
           Timestep = 0,
-          FileName = burnCountFilenames,
-          Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
-          mutate(
-            Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
+          FileName = burnProbabilityFileNames %>% normalizePath(),
+          Season = seasonValues) %>%
           as.data.frame(),
-        "burnP3Plus_OutputBurnCount")
+        "burnP3Plus_OutputBurnProbability",
+        append = F)
     
-    # Calculate and save burn probability if requested by user
-    if(OutputOptionsSpatial$BurnProbability         | OutputOptionsSpatial$SeasonalBurnProbability |
-       OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
+    if(OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
 
-      burnProbabilityRasters <- burnCountRasters %>%
-        map(function(burnCountRaster) (burnCountRaster / max(RunControl$MaximumIteration - length(incompleteIterations), 1))) %>%
-        set_names(names(burnCountRasters))
+      # Generate file names for the relative burn probability rasters
+      relativeBurnProbabilityFileNames <- map2_chr(
+        .x = seasonValues,
+        .y = burnProbabilityFileNames,
+        .f = summarizeRelativeBurnProbability,
+        outputFilePrefix = relativeBurnProbabilityFilePrefix)
 
-      # Discard seasonal probabilities if not requested
-      if(!OutputOptionsSpatial$SeasonalBurnProbability & !OutputOptionsSpatial$SeasonalRelativeBurnProbability)
-        burnProbabilityRasters <- burnProbabilityRasters %>%
-          keep_at("All")
+      saveDatasheet(
+        myScenario,
+        tibble(
+          Iteration = 0,
+          Timestep = 0,
+          FileName = relativeBurnProbabilityFileNames %>% normalizePath(),
+          Season = seasonValues) %>%
+          as.data.frame(),
+        "burnP3Plus_OutputRelativeBurnProbability",
+        append = F)
 
-      # Build up probabilty raster file names
-      burnProbabilityFilenames <- names(burnProbabilityRasters) %>%
-        map_chr(function(seasonName) str_c(burnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
-        set_names(names(burnProbabilityRasters))
-
-      # Write out probability rasters by season
-      walk2(burnProbabilityRasters, burnProbabilityFilenames,
-        function(burnProbabilityRaster, burnProbabilityFilename) {
-          terra::writeRaster(burnProbabilityRaster,
-                             filename = burnProbabilityFilename,
-                             wopt = list(filetype = "GTiff",
-                                         gdal = c("COMPRESS=DEFLATE","ZLEVEL=9","PREDICTOR=2")),
-                             NAflag = -9999, 
-                             overwrite = T)
-        })
-      
-      if(OutputOptionsSpatial$BurnProbability)
-        saveDatasheet(
-          myScenario,
-          tibble(
-            Iteration = 0,
-            Timestep = 0,
-            FileName = burnProbabilityFilenames,
-            Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
-            mutate(
-              Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
-            as.data.frame(),
-          "burnP3Plus_OutputBurnProbability")
-      
-      if(OutputOptionsSpatial$RelativeBurnProbability | OutputOptionsSpatial$SeasonalRelativeBurnProbability) {
-        # Discard seasonal files if not requested
-        if(!OutputOptionsSpatial$SeasonalRelativeBurnProbability)
-          burnProbabilityFilenames <- burnProbabilityFilenames %>%
-            keep_at("All")
-
-        # Build up relative probabilty raster file names
-        relativeBurnProbabilityFilenames <- names(burnProbabilityFilenames) %>%
-          map_chr(function(seasonName) str_c(relativeBurnProbabilityFilePrefix, "-sn", lookup(seasonName, SeasonTable$Name, SeasonTable$SeasonId), ".tif")) %>%
-          set_names(names(burnProbabilityFilenames))
-
-        # Calculate relative burn probabilities
-        pwalk(list(burnProbabilityFilename = burnProbabilityFilenames, relativeBurnProbabilityFilename = relativeBurnProbabilityFilenames, seasonName = names(burnProbabilityFilenames)),
-          function(burnProbabilityFilename, relativeBurnProbabilityFilename, seasonName) {
-            mean_bp_classification(input = burnProbabilityFilename, output_filename = relativeBurnProbabilityFilename, seasonName = seasonName)
-          })
-
-        saveDatasheet(
-          myScenario,
-          tibble(
-            Iteration = 0,
-            Timestep = 0,
-            FileName = relativeBurnProbabilityFilenames,
-            Season = str_extract(FileName, "\\d+.tif") %>% str_sub(end = -5) %>% as.integer()) %>%
-            mutate(
-              Season = lookup(Season, SeasonTable$SeasonId, SeasonTable$Name)) %>%
-            as.data.frame(),
-          "burnP3Plus_OutputRelativeBurnProbability")
-      }
     }
   }
+  # Wrap up SyncroSim progress bar
+  progressBar("end")
+  updateRunLog("Finished building burn summary maps in ", updateBreakpoint())
 }
-
-# Consolidate fire perimeter geopackages if necessary
-if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
-  # Append geopackages one by one to new geopackage path
-  # - layer name is used on read to ensure all inputs are the same variable type (final or daily) as expected in output
-  # - also reassign fire ids and iterations if extra fires were resampled
-  for (f in OutputFirePerimeter$FileName) {
-    st_read(f, layer = geopackage_layer_name, quiet = T) %>%
-      {if(nrow(firesToReplace) > 0) updateResampledFireIDs(., firesToReplace) else .} %>%
-      st_write(
-        dsn = geopackage_path,
-        layer = geopackage_layer_name,
-        quiet = TRUE,
-        append = TRUE)
-  }
-
-  OutputFirePerimeter <-
-    tibble(
-      FileName = geopackage_path %>% normalizePath(mustWork = F),
-      Description = 
-        str_c(
-          OutputOptionsSpatial$BurnPerimeter,
-          " burn perimeters")
-    ) %>%
-    as.data.frame()
-
-  saveDatasheet(myScenario, OutputFirePerimeter, "burnP3Plus_OutputFirePerimeter", append = FALSE)
-}
-
-# Wrap up SyncroSim progress bar
-progressBar("end")
-updateRunLog("Finished summarizing burn probability in ", updateBreakpoint(), "\n\n")
 
 # Save FBP Summary Maps
 if (saveFBPMaps) {
-  # Load a template raster
-  templateRaster <- rast(rast(datasheet(myScenario, "burnP3Plus_LandscapeRasters")[["FuelGridFileName"]]))
-
-  # Load and consolidate individual fires if needed ----
-  if (!isDatasheetEmpty(FBPTabular)) {
-    FBPTabular$FileName %>%
-      arrow::open_dataset() %>%
-      write_parquet(fbpTablePath)
-
-    # Also apply resampling reassignments as needed
-    if (requiresResample)
-      updateResampledFireIDs(fbpTablePath, firesToReplace)
-
-    unlink(FBPTabular$FileName, force = T)
-  }  else {
-    data.frame(Iteration = integer(0), FireID = integer(0), CellID = integer(0)) %>%
-      write_parquet(fbpTablePath)
-  }
-
-  FBPTabular <-
-    tibble(
-      FileName = fbpTablePath %>% normalizePath(mustWork = F),
-      Description = "Tabular burn outputs per fire", 
-    ) %>%
-    as.data.frame()
-
-  saveDatasheet(myScenario, FBPTabular, "burnP3Plus_OutputFBPTabular", append = FALSE)
-
   # Decide which burn components and fires are available and needed ---
   outputComponentsToKeep <- outputComponentsToKeepDisplayName %>%
     lookup(FBPVariableTable$DisplayName, FBPVariableTable$Name)
   
   # Coerce to data.frame before extracting colnames to avoid bug in conda with extracting colnames
   # - Subset the data.table from open_dataset to limit memory use when extracting colnames
-  fbpTableColumns <- open_dataset(fbpTablePath)[1,] %>%
-    as.data.frame() %>%
+  fbpTableColumns <- open_dataset(rawTablePath) %>%
     colnames()
+   
+  # Prep some information for more informative progress bars
+  total_outputs <- OutputOptionFBPSpatial %>%
+    dplyr::select(-any_of(c("Variable", "Individual"))) %>% 
+    map(as.logical) %>%
+    unlist() %>%
+    sum(na.rm = T)
+  current_output <- 1
+  num_tiles <- length(getPartitionLevels(rawTablePath, key = "TileID"))
 
-  firesToSummarize <- OutputFireStatistic %>%
-    dplyr::filter(
-      ResampleStatus %in% c("Kept", "Reassigned"), # Discards unused extra fires and fire below minimum fire size
-      !Iteration %in% incompleteIterations) %>%    # Discards fires from incomplete iterations
-    select(Iteration, FireID) %>%
-    mutate(across(everything(), as.integer))
-
-  progressBar("begin", totalSteps = OutputOptionFBPSpatial %>% dplyr::select(-Variable, -Individual) %>% as.matrix %>% as.logical %>% sum(na.rm = T))
   progressBar(type = "message", message = "Summarizing FBP Outputs...")
 
   # Iterate over FBP variables to keep
@@ -751,98 +878,76 @@ if (saveFBPMaps) {
       next
 
     # Load relevant data for the current FBP variable as data.table
-    fbpTabularData <- arrow::open_dataset(fbpTablePath) %>%
-      dplyr::select(all_of(c("Iteration", "FireID", "CellID", component))) %>%
-      inner_join(firesToSummarize, by = c("Iteration", "FireID")) %>%
-      dplyr::select(all_of(c("CellID", "Value" = component))) %>%
-      collect()
+    # - Don't collect query now as per-fire maps will need to query further
+    fbpTabularData <- arrow::open_dataset(rawTablePath) %>%
+      dplyr::select(all_of(c("TileID", "BatchID", "Iteration", "FireID", "CellID", "Value" = component)))
     
     # Pull out the relevant row of the FBP output options table to identify which summaries to keep for this variable
     componentOutputOptions <- OutputOptionFBPSpatial %>%
       dplyr::filter(Variable == lookup(component, FBPVariableTable$Name, FBPVariableTable$DisplayName)) %>%
       as.list()
 
+    # Save individual maps if requested
+    if (!is.na(componentOutputOptions$Individual) & componentOutputOptions$Individual) {
+      progressBar("begin", totalSteps = nrow(firesToSummarize))
+      progressBar(type = "message", message = str_c("Writing per-fire ", lookup(component, FBPVariableTable$Name, FBPVariableTable$DisplayName), " maps..."))
+
+      OutputFBPIndividual <- pmap_dfr(
+        firesToSummarize,
+        generatePerFireFBPMap,
+        data = fbpTabularData,
+        outputFilePrefix = str_c(fbpIndividualDir, "/", component, "-"),
+        template = templateRaster)
+
+      if (!isDatasheetEmpty(OutputFBPIndividual))
+        saveDatasheet(myScenario, OutputFBPIndividual, str_c("burnP3Plus_Output", component, "Map"), append = FALSE)
+      rm(OutputFBPIndividual)
+
+      progressBar("end")
+    }
+
+    # Iteration and FireID indices are no longer needed
+    fbpTabularData <- fbpTabularData %>%
+      dplyr::select(-Iteration, -FireID)
+
     # Initialize a table to hold the generated outputs
     OutputFBPSummary <- data.frame()
-    
+
     # Iterate over summary statistics
-    for (statistic_display_name in FBPStatisticTable$Name) {
-      statistic <- statistic_display_name %>% str_replace(" ", "") # Percentile1, Percentile2, and Percentile3 all have spaces in their display names, but not in keys
+    for (statisticDisplayName in FBPStatisticTable$Name) {
+      statistic <- statisticDisplayName %>% str_replace(" ", "") # Percentile1, Percentile2, and Percentile3 all have spaces in their display names, but not in keys
 
       # Skip if this statistic is not requested for this FBP variable
       if (is.na(componentOutputOptions[statistic]) | !as.logical(componentOutputOptions[[statistic]]))
         next
-      
-      # Apply the statistic to the corresponding FBP raster stack and save to disk
-      summaryFunction <- NA
-      if(statistic == "Average") {
-        summaryFunction <- function(x, na.rm = TRUE) {
-          m <- mean(as.numeric(x), na.rm = na.rm)
-          if (is.na(m)) NA_real_ else m
-        }
-      } else if(statistic == "Minimum") {
-        summaryFunction <- function(x, na.rm = TRUE) {
-          m <- min(as.numeric(x), na.rm = na.rm)
-          if (is.na(m)) NA_real_ else m
-        }
-      } else if(statistic == "Maximum") {
-        summaryFunction <- function(x, na.rm = TRUE) {
-          m <- max(as.numeric(x), na.rm = na.rm)
-          if (is.na(m)) NA_real_ else m
-        }
-      } else if(statistic == "Median") {
-        summaryFunction <- function(x, na.rm = TRUE) {
-          m <- median(as.numeric(x), na.rm = na.rm)
-          if (is.na(m)) NA_real_ else m
-        }
-      } else if (str_detect(statistic, "Percentile")) {
-        summaryFunction <- function(x, na.rm = TRUE) {
-          m <- quantile(x, componentOutputOptions[[statistic]] / 100, na.rm = na.rm)
-          if (is.na(m)) NA_real_ else m
-        }
-      } else {
-        updateRunLog("Skipping unknown summary statistic \"", statistic, "\"", type = "warning")
-      }
 
-      fbpSummaryFileName <- str_c(fbpSummaryFilePrefix, "-", component, "-", statistic, ".tif")
+      # Add progress bar with steps per tile plus one for writing to tif
+      progressBar("begin", totalSteps = num_tiles + 1)
+      progressBar(type = "message", message = str_c("Calculating FBP Summary ", current_output, " of ", total_outputs, " - ", statisticDisplayName, str_replace_all(component, "([A-Z])"," \\1")))
 
       # Calculate summary map and write to disk
-      summarizeFBPFromTabular(
-        data = fbpTabularData,
-        summaryFunction = summaryFunction,
-        outputFileName = fbpSummaryFileName,
-        template = templateRaster)
-
-      # Add record to datasheet
-      OutputFBPSummary <- rbind(
+      OutputFBPSummary <- bind_rows(
         OutputFBPSummary,
-        data.frame(
-          Summary = statistic_display_name,
-          Iteration = 0,
-          Timestep = 0,
-          FileName = fbpSummaryFileName))
-
-      progressBar()
+        summarizeFBPFromTabular(
+          data = fbpTabularData,
+          data_path = rawTablePath,
+          component = component,
+          statistic = statistic,
+          statisticDisplayName = statisticDisplayName,
+          outputFilePrefix = fbpSummaryFilePrefix,
+          tempfilePath = rawTableTempPath,
+          template = templateRaster))
+      gc()
+      
+      # Update index of burn summary progress bar messages
+      progressBar("end")
+      current_output <- current_output + 1
     }
 
     # Save summary outputs for this FBP variable
     if(!isDatasheetEmpty(OutputFBPSummary))
       saveDatasheet(myScenario, OutputFBPSummary, str_c("burnP3Plus_Output", component, "SummaryMap"), append = FALSE)
-
-    # # TODO Tabular Per-Fire Outputs: Temporarily commenting out spatial per-fire outputs
-    # # - Consider adding logic for deciding when to keep spatial outputs as well
-    # # Clear out raw FBP maps if not needed
-    # if(is.na(componentOutputOptions$Individual) | !componentOutputOptions$Individual) {
-    #   rsyncrosim::delete(myScenario, datasheet = str_c("burnP3Plus_Output", component, "Map"), force = T)
-    #   
-    # # Otherwise save any updated iteration / fire id reassignments from resampling back to the library
-    # } else {
-    #   saveDatasheet(myScenario, componentDatasheet %>% mutate(Timestep = FireID), str_c("burnP3Plus_Output", component, "Map"))
-    # }
   }
 
-  updateRunLog("Finished summarizing FBP outputs in ", updateBreakpoint(), "\n\n")
-  progressBar("end")
+  updateRunLog("Finished summarizing and writing FBP outputs in ", updateBreakpoint(), "\n\n")
 }
-
-updateRunLog("Run Context: ", as.character(datasheet(myScenario, "core_Multiprocessing")$EnableMultiprocessing), "\n\n")

@@ -7,7 +7,7 @@ title: Getting started
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 
-**BurnP3+** extends [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}) by enhancing scalability, cross-compatibility, and flexibility (visit our [Home page](http://burnp3.github.io/BurnP3Plus/) for more background information). The **BurnP3+** package is built for [SyncroSim](https://syncrosim.com/){:target="_blank"}, yet familiarity with SyncroSim is not required to get started with **BurnP3+**. Throughout the Quickstart tutorial, terminology associated with SyncroSim will be italicized, and whenever possible, links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"}. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
+**BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://cfs.nrcan.gc.ca/publications?id=25627){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
 
 <br>
 
@@ -16,8 +16,8 @@ title: Getting started
 This Quickstart tutorial will introduce you to the basics of working with **BurnP3+** in SyncroSim Studio. The steps include:
 
 1. <a href="#step1"> Installing the <b>BurnP3+</b> package </a>
-2. <a href="#step2"> Creating a new <b>BurnP3+</b> <i>library</i> </a>
-3. <a href="#step3"> Configuring the <b>BurnP3+</b> <i>library</i> to: </a>
+2. <a href="#step2"> Creating a new <b>BurnP3+</b> library </a>
+3. <a href="#step3"> Configuring the <b>BurnP3+</b> library to: </a>
 * <a href="#stage1"> Sample ignitions </a>
 * <a href="#stage2"> Sample burn conditions </a>
 * <a href="#stage3"> Grow fires </a>
@@ -33,7 +33,7 @@ Running **BurnP3+** requires that the SyncroSim software be installed on your co
 
 In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} SyncroSim [packages](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+Cell2Fire** package uses the [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} fire growth model.
 
-> An additional package to **BurnP3+** is also available: [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. Unlike the Cell2Fire fire growth model that is raster-based, Prometheus is vector-based and capable of executing fine-scale simulations. This degree of accuracy, however, is more computationally demanding in terms of memory use. Moreover, running a BurnP3+Prometheus model requires the installation of [Prometheus](https://firegrowthmodel.ca/#/prometheus_software){:target="_blank"}. Note that to run version 2.2.0 of BurnP3+Prometheus or earlier, you will need to install Prometheus 2021.12.03, which is not the latest version of Prometheus. This version is available upon request by contacting info@burnp3plus.ca.
+> An additional package to **BurnP3+** is also available: [BurnP3+FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"}.
 
 To install the **BurnP3+** and **BurnP3+Cell2Fire** packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**. 
 

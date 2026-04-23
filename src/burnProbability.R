@@ -857,7 +857,9 @@ if (saveFBPMaps) {
   # Coerce to data.frame before extracting colnames to avoid bug in conda with extracting colnames
   # - Subset the data.table from open_dataset to limit memory use when extracting colnames
   fbpTableColumns <- open_dataset(rawTablePath) %>%
-    colnames()
+    head(0) %>%
+    collect() %>%
+    names()
    
   # Prep some information for more informative progress bars
   total_outputs <- OutputOptionFBPSpatial %>%

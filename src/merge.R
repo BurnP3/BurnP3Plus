@@ -135,7 +135,8 @@ mergeRawTabular <- function(ScenarioId, BatchID, FileName, crosswalk, rawTableTe
       existing_data_behavior = "delete_matching")
     
   # Finally return a single row of the raw tabular output to track which FBP variables were included
-  arrow::open_dataset(FileName)[1,] %>%
+  arrow::open_dataset(FileName) %>%
+    head(1) %>%
     dplyr::select(-Iteration, -FireID, -CellID) %>%
     as_tibble() %>%
     mutate(across(everything(), ~ TRUE)) %>%

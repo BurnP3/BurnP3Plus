@@ -285,7 +285,7 @@ augmentOutputFireStatistic <- function(OutputFireStatistic, firesToBurn, Determi
 }
 
 # Function to combine a partitioned parquet file into a single parquet
-# - Note: Note not memory-safe above a ~2GB output!
+# - Note: memory safe but slow for large parquet files
 # - This is generally okay for merging batches within a job, but use `savePartitionedParquetToSyncroSim` for truly large datasets
 consolidateTabularOutputs <- function() {
   if(saveBurnMaps & file.exists(rawTableTempPath)) {
@@ -294,11 +294,18 @@ consolidateTabularOutputs <- function() {
     rawTableTempPath %>%
       arrow::open_dataset(format = "parquet") %>%
       dplyr::select(-BatchID) %>%
-      arrange(Iteration, FireID, CellID) %>%
-      arrow::write_parquet(rawTablePath)
+      arrow::write_dataset(rawTablePath, format = "parquet")
+    
+    gc()
+
+    # Using `write_datset(format = parquet)` instead of `write_parquet()` above is memory safe, but produces a partitioned file with one partition 
+    # - We need to rename the partition and point SyncroSim to this file for saving
+    rawTablePartitionPathOld <- str_c(rawTablePath, "/part-0.parquet")
+    rawTablePartitionPath    <- str_c(rawTablePath, "/", basename(rawTablePath))
+    file.rename(rawTablePartitionPathOld, rawTablePartitionPath)
 
     OutputRawTabular <- data.frame(
-      FileName = rawTablePath %>% normalizePath(mustWork = F),
+      FileName = rawTablePartitionPath %>% normalizePath(mustWork = F),
       Description =
         str_c(
           "Raw tabular outputs", 

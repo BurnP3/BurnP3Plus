@@ -109,6 +109,8 @@ mergeFirePerimeters <- function(ScenarioId, FileName, crosswalk, geopackage_path
         layer = layer,
         quiet = TRUE,
         append = TRUE)
+
+    gc()
   }
 }
 
@@ -133,6 +135,8 @@ mergeRawTabular <- function(ScenarioId, BatchID, FileName, crosswalk, rawTableTe
       path = rawTableTempPath,
       format = "parquet",
       existing_data_behavior = "delete_matching")
+  
+  gc()
     
   # Finally return a single row of the raw tabular output to track which FBP variables were included
   arrow::open_dataset(FileName) %>%

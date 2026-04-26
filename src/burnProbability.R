@@ -594,6 +594,9 @@ if(requiresResample) {
   incompleteIterations <- anti_join(requiredFires, validExtraFires, by = "UniqueID") %>%
     pull(NewIteration) %>%
     unique
+  
+  # Identify the proportion of fires above the Minimum Fire Size for reporting
+  proportionKept <- sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic)
 
   # Update output fire statistics table
   OutputFireStatistic <- OutputFireStatistic %>%
@@ -623,9 +626,11 @@ if(requiresResample) {
 
   # Report iterations that did not meet ignition targets
   if(length(incompleteIterations) > 0)
+    numMissingFires <- nrow(requiredFires) - nrow(validExtraFires)
     updateRunLog("Could not sample enough fires above the specified minimum fire size for ", length(incompleteIterations), " iterations.",
-                 "\nPlease increase the 'Proportion of Extra Ignition to Sample' in the Fire Resampling Options or decrease the 'Minimum Fire Size'.",
-                 "\nPlease see the Fire Statistics table for details on specific iterations, fires, and burn conditions. Incomplete iterations will not be included in summary burn maps\n", type = "warning") 
+                 "\nPlease see the Fire Statistics table for details on specific iterations, fires, and burn conditions. Incomplete iterations will not be included in summary burn maps.\n",
+                 "\nGiven the proportion of all fires burned above the minimum fire size, sampling an addditional ", ceiling(numMissingFires / proportionKept * 1.1), " extra fires is expected to produce enough fires to complete these iterations (with a 10% safety factor).",
+                 "\nPlease adjust your safety factor as desired, sample these extra fires, merge the outputs with these burn outputs, and run the summarize transformer again to complete these iterations.\n", type = "warning") 
 
   if(nrow(firesToReplace) > 0) {
     ## Update Deterministic Input tables ----
@@ -640,8 +645,8 @@ if(requiresResample) {
 # Report burn stats ----
 updateRunLog("\nBurn Summary:\n", 
                nrow(OutputFireStatistic), " fires burned. \n",
-               sum(OutputFireStatistic$ResampleStatus == "Discarded"), " fires discarded due to insufficient burn area.\n",
-               round(sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic) * 100, 0), "% of simulated fires were above the minimum fire size.\n",
+               sum(OutputFireStatistic$ResampleStatus == "Discarded"), " fires discarded due to being below the specified Minimum Fire Size.\n",
+               round(proportionKept * 100, 0), "% of all simulated fires were above the minimum fire size.\n",
                round(sum(OutputFireStatistic$ResampleStatus == "Not Used") / max(1, nrow(OutputFireStatistic %>% filter(Iteration == 0))) * 100, 0), "% of extra simulated fires not used because target ignition counts were already met.\n")
 
 updateRunLog("Finished summarizing burn status and resampling fires in ", updateBreakpoint())

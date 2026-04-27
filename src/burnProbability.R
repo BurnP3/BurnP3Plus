@@ -625,12 +625,13 @@ if(requiresResample) {
     as.data.table()
 
   # Report iterations that did not meet ignition targets
-  if(length(incompleteIterations) > 0)
+  if(length(incompleteIterations) > 0) {
     numMissingFires <- nrow(requiredFires) - nrow(validExtraFires)
     updateRunLog("Could not sample enough fires above the specified minimum fire size for ", length(incompleteIterations), " iterations.",
                  "\nPlease see the Fire Statistics table for details on specific iterations, fires, and burn conditions. Incomplete iterations will not be included in summary burn maps.\n",
                  "\nGiven the proportion of all fires burned above the minimum fire size, sampling an addditional ", ceiling(numMissingFires / proportionKept * 1.1), " extra fires is expected to produce enough fires to complete these iterations (with a 10% safety factor).",
                  "\nPlease adjust your safety factor as desired, sample these extra fires, merge the outputs with these burn outputs, and run the summarize transformer again to complete these iterations.\n", type = "warning") 
+  }
 
   if(nrow(firesToReplace) > 0) {
     ## Update Deterministic Input tables ----

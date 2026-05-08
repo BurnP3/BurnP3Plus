@@ -561,6 +561,9 @@ requiresResample <- missingFiresByIteration %>%
   mutate(requiresResample = requiredFires > 0) %>%
   pull(requiresResample) %>%
   any
+  
+# Identify the proportion of fires above the Minimum Fire Size for reporting
+proportionKept <- sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic)
 
 if(requiresResample) {
   progressBar(type = "message", message = "Resampling fires...")
@@ -594,9 +597,6 @@ if(requiresResample) {
   incompleteIterations <- anti_join(requiredFires, validExtraFires, by = "UniqueID") %>%
     pull(NewIteration) %>%
     unique
-  
-  # Identify the proportion of fires above the Minimum Fire Size for reporting
-  proportionKept <- sum(OutputFireStatistic$ResampleStatus != "Discarded") / nrow(OutputFireStatistic)
 
   # Update output fire statistics table
   OutputFireStatistic <- OutputFireStatistic %>%

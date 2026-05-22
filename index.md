@@ -19,10 +19,10 @@ permalink: /
 
 **BurnP3+** was developed to improve scalability to larger landscapes and number of scenarios, allow for cross-compatibility among platforms (Windows and Linux) and interfaces (SyncroSim Studio, command line, R and Python), and increase flexibility in model structure through the implementation of modules. With these enhancements, **BurnP3+** extends the success of Burn-P3 as a decision-support tool in land management and a framework for scientific inquiry ([Parisien *et al.* 2019](https://www.fs.usda.gov/research/treesearch/60727){:target="_blank"}).
 
-Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. **BurnP3+** now provides three fire growth models: 
+Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}. **BurnP3+** now provides three fire growth models: 
 
 * [BurnP3+Cell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"} enables users to grow fires with [Cell2Fire](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"} 
-* [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}
+* [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}
 * [BurnP3+FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"} enables users to grow fires with [FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"}
 
 The Canadian Forest Service plans to develop additional fire growth packages for **BurnP3+**. Alternatively, users also have the option to develop their own fire growth models as SyncroSim packages. <br>
@@ -65,7 +65,7 @@ Report a bug with **BurnP3+** or contribute an idea at
 [http://github.com/BurnP3/BurnP3Plus/issues](http://github.com/BurnP3/BurnP3Plus/issues){:target="_blank"}. <br>
 Cell2Fire model at [https://doi.org/10.3389/ffgc.2021.692706](https://doi.org/10.3389/ffgc.2021.692706){:target="_blank"}. <br>
 Cell2Fire package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusCell2Fire](https://github.com/BurnP3/BurnP3PlusCell2Fire){:target="_blank"}. <br>
-Prometheus model at [https://firegrowthmodel.ca/pages/prometheus_overview_e.html](https://firegrowthmodel.ca/pages/prometheus_overview_e.html){:target="_blank"}. <br>
+Prometheus model at [https://firegrowthmodel.ca/#/prometheus_overview](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}. <br>
 Prometheus package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusPrometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}. <br>
 FireSTARR model at [https://github.com/CWFMF/FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"}. <br>
 FireSTARR package for **BurnP3+** at [https://github.com/BurnP3/BurnP3PlusFireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"}. <br>

@@ -647,8 +647,8 @@ if(requiresResample) {
 updateRunLog("\nBurn Summary:\n", 
                nrow(OutputFireStatistic), " fires burned. \n",
                sum(OutputFireStatistic$ResampleStatus == "Discarded"), " fires discarded due to being below the specified Minimum Fire Size.\n",
-               round(proportionKept * 100, 0), "% of all simulated fires were above the minimum fire size.\n",
-               round(sum(OutputFireStatistic$ResampleStatus == "Not Used") / max(1, nrow(OutputFireStatistic %>% filter(Iteration == 0))) * 100, 0), "% of extra simulated fires not used because target ignition counts were already met.\n")
+               if(requiresResample) paste(round(proportionKept * 100, 0), "% of all simulated fires were above the minimum fire size.\n",
+               round(sum(OutputFireStatistic$ResampleStatus == "Not Used") / max(1, nrow(OutputFireStatistic %>% filter(Iteration == 0))) * 100, 0), "% of extra simulated fires not used because target ignition counts were already met.\n"))
 
 updateRunLog("Finished summarizing burn status and resampling fires in ", updateBreakpoint())
 

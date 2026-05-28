@@ -73,9 +73,10 @@ updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, fi
         FireID    = coalesce(NewFireID, FireID)) %>%
     dplyr::select(-NewIteration, -NewFireID) %>%
     inner_join(firesToSummarize) %>%
+    dplyr::filter(!is.na(CellID)) %>%
     mutate(
-      BatchID = (Iteration - 1) %/% iterations_per_batch,
-      TileID  = (CellID - 1) %/% cells_per_tile,
+      BatchID = as.integer((Iteration - 1) %/% iterations_per_batch),
+      TileID  = as.integer((CellID - 1) %/% cells_per_tile),
       CellID = as.integer(CellID)) %>%
     group_by(TileID, BatchID) %>%
     write_dataset(
@@ -204,13 +205,14 @@ summarizeFBPFromTabular <- function(data, data_path, component, statistic, stati
       unlink(subtileTempfilePath, recursive = T)
 
       # Add subtile index
+      
       query <- query %>%
         mutate(SubtileID = as.integer(((CellID) - (TileID * cells_per_tile) - 1) %/% cells_per_subtile))
       
       # Iterate over subtiles calculating summary
       for (subtileID in (seq(subtiles_per_tile) - 1)) {
         query %>%
-          filter(SubtileID == subtileID) %>%
+          dplyr::filter(SubtileID == subtileID) %>%
           group_by(TileID, SubtileID, CellID) %>%
           summarize(Value = median(Value, na.rm = T)) %>%
           write_dataset(

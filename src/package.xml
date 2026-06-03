@@ -99,8 +99,6 @@
 	</dataSheet>
 
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
-		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
-		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" defaultValue="0" isVisible="False"/>
 		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" allowDbNull="False" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
 		<column name="ElevationGridFileName" displayName="Elevation [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
 		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>

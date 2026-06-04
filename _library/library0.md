@@ -39,7 +39,7 @@ permalink: reference/batch-burns
 
 The **Batch Burns** node is a *library datasheet*.
 
-In SyncroSim Studio, it can be accessed by right-clicking on the **BurnP3+** library name in the *explorer* panel (top-left), selecting **Open** from the context menu, navigating to the BurnP3+ tab to open **Batch Burns** window.
+In SyncroSim Studio, it can be accessed by right-clicking on the **BurnP3+** library name in the *explorer* panel (top-left), selecting **Open** from the context menu, navigating to the *BurnP3+ tab* to open **Batch Burns** window.
 
 <br>
 

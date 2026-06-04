@@ -64,7 +64,7 @@ For more information on the Canadian Fire Behaviour Prediction (FBP) System fuel
 
 **Column internal name:** Name
 
-Defines a name for the fuel type. E.g., “Boreal Spruce”. Fuel Names are defined by the user (i.e., free-form) and must match the name(s) of the Fuel Type(s) in the fuel Crosswalk (e.g., <a href="cell2-fire#heading01">Cell2Fire Crosswalk</a>).
+Defines a name for the fuel type. E.g., “Boreal Spruce”. Fuel Names are defined by the user (i.e., free-form) and must match the name(s) of the Fuel Type(s) in the fuel Crosswalk (e.g., <a href="fire-starr#heading01">FireSTARR Crosswalk</a>).
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
 

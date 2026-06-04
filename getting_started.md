@@ -40,7 +40,7 @@ In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+FireSTARR]
 
 > An additional package to **BurnP3+** is also available: [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}.
 
-To install the **BurnP3+** and **BurnP3+FireSTARR** packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages...**. 
+To install the **BurnP3+** and **BurnP3+FireSTARR** packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages**. 
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-1.1.png">
 
@@ -80,9 +80,9 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.1.png">
 
-2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. Notice that the only available template is the *Glacier Example (FireSTARR)*. Select this template library, choose a folder to save it, and click **OK**.
+2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There tare two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
-    <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png">
+    <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png"> 
 
     > If prompted, update the library to the latest **core** package version. Click **Apply**.
 
@@ -194,7 +194,9 @@ Rename the scenario by right clicking the newly created scenario, selecting **Re
 
 After reviewing the model inputs and creating a new scenario, you are now ready to run the model. 
 
-You can enable and adjust the number of **multiprocessing** jobs according to the specifications of your computer. A good rule of thumb to follow is number of logical cores minus 1.
+You can enable and adjust the number of **Multiprocessing** jobs according to the specifications of your computer. A good rule of thumb to follow is number of logical cores minus 1.
+
+<img align="middle" style="padding: 3px" width="500" src="assets/getting_started_images/multi.png">
 
 Next, click on the **Baseline Burning Hours** scenario, and from the main tool menu select the green triangle **(Run)**. If prompted to save your project, click **Yes**.
 

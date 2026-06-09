@@ -8,7 +8,7 @@ title: Tutorials
 This video tutorial covers how to use the **BurnP3+** SyncroSim package to configure a wildfire probability model. 
 
 To follow along, this tutorial requires:
-* the SyncroSim software, version 3.0.9;
+* the SyncroSim software, version 3.1.29;
 * the **BurnP3+** SyncroSim package;
 * the **BurnP3+Prometheus** SyncroSim package; and
 * the **Prometheus** fire growth model software 

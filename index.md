@@ -19,7 +19,7 @@ permalink: /
 
 **BurnP3+** was developed to improve scalability to larger landscapes and number of scenarios, allow for cross-compatibility among platforms (Windows and Linux) and interfaces (SyncroSim Studio, command line, R and Python), and increase flexibility in model structure through the implementation of modules. With these enhancements, **BurnP3+** extends the success of Burn-P3 as a decision-support tool in land management and a framework for scientific inquiry ([Parisien *et al.* 2019](https://www.fs.usda.gov/research/treesearch/60727){:target="_blank"}).
 
-Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}. **BurnP3+** now provides three fire growth models: 
+Burn-P3 utilized a single deterministic fire growth model called [Prometheus](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}. **BurnP3+** now provides two fire growth models: 
 
 * [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"} enables users to grow fires with [Prometheus](https://firegrowthmodel.ca/#/prometheus_overview){:target="_blank"}
 * [BurnP3+FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"} enables users to grow fires with [FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"}

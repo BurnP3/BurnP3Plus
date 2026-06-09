@@ -49,21 +49,57 @@ permalink: reference/burn-p3-plus-scenario
             <a href="#heading18"> &emsp;&emsp;&emsp;Fire Resampling Options</a>
             <a href="#heading19"> &emsp;&emsp;&emsp;Distributions</a>
             <a href="#heading20"> &emsp;&emsp;&emsp;Output Fire Statistics Table</a>
-            <a href="#heading21"> &emsp;&emsp;&emsp;Prometheus Fire Behaviour Prediction (FBP) Outputs</a>
-            <a href="#heading22"> &emsp;&emsp;&emsp;Output Rate of Spread Map</a>
-            <a href="#heading23"> &emsp;&emsp;&emsp;Output Fire Intensity Map</a>
-            <a href="#heading24"> &emsp;&emsp;&emsp;Output Spread Direction Map</a>
-            <a href="#heading25"> &emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
-            <a href="#heading26"> &emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
-            <a href="#heading27"> &emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
-            <a href="#heading28"> &emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
-            <a href="#heading29"> &emsp;&emsp;&emsp;FireSTARR Fire Behaviour Prediction (FBP) Outputs</a>
-            <a href="#heading30"> &emsp;&emsp;&emsp;Output Rate of Spread Map</a>
-            <a href="#heading31"> &emsp;&emsp;&emsp;Output Fire Intensity Map</a>
-            <a href="#heading32"> &emsp;&emsp;&emsp;Output Spread Direction Map</a>
+            <details class="sidenav-group">
+                <summary><a href="#heading21"> &emsp;&emsp;&emsp;Prometheus FBP Outputs</a></summary>
+                <a href="#heading22"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Map</a>
+                <a href="#heading23"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Map</a>
+                <a href="#heading24"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Map</a>
+                <a href="#heading25"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
+                <a href="#heading26"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
+                <a href="#heading27"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
+                <a href="#heading28"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
+            </details>
+            <details class="sidenav-group">
+                <summary><a href="#heading29"> &emsp;&emsp;&emsp;FireSTARR FBP Outputs</a></summary>
+                <a href="#heading30"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Map</a>
+                <a href="#heading31"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Map</a>
+                <a href="#heading32"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Map</a>
+            </details>
         {% endif %}
     {% endfor %}
 </div>
+
+<style>
+.sidenav details.sidenav-group {
+    display: block;
+}
+.sidenav details.sidenav-group > summary {
+    padding: 3px 3px 3px 12px;
+    font-size: 12px;
+    color: #000;
+    display: block;
+    cursor: pointer;
+    list-style: none;
+}
+.sidenav details.sidenav-group > summary::-webkit-details-marker {
+    display: none;
+}
+.sidenav details.sidenav-group > summary::before {
+    content: "▶ ";
+    font-size: 9px;
+}
+.sidenav details.sidenav-group[open] > summary::before {
+    content: "▼ ";
+    font-size: 9px;
+}
+.sidenav details.sidenav-group > summary a {
+    display: inline;
+    padding: 0;
+}
+.sidenav details.sidenav-group > summary:hover {
+    background-color: #fff;
+}
+</style>
 
 # **BurnP3+**
 

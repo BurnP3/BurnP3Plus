@@ -266,7 +266,7 @@ Provides a numerical ID for the weather zone. IDs must match the weather zone ra
 
 **Datasheet internal name:** burnP3Plus_Distribution
 
-The **Distributions** datasheet is used to define distributions in the analysis. Further information on the distribution(s) defined in this datasheet is input in the <a href="burn-p3-plus-scenario#heading21">scenario Distributions datasheet</a>.
+The **Distributions** datasheet is used to define distributions in the analysis. Further information on the distribution(s) defined in this datasheet is input in the <a href="burn-p3-plus-scenario#heading19">scenario Distributions datasheet</a>.
 
 
 ### **Name**

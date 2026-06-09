@@ -44,10 +44,9 @@ In SyncroSim Studio, the following *project datasheets* can be accessed by right
 
 **Datasheet internal name:** burnP3PlusPrometheus_FuelCodeCrosswalk
 
-The **Prometheus Crosswalk** datasheet can be found under the **BurnP3+ Prometheus** tab and contains information about the fuel types associated with the study area. The Fuel Types in the Crosswalk must match the Names of the fuel types in the BurnP3+ \| <a href="burn-p3-plus#heading01">Fuel Types</a> datasheet. The fuel Crosswalk links the pre-defined BurnP3+ \| <a href="burn-p3-plus#heading01">Fuel Types</a> Names to the fuels in the Prometheus fire growth model.
+The **Prometheus Crosswalk** datasheet can be found under the **BurnP3+ Prometheus** tab and contains information about the fuel types associated with the study area. The Fuel Types in the Crosswalk must match the Names of the fuel types in the BurnP3+ \| <a href="burn-p3-plus#heading01">Fuel Types</a> datasheet. The fuel Crosswalk links the pre-defined BurnP3+ \| <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system-fuel-types" target="_blank">Fuel Types</a> Names to the fuels in the Prometheus fire growth model.
 
 *Note: The Prometheus Crosswalk is identical to the FireSTARR Crosswalk. As a result, data can be exported and imported between the two datasheets without any modifications.*
-
 
 ### **Fuel Type**
 

@@ -16,13 +16,15 @@
             Band                    INTEGER) </item>
 
     <item> INSERT INTO burnP3Plus_LandscapeRasters (
+            LandscapeRastersID,
             ScenarioID,
             FuelGridFileName,
             ElevationGridFileName,
             FireZoneGridFileName,
             WeatherZoneGridFileName,
             Band)
-      SELECT ScenarioID,
+      SELECT LandscapeRastersID,
+             ScenarioID,
              FuelGridFileName,
              ElevationGridFileName,
              FireZoneGridFileName,

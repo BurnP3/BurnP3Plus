@@ -1,5 +1,5 @@
 # Setup ----
-Sys.unsetenv("PROJ_LIB")
+if (.Platform$OS.type == "windows") Sys.unsetenv("PROJ_LIB")
 library(rsyncrosim)
 
 # Find location of shared function definitions and source

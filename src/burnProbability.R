@@ -7,6 +7,7 @@ getSharedDefinitionsPath <- function() {
   sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
   return(sharedDefinitionsPath)
 }
+Sys.setenv("MALLOC_CONF" = "dirty_decay_ms:0,muzzy_decay_ms:0")
 source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----
@@ -63,26 +64,38 @@ updateResampledFireIDs <- function(data, firesToReplace) {
 # - Also is responsible for repartitioning the raw tabular parquet file spatially for memory-safe analysis
 updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, firesToSummarize, output_parquet_path) {
   if (!is.character(input_parquet_path) | !all(file.exists(input_parquet_path)))
-    stop("Received incorrect data type while trying to reassign extra fires in raw tabular output from resampling.") 
+    stop("Received incorrect data type while trying to reassign extra fires in raw tabular output from resampling.")
 
-  input_parquet_path %>%
-    open_dataset() %>%
-    left_join(firesToReplace) %>%
-    mutate(
-        Iteration = coalesce(NewIteration, Iteration),
-        FireID    = coalesce(NewFireID, FireID)) %>%
-    dplyr::select(-NewIteration, -NewFireID) %>%
-    inner_join(firesToSummarize) %>%
-    dplyr::filter(!is.na(CellID)) %>%
-    mutate(
-      BatchID = as.integer((Iteration - 1) %/% iterations_per_batch),
-      TileID  = as.integer((CellID - 1) %/% cells_per_tile),
-      CellID = as.integer(CellID)) %>%
-    group_by(TileID, BatchID) %>%
-    write_dataset(
-      path = output_parquet_path,
-      format = "parquet")
-  gc()
+  # Process input files in batches of 50 to avoid opening 1000+ file handles simultaneously.
+  # Arrow opens all input files for metadata scanning at query plan time; with many input files
+  # this can approach the Linux default file descriptor limit (1024) and spike memory.
+  # Each batch appends to the same output directory using a unique basename_template so
+  # partition files from different batches coexist and are read correctly by open_dataset().
+  batches <- split(input_parquet_path, ceiling(seq_along(input_parquet_path) / 50L))
+
+  for (batch_idx in seq_along(batches)) {
+    batches[[batch_idx]] %>%
+      open_dataset() %>%
+      left_join(firesToReplace) %>%
+      mutate(
+          Iteration = coalesce(NewIteration, Iteration),
+          FireID    = coalesce(NewFireID, FireID)) %>%
+      dplyr::select(-NewIteration, -NewFireID) %>%
+      inner_join(firesToSummarize) %>%
+      dplyr::filter(!is.na(CellID)) %>%
+      mutate(
+        BatchID = as.integer((Iteration - 1) %/% iterations_per_batch),
+        TileID  = as.integer((CellID - 1) %/% cells_per_tile),
+        CellID = as.integer(CellID)) %>%
+      write_dataset(
+        path = output_parquet_path,
+        format = "parquet",
+        partitioning = c("TileID", "BatchID"),
+        max_open_files = 20L,
+        existing_data_behavior = "overwrite",
+        basename_template = paste0("part-", batch_idx, "-{i}.parquet"))
+    gc()
+  }
 }
 
 # Function to quickly identify unique parition IDs by name
@@ -688,6 +701,9 @@ if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
 }
 
 # Raster outputs ----
+rm(OutputFireStatistic, DeterministicIgnitionLocation, DeterministicBurnCondition)
+gc()
+
 if (saveBurnMaps | saveFBPMaps | requiresResample) {
   # Set up parameters for tiling / subtiling
   iterations_per_batch <- 5000L

@@ -66,13 +66,14 @@ updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, fi
   if (!is.character(input_parquet_path) | !all(file.exists(input_parquet_path)))
     stop("Received incorrect data type while trying to reassign extra fires in raw tabular output from resampling.")
 
-  # Process input files in batches of 50 to avoid opening 1000+ file handles simultaneously.
-  # Arrow opens all input files for metadata scanning at query plan time; with many input files
-  # this can approach the Linux default file descriptor limit (1024) and spike memory.
-  # Each batch appends to the same output directory using a unique basename_template so
-  # partition files from different batches coexist and are read correctly by open_dataset().
   batches <- split(input_parquet_path, ceiling(seq_along(input_parquet_path) / 50L))
+  temp_dirs <- file.path(
+    dirname(output_parquet_path),
+    paste0(".tmp_", basename(output_parquet_path), "_", seq_along(batches)))
+  on.exit(unlink(temp_dirs, recursive = TRUE), add = TRUE)
 
+  # Phase 1: process each batch of 50 input files and write to a dedicated temp directory.
+  # Capping open_dataset() at 50 files per call stays below Linux's default FD limit of 1024.
   for (batch_idx in seq_along(batches)) {
     batches[[batch_idx]] %>%
       open_dataset() %>%
@@ -86,14 +87,46 @@ updateResampledFireIDsParquet <- function(input_parquet_path, firesToReplace, fi
       mutate(
         BatchID = as.integer((Iteration - 1) %/% iterations_per_batch),
         TileID  = as.integer((CellID - 1) %/% cells_per_tile),
-        CellID = as.integer(CellID)) %>%
+        CellID  = as.integer(CellID)) %>%
       write_dataset(
-        path = output_parquet_path,
+        path = temp_dirs[[batch_idx]],
         format = "parquet",
         partitioning = c("TileID", "BatchID"),
-        max_open_files = 20L,
-        existing_data_behavior = "overwrite",
-        basename_template = paste0("part-", batch_idx, "-{i}.parquet"))
+        max_open_files = 100L,
+        existing_data_behavior = "overwrite")
+    gc()
+  }
+
+  # Phase 2: consolidate into exactly one parquet file per TileID/BatchID partition.
+  # Iterates over each partition directory, opening at most N_batches (~21) files per call.
+  # One file per partition is required by savePartitionedParquetToSyncroSim: it renames every
+  # file in a partition directory to the same target name, so multiple files cause silent data
+  # loss through overwriting.
+  if (dir.exists(output_parquet_path)) unlink(output_parquet_path, recursive = TRUE)
+
+  all_partition_dirs <- temp_dirs %>%
+    map(~ list.files(.x, pattern = "\\.parquet$", recursive = TRUE, full.names = FALSE)) %>%
+    unlist() %>%
+    dirname() %>%
+    unique()
+
+  for (part_dir in all_partition_dirs) {
+    batch_files <- temp_dirs %>%
+      map(~ {
+        pdir <- file.path(.x, part_dir)
+        if (dir.exists(pdir)) list.files(pdir, pattern = "\\.parquet$", full.names = TRUE)
+        else character(0)
+      }) %>%
+      unlist()
+
+    if (length(batch_files) == 0) next
+
+    out_dir <- file.path(output_parquet_path, part_dir)
+    dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+
+    open_dataset(batch_files) %>%
+      collect() %>%
+      write_parquet(file.path(out_dir, "part-0.parquet"))
     gc()
   }
 }
@@ -700,9 +733,10 @@ if (saveBurnPerimeters & !isDatasheetEmpty(OutputFirePerimeter)) {
   updateRunLog("Finished processing vector outputs in ", updateBreakpoint())
 }
 
-# Raster outputs ----
 rm(OutputFireStatistic, DeterministicIgnitionLocation, DeterministicBurnCondition)
 gc()
+
+# Raster outputs ----
 
 if (saveBurnMaps | saveFBPMaps | requiresResample) {
   # Set up parameters for tiling / subtiling

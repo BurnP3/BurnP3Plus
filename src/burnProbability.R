@@ -7,7 +7,7 @@ getSharedDefinitionsPath <- function() {
   sharedDefinitionsPath <- paste0(ssimEnvironment()$PackageDirectory, "/shared.R")
   return(sharedDefinitionsPath)
 }
-Sys.setenv("MALLOC_CONF" = "dirty_decay_ms:0,muzzy_decay_ms:0")
+Sys.setenv("MALLOC_CONF" = "dirty_decay_ms:0,muzzy_decay_ms:0") # Disable jemalloc decay to free up memory immediately (Arrow 24.+. Must be done before loading Arrow) 
 source(getSharedDefinitionsPath())
 
 ## Connect to SyncroSim ----

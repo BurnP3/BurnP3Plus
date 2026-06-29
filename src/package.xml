@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.6.11" minSyncroSimVersion="3.1.9">
+<package name="burnP3Plus" displayName = "BurnP3+" description="Burn probability modeling" url="https://burnp3.github.io/BurnP3Plus/" version="2.7.0" minSyncroSimVersion="3.1.9">
 
 	<!--Library Datasheets-->
 
@@ -99,8 +99,6 @@
 	</dataSheet>
 
 	<dataSheet name="LandscapeRasters" displayName="Landscape Maps" isSingleRow="True">
-		<column name="Iteration" dataType="Integer" validationType="WholeNumber" validationCondition="Greater" formula1="0" format="d" defaultValue="1" isVisible="False"/>
-		<column name="Timestep" dataType="Integer" validationType="WholeNumber" validationCondition="GreaterEqual" formula1="0" format="d" defaultValue="0" isVisible="False"/>
 		<column name="FuelGridFileName" displayName="Fuel" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" allowDbNull="False" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
 		<column name="ElevationGridFileName" displayName="Elevation [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
 		<column name="FireZoneGridFileName" displayName="Fire Zone [Optional]" dataType="String" isExternalFile="True" bandColumn="Band" isRaster="True" externalFileFilter="GeoTIFF Files (*.tif)|*.tif"/>
@@ -484,7 +482,7 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="IgnitionsPerIteration" type="Input"/>
@@ -497,7 +495,7 @@
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="FireDuration" type="Input"/>
@@ -510,7 +508,7 @@
 	</transformer>
 
 	<!--Merge Fire Growth Outputs Transformer-->
-	<transformer name="mergeBurns" displayName="3.5 - Merge Fire Growth Scenarios" isRunnable="True" programName="Rscript" programArguments="merge.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="mergeBurns" displayName="3.5 - Merge Fire Growth Scenarios" isRunnable="True" programName="Rscript" programArguments="merge.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 	  <dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 	  <dataSheet name="DeterministicBurnCondition" type="Both"/>
 	  <dataSheet name="burnP3Plus_OutputFireStatistic" type="Both"/>
@@ -519,7 +517,7 @@
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 		<dataSheet name="DeterministicBurnCondition" type="Both"/>

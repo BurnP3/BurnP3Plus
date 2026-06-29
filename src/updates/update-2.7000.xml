@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<update comment="Remove unused Iteration and Timestep columns from LandscapeRasters">
+
+  <action code="Exec" condition="TableExists" criteria="burnP3Plus_LandscapeRasters">
+    <item> CREATE TABLE temp_table AS SELECT * FROM burnP3Plus_LandscapeRasters </item>
+
+    <item> DROP TABLE burnP3Plus_LandscapeRasters </item>
+
+    <item> CREATE TABLE burnP3Plus_LandscapeRasters (
+            LandscapeRastersID      INTEGER PRIMARY KEY,
+            ScenarioID              INTEGER,
+            FuelGridFileName        TEXT,
+            ElevationGridFileName   TEXT,
+            FireZoneGridFileName    TEXT,
+            WeatherZoneGridFileName TEXT,
+            Band                    INTEGER) </item>
+
+    <item> INSERT INTO burnP3Plus_LandscapeRasters (
+            LandscapeRastersID,
+            ScenarioID,
+            FuelGridFileName,
+            ElevationGridFileName,
+            FireZoneGridFileName,
+            WeatherZoneGridFileName,
+            Band)
+      SELECT LandscapeRastersID,
+             ScenarioID,
+             FuelGridFileName,
+             ElevationGridFileName,
+             FireZoneGridFileName,
+             WeatherZoneGridFileName,
+             Band
+      FROM temp_table </item>
+
+    <item> DROP TABLE temp_table </item>
+  </action>
+
+</update>

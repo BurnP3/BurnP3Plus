@@ -2,7 +2,7 @@
 progressBar(type = "message", message = "Preparing inputs...")
 
 # Clean up environment variables and global options before loading packages
-Sys.unsetenv("PROJ_LIB")
+if (.Platform$OS.type == "windows") Sys.unsetenv("PROJ_LIB")
 options(scipen = 999)
 
 # Initialize first breakpoint for timing code

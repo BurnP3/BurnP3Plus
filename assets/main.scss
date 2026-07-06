@@ -84,6 +84,10 @@ a {
     background: #f1f1f1;
     padding: 12px 12px;
     display: inline-block;
+    box-sizing: border-box;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 /* Link */
 .sidenav a {

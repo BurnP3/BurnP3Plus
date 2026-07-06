@@ -47,18 +47,18 @@ permalink: reference/burn-p3-plus-scenario
             <details class="sidenav-group">
                 <summary><a href="#heading21"> &emsp;&emsp;&emsp;Spatial FBP</a></summary>
                 <a href="#heading22"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Map</a>
-                <a href="#heading23"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Map</a>
-                <a href="#heading24"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Map</a>
-                <a href="#heading25"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
-                <a href="#heading26"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
-                <a href="#heading27"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
-                <a href="#heading28"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
-                <a href="#heading29"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Summary Map</a>
-                <a href="#heading30"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Summary Map</a>
-                <a href="#heading31"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Summary Map</a>
-                <a href="#heading32"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Summary Map</a>
-                <a href="#heading33"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Summary Map</a>
-                <a href="#heading34"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Summary Map</a>
+                <a href="#heading23"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Summary Map</a>
+                <a href="#heading24"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Map</a>
+                <a href="#heading25"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Summary Map</a>
+                <a href="#heading26"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Map</a>
+                <a href="#heading27"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Summary Map</a>
+                <a href="#heading28"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
+                <a href="#heading29"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Summary Map</a>
+                <a href="#heading30"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
+                <a href="#heading31"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Summary Map</a>
+                <a href="#heading32"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
+                <a href="#heading33"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Summary Map</a>
+                <a href="#heading34"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
                 <a href="#heading35"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Summary Map</a>
             </details>
             <a href="#heading16"> &emsp;&emsp;&emsp;Deterministic Ignition Location</a>
@@ -1435,301 +1435,7 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading23"> <h2><b>Output Fire Intensity Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputFireIntensityMap
-
-The **Output Fire Intensity Map** datasheet contains the per-fire fire intensity maps created when **Per-Fire Maps** is selected for the **Fire Intensity Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading24"> <h2><b>Output Spread Direction Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputSpreadDirectionMap
-
-The **Output Spread Direction Map** datasheet contains the per-fire spread direction maps created when **Per-Fire Maps** is selected for the **Spread Direction Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading25"> <h2><b>Output Surface Fuel Consumption Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputSurfaceFuelConsumptionMap
-
-The **Output Surface Fuel Consumption Map** datasheet contains the per-fire surface fuel consumption maps created when **Per-Fire Maps** is selected for the **Surface Fuel Consumption Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading26"> <h2><b>Output Crown Fraction Burned Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputCrownFractionBurnedMap
-
-The **Output Crown Fraction Burned Map** datasheet contains the per-fire crown fraction burned maps created when **Per-Fire Maps** is selected for the **Crown Fraction Burned Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading27"> <h2><b>Output Crown Fraction Consumed Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputCrownFractionConsumedMap
-
-The **Output Crown Fraction Consumed Map** datasheet contains the per-fire crown fraction consumed maps created when **Per-Fire Maps** is selected for the **Crown Fraction Consumed Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading28"> <h2><b>Output Total Fuel Consumption Map</b></h2> </p>
-
-**Datasheet internal name:** burnP3Plus_OutputTotalFuelConsumptionMap
-
-The **Output Total Fuel Consumption Map** datasheet contains the per-fire total fuel consumption maps created when **Per-Fire Maps** is selected for the **Total Fuel Consumption Map** variable in the **Spatial FBP** datasheet.
-
-### **Iteration**
-
-**Column internal name:** Iteration
-
-Specifies the map's iteration.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **Timestep**
-
-**Column internal name:** Timestep
-
-Specifies the map's timestep.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FireID**
-
-**Column internal name:** FireID
-
-Specifies the map's fire ID.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-### **FileName**
-
-**Column internal name:** FileName
-
-Specifies the map's file name.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
-
-### **Band**
-
-**Column internal name:** Band
-
-Specifies the map's band.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
-
-<br>
-
-
-<p id="heading29"> <h2><b>Output Rate of Spread Summary Map</b></h2> </p>
+<p id="heading23"> <h2><b>Output Rate of Spread Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputRateOfSpreadSummaryMap
 
@@ -1778,7 +1484,56 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading30"> <h2><b>Output Fire Intensity Summary Map</b></h2> </p>
+<p id="heading24"> <h2><b>Output Fire Intensity Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputFireIntensityMap
+
+The **Output Fire Intensity Map** datasheet contains the per-fire fire intensity maps created when **Per-Fire Maps** is selected for the **Fire Intensity Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading25"> <h2><b>Output Fire Intensity Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputFireIntensitySummaryMap
 
@@ -1827,7 +1582,56 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading31"> <h2><b>Output Spread Direction Summary Map</b></h2> </p>
+<p id="heading26"> <h2><b>Output Spread Direction Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputSpreadDirectionMap
+
+The **Output Spread Direction Map** datasheet contains the per-fire spread direction maps created when **Per-Fire Maps** is selected for the **Spread Direction Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading27"> <h2><b>Output Spread Direction Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputSpreadDirectionSummaryMap
 
@@ -1876,7 +1680,56 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading32"> <h2><b>Output Surface Fuel Consumption Summary Map</b></h2> </p>
+<p id="heading28"> <h2><b>Output Surface Fuel Consumption Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputSurfaceFuelConsumptionMap
+
+The **Output Surface Fuel Consumption Map** datasheet contains the per-fire surface fuel consumption maps created when **Per-Fire Maps** is selected for the **Surface Fuel Consumption Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading29"> <h2><b>Output Surface Fuel Consumption Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputSurfaceFuelConsumptionSummaryMap
 
@@ -1925,7 +1778,56 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading33"> <h2><b>Output Crown Fraction Burned Summary Map</b></h2> </p>
+<p id="heading30"> <h2><b>Output Crown Fraction Burned Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputCrownFractionBurnedMap
+
+The **Output Crown Fraction Burned Map** datasheet contains the per-fire crown fraction burned maps created when **Per-Fire Maps** is selected for the **Crown Fraction Burned Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading31"> <h2><b>Output Crown Fraction Burned Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputCrownFractionBurnedSummaryMap
 
@@ -1974,7 +1876,56 @@ Specifies the map's band.
 <br>
 
 
-<p id="heading34"> <h2><b>Output Crown Fraction Consumed Summary Map</b></h2> </p>
+<p id="heading32"> <h2><b>Output Crown Fraction Consumed Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputCrownFractionConsumedMap
+
+The **Output Crown Fraction Consumed Map** datasheet contains the per-fire crown fraction consumed maps created when **Per-Fire Maps** is selected for the **Crown Fraction Consumed Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading33"> <h2><b>Output Crown Fraction Consumed Summary Map</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_OutputCrownFractionConsumedSummaryMap
 
@@ -2001,6 +1952,55 @@ Specifies the map's iteration.
 **Column internal name:** Timestep
 
 Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FileName**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+
+<p id="heading34"> <h2><b>Output Total Fuel Consumption Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputTotalFuelConsumptionMap
+
+The **Output Total Fuel Consumption Map** datasheet contains the per-fire total fuel consumption maps created when **Per-Fire Maps** is selected for the **Total Fuel Consumption Map** variable in the **Spatial FBP** datasheet.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **FireID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
 

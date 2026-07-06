@@ -161,9 +161,9 @@ a {
 
 /* Dropdown container */
 .dropdown {
-    float: left;
+    display: inline-block;
     line-height: 54px;
-    margin-left: 12px;
+    margin-right: 20px;
 }
 
 /* Dropdown content */

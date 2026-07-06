@@ -3,14 +3,14 @@ layout: default
 title: Getting started
 ---
 
-# Getting started with **BurnP3+**
+# BurnP3PlusFireSTARR Quickstart Tutorial**
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 
 **BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://ostrnrcan-dostrncan.canada.ca/entities/publication/18cdf7dd-2488-4df4-8cc7-62fb1eebf9ed){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
 
 This tutorial was built using the following software versions:
-* SyncroSim version 3.1.29
+* SyncroSim version 3.0.9
 * burnP3Plus version 2.6.11
 * burnP3PlusFireSTARR 1.5.7
 
@@ -70,7 +70,7 @@ Next, click on the **Install from Server...** button again to open the packages 
 
 <p id="step2"> <h2> <b>Step 2: Opening a BurnP3+ library</b> </h2> </p>
 
-Having installed **BurnP3+** and **burnP3PlusFireSTARR**, you are now ready to create your first SyncroSim [*library*](https://docs.syncrosim.com/getting_started/overview.html#libraries){:target="_blank"}. A library is a file (with extension .ssim) that stores all the data and configurations associated with your model. 
+Having installed **BurnP3+** and **burnP3PlusFireSTARR**, you are now ready to create your first SyncroSim [*library*](https://docs.syncrosim.com/get_started/overview){:target="_blank"}. A library is a file (with extension .ssim) that stores all the data and configurations associated with your model. 
 
 We will start with a pre-built example library using the **BurnP3+** and **BurnP3+FireSTARR** packages. This example uses a synthetic landscape to demonstrate the basics of running **BurnP3+** using the **FireSTARR** fire growth model.
 
@@ -80,13 +80,13 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.1.png">
 
-2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There tare two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
+2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *BurnP3Plus FireSTARR Example*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png"> 
 
     > If prompted, update the library to the latest **core** package version. Click **Apply**.
 
-3. The *Getting Started with BurnP3+FireSTARR* library will automatically open in the SyncroSim Studio *Explorer* window. The **Glacier Example (FireSTARR)** library contains a [*project*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/getting_started/overview.html#scenarios){:target="_blank"} named **Baseline Burning Hours**.
+3. The *Getting Started with BurnP3+FireSTARR* library will automatically open in the SyncroSim Studio *Explorer* window. The **BurnP3Plus FireSTARR Example** library contains a [*project*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} named **Baseline Burning Hours**.
 
     <img align="middle" style="padding: 3px" width="250" src="assets/getting_started_images/BurnP3Plus-screenshot-2.3.png">
 
@@ -101,7 +101,7 @@ This information can be found by selecting **File > Library Datasheets** and nav
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.1.png">
 
-Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datasheets*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data shared across all scenarios for a project. 
+Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datasheets*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} containing data shared across all scenarios for a project. 
 
 Navigate to the **BurnP3+** tab, under the **Fuels** tab, click **Fuel Types**. Here, you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. This example library already contains a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
 
@@ -111,9 +111,9 @@ Next, under the **BurnP3+FireSTARR** tab, click on **FireSTARR Crosswalk**. Here
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.3.png">
 
-Lastly, in the **Library Explorer** window, you will see one scenario named **Baseline Conditions**. Model inputs in SyncroSim are organized into scenarios. Each scenario is associated with [*scenario datasheets*](https://docs.syncrosim.com/how_to_guides/library_overview.html){:target="_blank"} containing data that are specified for each scenario.
+Lastly, in the **Library Explorer** window, you will see one scenario named **Baseline Burning Hours**. Model inputs in SyncroSim are organized into scenarios. Each scenario is associated with [*scenario datasheets*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} containing data that are specified for each scenario.
 
-To view the model inputs for the scenario, double-click on **Baseline Conditions**. 
+To view the model inputs for the scenario, double-click on **Baseline Burning Hours**. 
 
 In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages:
 
@@ -154,7 +154,7 @@ Navigate to the next node, **Sample Burning Conditions**. The **Spread Event Day
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.9.png">
 
-The **Daily Burning Hours** datasheet defines the number of hours fires are actively burning per day. For the **Baseline Conditions** scenario, **Daily Burning Hours** was set to **4** for all **Seasons**.
+The **Daily Burning Hours** datasheet defines the number of hours fires are actively burning per day. For the **Baseline Burning Hours** scenario, **Daily Burning Hours** was set to **4** for all **Seasons**.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.10.png">
 

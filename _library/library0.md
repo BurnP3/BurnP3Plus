@@ -1,7 +1,7 @@
 ---
 layout: default
 section: 0
-title: Batch Burns
+title: BurnP3+
 permalink: reference/batch-burns
 ---
 
@@ -33,15 +33,15 @@ permalink: reference/batch-burns
     {% endfor %}
 </div>
 
-# **Batch Burns**
+# **BurnP3+**
 
-**Datasheet internal name:** burnP3Plus_BatchOption
-
-The **Batch Burns** node is a *library datasheet*.
-
-In SyncroSim Studio, it can be accessed by right-clicking on the **BurnP3+** library name in the *explorer* panel (top-left), selecting **Open** from the context menu, navigating to the *BurnP3+ tab* to open **Batch Burns** window.
+In SyncroSim Studio, the following *library datasheet* can be accessed by right-clicking on the library name in the Explorer, selecting **Open** from the context menu, and navigating to the **BurnP3+** tab to open the **Batch Burns** datasheet.
 
 <br>
+
+## **Batch Burns**
+
+**Datasheet internal name:** burnP3Plus_BatchOption
 
 
 ### **Batch Size (ignitions)**

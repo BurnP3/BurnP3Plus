@@ -128,6 +128,35 @@ a {
     display: block;
 }
 
+/* Nested nav indentation levels.
+   These use padding (not leading &emsp; characters) so that when a link's
+   text wraps onto a second line, the wrapped line stays aligned under the
+   first line instead of falling back to the left edge. */
+.sidenav a.lvl1 {
+    padding-left: 24px;
+}
+.sidenav a.lvl2 {
+    padding-left: 48px;
+}
+.sidenav a.lvl3 {
+    padding-left: 72px;
+}
+
+/* Collapsible nav group (e.g. Spatial FBP outputs) */
+.sidenav .sidenav-group summary {
+    list-style: none;
+    cursor: pointer;
+}
+.sidenav .sidenav-group summary::-webkit-details-marker {
+    display: none;
+}
+.sidenav .sidenav-group summary::marker {
+    content: "";
+}
+.sidenav .sidenav-group summary a {
+    padding-left: 48px;
+}
+
 
 // Indented text
 .indentation {

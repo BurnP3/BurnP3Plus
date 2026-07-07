@@ -3,14 +3,14 @@ layout: default
 title: Getting started
 ---
 
-# BurnP3PlusFireSTARR Quickstart Tutorial**
+# **BurnP3PlusFireSTARR Quickstart Tutorial**
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 
 **BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://ostrnrcan-dostrncan.canada.ca/entities/publication/18cdf7dd-2488-4df4-8cc7-62fb1eebf9ed){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
 
 This tutorial was built using the following software versions:
-* SyncroSim version 3.0.9
+* SyncroSim version 3.1.29
 * burnP3Plus version 2.6.11
 * burnP3PlusFireSTARR 1.5.7
 
@@ -42,7 +42,7 @@ In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+FireSTARR]
 
 To install the **BurnP3+** and **BurnP3+FireSTARR** packages, open SyncroSim Studio (**Start > SyncroSim Studio**) and select **File > Local Packages**. 
 
-<img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-1.1.png">
+<img align="middle" style="padding: 3px" width="400" src="assets/getting_started_images/BurnP3Plus-screenshot-1.1.png">
 
 Click on the **Install from Server...** button.
 
@@ -80,7 +80,7 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.1.png">
 
-2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *BurnP3Plus FireSTARR Example*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
+2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png"> 
 
@@ -196,11 +196,11 @@ After reviewing the model inputs and creating a new scenario, you are now ready 
 
 You can enable and adjust the number of **Multiprocessing** jobs according to the specifications of your computer. A good rule of thumb to follow is number of logical cores minus 1.
 
-<img align="middle" style="padding: 3px" width="500" src="assets/getting_started_images/multi.png">
+<img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/multi.png">
 
 Next, click on the **Baseline Burning Hours** scenario, and from the main tool menu select the green triangle **(Run)**. If prompted to save your project, click **Yes**.
 
-<img align="middle" style="padding: 3px" width="500" src="assets/getting_started_images/BurnP3Plus-screenshot-4.5.png">
+<img align="middle" style="padding: 3px" width="400" src="assets/getting_started_images/BurnP3Plus-screenshot-4.5.png">
 
 A **Run Monitor** window will appear, indicating the **Status** of the scenario as **Running**. At the bottom of the SyncroSim Studio window, an orange progress bar will provide further information during each stage of the pipeline. 
 
@@ -233,7 +233,7 @@ Next, navigate to the **Maps** tab and double-click on **Burn Probability**.
 Lastly, navigate to the **Maps** tab and double-click on **Burn Maps**. Scroll through burn maps for different iterations by changing the **Iteration** on the top tool bar in the map window.
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-5.4.png">
-<img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-5.5.png">
+
 
 To export spatial outputs directly to disk, navigate to the **Export** tab in the results panel, select the variable of interest, and double-click to choose a destination folder.
 

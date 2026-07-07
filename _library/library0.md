@@ -10,25 +10,26 @@ permalink: reference/batch-burns
     <li>Library</li>
     {% for section in site.library %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a class="lvl2" href="#heading01">Batch Burns</a>
         {% endif %}
     {% endfor %}
     <li>Project</li>
     {% for section in site.project %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
     <li>Scenario</li>
     {% for section in site.scenarios %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -39,7 +40,7 @@ In SyncroSim Studio, the following *library datasheet* can be accessed by right-
 
 <br>
 
-## **Batch Burns**
+<p id="heading01"> <h2><b>Batch Burns</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_BatchOption
 

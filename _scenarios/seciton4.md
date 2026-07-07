@@ -10,62 +10,62 @@ permalink: reference/burn-p3-plus-scenario
     <li>Library</li>
     {% for section in site.library %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
     <li>Project</li>
     {% for section in site.project %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
     <li>Scenario</li>
     {% for section in site.scenarios %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
-            <a href="#heading01"> &emsp;&emsp;&emsp;Run Control</a>
-            <a href="#heading02"> &emsp;&emsp;&emsp;Landscape Maps</a>
-            <a href="#heading03"> &emsp;&emsp;&emsp;Ignition Count</a>
-            <a href="#heading04"> &emsp;&emsp;&emsp;Ignition Location</a>
-            <a href="#heading05"> &emsp;&emsp;&emsp;Ignition Restrictions</a>
-            <a href="#heading06"> &emsp;&emsp;&emsp;Ignition Distribution</a>
-            <a href="#heading07"> &emsp;&emsp;&emsp;Spread Event Days</a>
-            <a href="#heading08"> &emsp;&emsp;&emsp;Daily Burning Hours</a>
-            <a href="#heading09"> &emsp;&emsp;&emsp;Daily Weather</a>
-            <a href="#heading10"> &emsp;&emsp;&emsp;Weather Sampling Options</a>
-            <a href="#heading11"> &emsp;&emsp;&emsp;Green Up</a>
-            <a href="#heading12"> &emsp;&emsp;&emsp;Curing</a>
-            <a href="#heading13"> &emsp;&emsp;&emsp;Wind Grid</a>
-            <a href="#heading14"> &emsp;&emsp;&emsp;Tabular</a>
-            <a href="#heading15"> &emsp;&emsp;&emsp;Spatial</a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a class="lvl2" href="#heading01">Run Control</a>
+            <a class="lvl2" href="#heading02">Landscape Maps</a>
+            <a class="lvl2" href="#heading03">Ignition Count</a>
+            <a class="lvl2" href="#heading04">Ignition Location</a>
+            <a class="lvl2" href="#heading05">Ignition Restrictions</a>
+            <a class="lvl2" href="#heading06">Ignition Distribution</a>
+            <a class="lvl2" href="#heading07">Spread Event Days</a>
+            <a class="lvl2" href="#heading08">Daily Burning Hours</a>
+            <a class="lvl2" href="#heading09">Daily Weather</a>
+            <a class="lvl2" href="#heading10">Weather Sampling Options</a>
+            <a class="lvl2" href="#heading11">Green Up</a>
+            <a class="lvl2" href="#heading12">Curing</a>
+            <a class="lvl2" href="#heading13">Wind Grid</a>
+            <a class="lvl2" href="#heading14">Tabular</a>
+            <a class="lvl2" href="#heading15">Spatial</a>
             <details class="sidenav-group">
-                <summary><a href="#heading21"> &emsp;&emsp;&emsp;Spatial FBP</a></summary>
-                <a href="#heading22"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Map</a>
-                <a href="#heading23"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Rate of Spread Summary Map</a>
-                <a href="#heading24"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Map</a>
-                <a href="#heading25"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Fire Intensity Summary Map</a>
-                <a href="#heading26"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Map</a>
-                <a href="#heading27"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Spread Direction Summary Map</a>
-                <a href="#heading28"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Map</a>
-                <a href="#heading29"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Surface Fuel Consumption Summary Map</a>
-                <a href="#heading30"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Map</a>
-                <a href="#heading31"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Burned Summary Map</a>
-                <a href="#heading32"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Map</a>
-                <a href="#heading33"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Crown Fraction Consumed Summary Map</a>
-                <a href="#heading34"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Map</a>
-                <a href="#heading35"> &emsp;&emsp;&emsp;&emsp;&emsp;Output Total Fuel Consumption Summary Map</a>
+                <summary><a class="lvl2" href="#heading21">Spatial FBP</a></summary>
+                <a class="lvl3" href="#heading22">Output Rate of Spread Map</a>
+                <a class="lvl3" href="#heading23">Output Rate of Spread Summary Map</a>
+                <a class="lvl3" href="#heading24">Output Fire Intensity Map</a>
+                <a class="lvl3" href="#heading25">Output Fire Intensity Summary Map</a>
+                <a class="lvl3" href="#heading26">Output Spread Direction Map</a>
+                <a class="lvl3" href="#heading27">Output Spread Direction Summary Map</a>
+                <a class="lvl3" href="#heading28">Output Surface Fuel Consumption Map</a>
+                <a class="lvl3" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
+                <a class="lvl3" href="#heading30">Output Crown Fraction Burned Map</a>
+                <a class="lvl3" href="#heading31">Output Crown Fraction Burned Summary Map</a>
+                <a class="lvl3" href="#heading32">Output Crown Fraction Consumed Map</a>
+                <a class="lvl3" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
+                <a class="lvl3" href="#heading34">Output Total Fuel Consumption Map</a>
+                <a class="lvl3" href="#heading35">Output Total Fuel Consumption Summary Map</a>
             </details>
-            <a href="#heading16"> &emsp;&emsp;&emsp;Deterministic Ignition Location</a>
-            <a href="#heading17"> &emsp;&emsp;&emsp;Deterministic Burn Conditions</a>
-            <a href="#heading18"> &emsp;&emsp;&emsp;Fire Resampling Options</a>
-            <a href="#heading19"> &emsp;&emsp;&emsp;Distributions</a>
-            <a href="#heading20"> &emsp;&emsp;&emsp;Output Fire Statistics Table</a>
+            <a class="lvl2" href="#heading16">Deterministic Ignition Location</a>
+            <a class="lvl2" href="#heading17">Deterministic Burn Conditions</a>
+            <a class="lvl2" href="#heading18">Fire Resampling Options</a>
+            <a class="lvl2" href="#heading19">Distributions</a>
+            <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
         {% endif %}
     {% endfor %}
 </div>

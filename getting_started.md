@@ -84,7 +84,7 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png">
 
-    > If prompted, update the library to the latest **core** package version. Click **Apply**.
+> If prompted, update the library to the latest **core** package version. Click **Apply**.
 
 3. The *BurnP3PlusFireSTARR Quickstart Tutorial (Alberta)’* library will automatically open in the SyncroSim Studio *Explorer* window. This library contains a [*project*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Baseline Burning Hours**.
 

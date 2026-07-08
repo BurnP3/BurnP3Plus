@@ -122,7 +122,7 @@ In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.co
 -	**Stage 3: Grow Fires with FireSTARR**: Simulate each fire deterministically using a fire growth model;
 -	**Stage 4: Summarize Burn Probability**: Summarise the outputs of the fire growth model to calculate burn probability and other burn metrics.
 
-Stages 1 and 2 encompass the stochastic half of the simulation — all random sampling of ignitions and burning conditions occurs here. Stages 3 and 4 are fully deterministic given those sampled inputs, and Stage 3 can be distributed across multiple threads or nodes on a computing cluster. One benefit of the modular pipeline is that these stages can be split across separate scenarios using dependencies (see the [Building a BurnP3+ model from scratch](tutorials.html) tutorial for details). This allows you to review sampling outputs before committing to the computationally expensive fire growth step, making it easier to catch configuration errors early.
+Stages 1 and 2 encompass the stochastic half of the simulation — all random sampling of ignitions and burning conditions occurs here. Stages 3 and 4 are fully deterministic given those sampled inputs, and Stage 3 can be distributed across multiple threads or nodes on a computing cluster. One benefit of the modular pipeline is that these stages can be split across separate scenarios using dependencies. This allows you to review sampling outputs before committing to the computationally expensive fire growth step, making it easier to catch configuration errors early.
 
 In this example, we will run the full pipeline.
 

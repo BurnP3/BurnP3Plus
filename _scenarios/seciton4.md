@@ -1322,9 +1322,9 @@ Specifies the FBP output variable for which maps will be generated. The availabl
 - **Crown Fraction Consumed Map** &mdash; describes the predicted fraction (%) of tree crowns consumed by the fire.
 - **Total Fuel Consumption Map** &mdash; describes the predicted amount (kg/m2) of fuel consumed by the fire on the forest floor and in the crown. The Total Fuel Consumption (TFC) is based on foliar moisture content, surface fuel consumption, and Rate of Spread (ROS).
 
-For more information visit the FBP system <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">webpage</a>.
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+For more information visit the FBP system <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">webpage</a>.
 
 ### **Average**
 

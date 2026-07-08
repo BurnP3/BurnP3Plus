@@ -82,7 +82,7 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
 2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
-    <img align="middle" style="padding: 3px" #width="600" src="assets/getting_started_images/#BurnP3Plus-screenshot-2.2.png"> 
+<img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png">
 
     > If prompted, update the library to the latest **core** package version. Click **Apply**.
 

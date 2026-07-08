@@ -7,7 +7,7 @@ title: Getting started
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 
-**BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://ostrnrcan-dostrncan.canada.ca/entities/publication/18cdf7dd-2488-4df4-8cc7-62fb1eebf9ed){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/getting_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/getting_started/quickstart.html){:target="_blank"}.
+**BurnP3+** was designed to update and replace [Burn-P3](https://firegrowthmodel.ca/#/burnp3_overview){:target="_blank"} ([Parisien *et al.* 2005](https://ostrnrcan-dostrncan.canada.ca/entities/publication/18cdf7dd-2488-4df4-8cc7-62fb1eebf9ed){:target="_blank"}) and was developed jointly by National Resources Canada (NRCan) and ApexRMS as an open-source package within the [SyncroSim](https://syncrosim.com/){:target="_blank"} software framework. Throughout the Quickstart tutorial links will be provided to the SyncroSim [online documentation](https://docs.syncrosim.com){:target="_blank"} where applicable. For more on SyncroSim, please refer to the SyncroSim [Overview](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} and [Quickstart tutorial](https://docs.syncrosim.com/get_started/quickstart_studio.html){:target="_blank"}.
 
 This tutorial was built using the following software versions:
 * SyncroSim version 3.1.29
@@ -34,9 +34,9 @@ This Quickstart tutorial will introduce you to the basics of working with **Burn
 
 <p id="step1"> <h2> <b>Step 1: Installing the BurnP3+ package</b> </h2> </p>
 
-Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.1.0 or later). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
+Running **BurnP3+** requires that the SyncroSim software be installed on your computer (version 3.0.9 or later). Download the latest version of SyncroSim [here](https://syncrosim.com/download/){:target="_blank"} and follow the installation prompts. 
 
-In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"} SyncroSim [packages](https://docs.syncrosim.com/how_to_guides/package_overview.html){:target="_blank"}. The **BurnP3+FireSTARR** package uses the [FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"} fire growth model.
+In this Quickstart tutorial, you will run the **BurnP3+** and [BurnP3+FireSTARR](https://github.com/BurnP3/BurnP3PlusFireSTARR){:target="_blank"} SyncroSim [packages](https://docs.syncrosim.com/get_started/overview.html#packages){:target="_blank"}. The **BurnP3+FireSTARR** package uses the [FireSTARR](https://github.com/CWFMF/FireSTARR){:target="_blank"} fire growth model.
 
 > An additional package to **BurnP3+** is also available: [BurnP3+Prometheus](https://github.com/BurnP3/BurnP3PlusPrometheus){:target="_blank"}.
 
@@ -56,7 +56,7 @@ If you do not have [Miniforge](https://github.com/conda-forge/miniforge){:target
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-1.4.png">
 
-> **Miniforge** and **Miniconda** are installers for [conda](https://docs.conda.io/projects/conda/en/latest/){:target="_blank"}, a package environment management system that installs any required packages and their dependencies. By default, [**BurnP3+** uses conda](https://docs.syncrosim.com/how_to_guides/package_conda.html){:target="_blank"} to install, create, save, and load the required environment for running **BurnP3+**. The **BurnP3+** conda environment includes the required versions of R software and R packages that **BurnP3+** was built against.
+> **Miniforge** and **Miniconda** are installers for [conda](https://docs.conda.io/projects/conda/en/latest/){:target="_blank"}, a package environment management system that installs any required packages and their dependencies. By default, [**BurnP3+** uses conda](https://docs.syncrosim.com/learn/packages_conda.html){:target="_blank"} to install, create, save, and load the required environment for running **BurnP3+**. The **BurnP3+** conda environment includes the required versions of R software and R packages that **BurnP3+** was built against.
 
 The pop-up window will close after the conda environment is created, and a checkmark will appear in the Conda checkbox beside the package description. 
 
@@ -70,7 +70,7 @@ Next, click on the **Install from Server...** button again to open the packages 
 
 <p id="step2"> <h2> <b>Step 2: Opening a BurnP3+ library</b> </h2> </p>
 
-Having installed **BurnP3+** and **burnP3PlusFireSTARR**, you are now ready to create your first SyncroSim [*library*](https://docs.syncrosim.com/get_started/overview){:target="_blank"}. A library is a file (with extension .ssim) that stores all the data and configurations associated with your model. 
+Having installed **BurnP3+** and **burnP3PlusFireSTARR**, you are now ready to create your first SyncroSim [*library*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"}. A library is a file (with extension .ssim) that stores all the data and configurations associated with your model. 
 
 We will start with a pre-built example library using the **BurnP3+** and **BurnP3+FireSTARR** packages. This example uses a synthetic landscape to demonstrate the basics of running **BurnP3+** using the **FireSTARR** fire growth model.
 
@@ -82,13 +82,13 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
 2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
-    <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.2.png"> 
+    #<img align="middle" style="padding: 3px" #width="600" src="assets/getting_started_images/#BurnP3Plus-screenshot-2.2.png"> 
 
     > If prompted, update the library to the latest **core** package version. Click **Apply**.
 
-3. The *Getting Started with BurnP3+FireSTARR* library will automatically open in the SyncroSim Studio *Explorer* window. The **BurnP3Plus FireSTARR Example** library contains a [*project*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} named **Baseline Burning Hours**.
+3. The *Getting Started with BurnP3+FireSTARR* library will automatically open in the SyncroSim Studio *Explorer* window. The **BurnP3Plus FireSTARR Example** library contains a [*project*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Baseline Burning Hours**.
 
-    <img align="middle" style="padding: 3px" width="250" src="assets/getting_started_images/BurnP3Plus-screenshot-2.3.png">
+    <img align="middle" style="padding: 3px" width="400" src="assets/getting_started_images/BurnP3Plus-screenshot-2.3.png">
 
 
 <br>
@@ -101,7 +101,7 @@ This information can be found by selecting **File > Library Datasheets** and nav
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.1.png">
 
-Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datasheets*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} containing data shared across all scenarios for a project. 
+Next, in the **Library Explorer** window, double click on **Definitions**. Definitions are [*project datasheets*](https://docs.syncrosim.com/learn/libraries_datasheets.html){:target="_blank"} containing data shared across all scenarios for a project. 
 
 Navigate to the **BurnP3+** tab, under the **Fuels** tab, click **Fuel Types**. Here, you will find a **Name** list for each of the fuel types present in the fuel grid, which the model requires as input. This example library already contains a fuel grid with two fuel types: **Boreal Spruce** and **Lodgepole Pine Slash**. Note that these names are free-form and can be arbitrary. Each **Name** is associated with an **ID** that must correspond to the labels given to each fuel type in the fuel grid loaded for each scenario. 
 
@@ -111,11 +111,11 @@ Next, under the **BurnP3+FireSTARR** tab, click on **FireSTARR Crosswalk**. Here
 
 <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-3.3.png">
 
-Lastly, in the **Library Explorer** window, you will see one scenario named **Baseline Burning Hours**. Model inputs in SyncroSim are organized into scenarios. Each scenario is associated with [*scenario datasheets*](https://docs.syncrosim.com/get_started/overview){:target="_blank"} containing data that are specified for each scenario.
+Lastly, in the **Library Explorer** window, you will see one scenario named **Baseline Burning Hours**. Model inputs in SyncroSim are organized into scenarios. Each scenario is associated with [*scenario datasheets*](https://docs.syncrosim.com/learn/libraries_datasheets.html){:target="_blank"} containing data that are specified for each scenario.
 
 To view the model inputs for the scenario, double-click on **Baseline Burning Hours**. 
 
-In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/how_to_guides/properties_overview.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages:
+In the **General** tab, the **Pipeline** [*datasheet*](https://docs.syncrosim.com/learn/libraries_datasheets.html){:target="_blank"} allows users to select the stages to include in the model run and their order. A full run of **BurnP3+** consists of four stages:
 
 -	**Stage 1: Sample Ignitions**: Sample the number and locations of ignitions for each simulated burn season, or iteration;
 -	**Stage 2: Sample Burning Conditions**: Sample the burning conditions for each ignition, which depend on when and where the ignitions occurred;
@@ -206,7 +206,7 @@ A **Run Monitor** window will appear, indicating the **Status** of the scenario 
 
 When the run has completed the **Status** will change to **Done** in the **Run Monitor** window. If an error or warning has been issued, click on the **Run Log** link to see a report of problems. Make any required changes to your scenario and re-run it.
 
-Running a model in SyncroSim produces a [*results scenario*](https://docs.syncrosim.com/how_to_guides/modelrun_overview.html#results-scenarios){:target="_blank"}, which contain the input datasheets associated with the *parent scenario*, as well as output datasheets for the scenario run. Each results scenario inherits the parent scenario’s name and receives a unique ID.
+Running a model in SyncroSim produces a [*results scenario*](https://docs.syncrosim.com/learn/results_overview.html){:target="_blank"}, which contain the input datasheets associated with the *parent scenario*, as well as output datasheets for the scenario run. Each results scenario inherits the parent scenario’s name and receives a unique ID.
 
 <img align="middle" style="padding: 3px" width="400" src="assets/getting_started_images/BurnP3Plus-screenshot-4.6.png">
 

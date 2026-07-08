@@ -10,26 +10,26 @@ permalink: reference/prometheus
     <li>Library</li>
     {% for section in site.library %}
         {% if section.section != page.section %}
-            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
         {% else %}
-            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
         {% endif %}
     {% endfor %}
     <li>Project</li>
     {% for section in site.project %}
         {% if section.section != page.section %}
-            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
         {% else %}
-            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
-            <a class="lvl2" href="#heading01">Prometheus Crosswalk</a>
+            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a href="#heading01"> &emsp;&emsp;&emsp;Prometheus Crosswalk</a>
         {% endif %}
     {% endfor %}
     <li>Scenario</li>
     {% for section in site.scenarios %}
         {% if section.section != page.section %}
-            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
         {% else %}
-            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
         {% endif %}
     {% endfor %}
 </div>
@@ -61,10 +61,9 @@ Defines a name for the fuel type. The name of the fuel type is selected from a d
 
 **Column internal name:** Code
 
-Defines the FBP fuel type code. The fuel type code is selected from the available FBP fuel type codes in Canada. For example, “D-1/D-2” corresponds to Aspen <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system-fuel-types" target="_blank">Fuel Type
+Defines the FBP fuel type code. The fuel type code is selected from the available FBP fuel type codes in Canada. For example, “D-1/D-2” corresponds to Aspen <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system-fuel-types" target="_blank">Fuel Type.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item 
 
 <br>
 
-<a href="https://docs.syncrosim.com/reference/ds_overview.html" target="_blank">SyncroSim System Datasheets Overview</a>.

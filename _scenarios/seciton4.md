@@ -1103,7 +1103,7 @@ A raster file (.tif) input that contains the resulting local wind direction unde
 
 **Datasheet internal name:** burnP3Plus_OutputOption
 
-The **Tabular** datasheet can be found under the **Output Options** tab and provides the option to generate a fire statistics table of simulation outputs.
+The **Tabular** datasheet can be found under the **Output Options** node and provides the option to generate a fire statistics table of simulation outputs.
 
 ### **Fire Statistics Table**
 
@@ -1123,7 +1123,7 @@ This datasheet is an input and output for the *Summarize Burn Probability* trans
 
 **Datasheet internal name:** burnP3Plus_OutputOptionsSpatial
 
-The **Spatial** datasheet can be found under the **Output Options** tab and provides the option to select which spatial outputs to generate. 
+The **Spatial** datasheet can be found under the **Output Options** node and provides the option to select which spatial outputs to generate. 
 
 ### **Burn Probability Map**
 
@@ -1301,7 +1301,7 @@ This datasheet is an output for the *Summarize Burn Probability* transformer.
 
 **Datasheet internal name:** burnP3Plus_OutputOptionFBPSpatial
 
-The **Spatial FBP** datasheet can be found under the **Output Options** tab and provides the option to select which Fire Behaviour Prediction (FBP) System spatial outputs to generate. Each FBP output variable is added as a row in this datasheet, along with the summary statistics and per-fire maps to generate for that variable.
+The **Spatial FBP** datasheet can be found under the **Output Options** node and provides the option to select which Fire Behaviour Prediction (FBP) System spatial outputs to generate. Each FBP output variable is added as a row in this datasheet, along with the summary statistics and per-fire maps to generate for that variable.
 
 ### **Variable**
 
@@ -2297,7 +2297,7 @@ Defines the Fire Weather Index (<a href ="https://natural-resources.canada.ca/fo
 
 **Datasheet internal name:** burnP3Plus_FireResampleOption
 
-The **Fire Resampling Options** datasheet can be found under the **Advanced** tab and provides specifications on the minimum fire size, and the proportion of extra ignitions to sample for replacing fires below the minimum fire size in the simulation. 
+The **Fire Resampling Options** datasheet can be found under the **Advanced** node and provides specifications on the minimum fire size, and the proportion of extra ignitions to sample for replacing fires below the minimum fire size in the simulation. 
 
 This datasheet is an input for the *Sample Ignitions* and *Fire Growth* transformers.
 
@@ -2327,7 +2327,7 @@ Specifies the number of extra ignitions to be generated to make up for discarded
 
 **Datasheet internal name:** core_DistributionValue
 
-The **Distributions** datasheet can be found under the **Advanced** tab and provides information on any user defined distributions.
+The **Distributions** datasheet can be found under the **Advanced** node and provides information on any user defined distributions.
 
 ### **Name**
 
@@ -2367,7 +2367,7 @@ An example of the Distribution datasheet in the **BurnP3+Prometheus** template l
 
 **Datasheet internal name:** burnP3Plus_OutputFireStatistic
 
-The **OutputFireStatistic** datasheet can be found under the **Advanced** tab and provides a tabular summary of the fires burned in the simulation. This table is populated by the *Fire Growth* transformers and can be modified by the *Summary* transformer during resampling. 
+The **OutputFireStatistic** datasheet can be found under the **Advanced** node and provides a tabular summary of the fires burned in the simulation. This table is populated by the *Fire Growth* transformers and can be modified by the *Summary* transformer during resampling. 
 
 ### **Iteration**
 

@@ -142,21 +142,6 @@ a {
     padding-left: 72px;
 }
 
-/* Collapsible nav group (e.g. Spatial FBP outputs) */
-.sidenav .sidenav-group summary {
-    list-style: none;
-    cursor: pointer;
-}
-.sidenav .sidenav-group summary::-webkit-details-marker {
-    display: none;
-}
-.sidenav .sidenav-group summary::marker {
-    content: "";
-}
-.sidenav .sidenav-group summary a {
-    padding-left: 48px;
-}
-
 
 // Indented text
 .indentation {

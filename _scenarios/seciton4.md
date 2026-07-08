@@ -44,28 +44,33 @@ permalink: reference/burn-p3-plus-scenario
             <a class="lvl2" href="#heading13">Wind Grid</a>
             <a class="lvl2" href="#heading14">Tabular</a>
             <a class="lvl2" href="#heading15">Spatial</a>
-            <details class="sidenav-group">
-                <summary><a class="lvl2" href="#heading21">Spatial FBP</a></summary>
-                <a class="lvl3" href="#heading22">Output Rate of Spread Map</a>
-                <a class="lvl3" href="#heading23">Output Rate of Spread Summary Map</a>
-                <a class="lvl3" href="#heading24">Output Fire Intensity Map</a>
-                <a class="lvl3" href="#heading25">Output Fire Intensity Summary Map</a>
-                <a class="lvl3" href="#heading26">Output Spread Direction Map</a>
-                <a class="lvl3" href="#heading27">Output Spread Direction Summary Map</a>
-                <a class="lvl3" href="#heading28">Output Surface Fuel Consumption Map</a>
-                <a class="lvl3" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
-                <a class="lvl3" href="#heading30">Output Crown Fraction Burned Map</a>
-                <a class="lvl3" href="#heading31">Output Crown Fraction Burned Summary Map</a>
-                <a class="lvl3" href="#heading32">Output Crown Fraction Consumed Map</a>
-                <a class="lvl3" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
-                <a class="lvl3" href="#heading34">Output Total Fuel Consumption Map</a>
-                <a class="lvl3" href="#heading35">Output Total Fuel Consumption Summary Map</a>
-            </details>
+            <a class="lvl2" href="#heading21">Spatial FBP</a>
             <a class="lvl2" href="#heading16">Deterministic Ignition Location</a>
             <a class="lvl2" href="#heading17">Deterministic Burn Conditions</a>
             <a class="lvl2" href="#heading18">Fire Resampling Options</a>
             <a class="lvl2" href="#heading19">Distributions</a>
             <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
+            <a class="lvl2" href="#heading36">Output Burn Probability</a>
+            <a class="lvl2" href="#heading37">Output Relative Burn Probability</a>
+            <a class="lvl2" href="#heading38">Output Burn Count</a>
+            <a class="lvl2" href="#heading39">Output Burn Map</a>
+            <a class="lvl2" href="#heading40">Output Fire Perimeters</a>
+            <a class="lvl2" href="#heading41">Output Individual Burn Maps</a>
+            <a class="lvl2" href="#heading42">Output Burn Tables</a>
+            <a class="lvl2" href="#heading22">Output Rate of Spread Map</a>
+            <a class="lvl2" href="#heading23">Output Rate of Spread Summary Map</a>
+            <a class="lvl2" href="#heading24">Output Fire Intensity Map</a>
+            <a class="lvl2" href="#heading25">Output Fire Intensity Summary Map</a>
+            <a class="lvl2" href="#heading26">Output Spread Direction Map</a>
+            <a class="lvl2" href="#heading27">Output Spread Direction Summary Map</a>
+            <a class="lvl2" href="#heading28">Output Surface Fuel Consumption Map</a>
+            <a class="lvl2" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
+            <a class="lvl2" href="#heading30">Output Crown Fraction Burned Map</a>
+            <a class="lvl2" href="#heading31">Output Crown Fraction Burned Summary Map</a>
+            <a class="lvl2" href="#heading32">Output Crown Fraction Consumed Map</a>
+            <a class="lvl2" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
+            <a class="lvl2" href="#heading34">Output Total Fuel Consumption Map</a>
+            <a class="lvl2" href="#heading35">Output Total Fuel Consumption Summary Map</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -1309,13 +1314,15 @@ The **Spatial FBP** datasheet can be found under the **Output Options** node and
 
 Specifies the FBP output variable for which maps will be generated. The available variables are:
 
-- **Rate of Spread Map** &mdash; describes the predicted speed (m/min) of fire as it initially passes through the cell. The Rate of Spread (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">ROS</a>) metric is based on the Fuel Type, Initial Spread Index (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">ISI</a>), Buildup Index (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">BUI</a>), and other fuel-specific parameters (i.e., leafless or green in deciduous trees, crown base height in coniferous trees, and percent curing in grasses).
-- **Fire Intensity Map** &mdash; describes the predicted intensity (energy output in kW/m) of the fire as it initially passes through the cell. The Fire Intensity (FI) metric is based on the Rate of Spread (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">ROS</a>), and the Total Fuel Consumption (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">TFC</a>).
+- **Rate of Spread Map** &mdash; describes the predicted speed (m/min) of fire as it initially passes through the cell. The Rate of Spread (ROS) metric is based on the Fuel Type, Initial Spread Index (ISI), Buildup Index (BUI), and other fuel-specific parameters (i.e., leafless or green in deciduous trees, crown base height in coniferous trees, and percent curing in grasses).
+- **Fire Intensity Map** &mdash; describes the predicted intensity (energy output in kW/m) of the fire as it initially passes through the cell. The Fire Intensity (FI) metric is based on the Rate of Spread (ROS), and the Total Fuel Consumption (TFC).
 - **Spread Direction Map** &mdash; describes the predicted direction of fire spread.
 - **Surface Fuel Consumption Map** &mdash; describes the predicted amount (kg/m2) of fuel consumed by the fire on the surface of the forest floor.
-- **Crown Fraction Burned Map** &mdash; describes the predicted fraction (%) of tree crowns burned by the fire. The Crown Fraction Burned (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">CFB</a>) is based on the Buildup Index (BUI), foliar moisture content, surface fuel consumption, and Rate of Spread (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">ROS</a>).
+- **Crown Fraction Burned Map** &mdash; describes the predicted fraction (%) of tree crowns burned by the fire. The Crown Fraction Burned (BUI) is based on the Buildup Index (BUI), foliar moisture content, surface fuel consumption, and Rate of Spread (ROS).
 - **Crown Fraction Consumed Map** &mdash; describes the predicted fraction (%) of tree crowns consumed by the fire.
-- **Total Fuel Consumption Map** &mdash; describes the predicted amount (kg/m2) of fuel consumed by the fire on the forest floor and in the crown. The Total Fuel Consumption (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">TFC</a>) is based on foliar moisture content, surface fuel consumption, and Rate of Spread (<a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">ROS</a>).
+- **Total Fuel Consumption Map** &mdash; describes the predicted amount (kg/m2) of fuel consumed by the fire on the forest floor and in the crown. The Total Fuel Consumption (TFC) is based on foliar moisture content, surface fuel consumption, and Rate of Spread (ROS).
+
+For more information visit the FBP system <a href="https://natural-resources.canada.ca/forests-forestry/wildland-fires/canada-fire-behaviour-prediction-system" target="_blank">webpage</a>.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
 
@@ -2500,5 +2507,315 @@ Defines the weather zone in which a fire ignited.
 Weather Zones are defined in the project [Weather Zones](burn-p3-plus#heading05) datasheet under the **Advanced** node.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+<br>
+
+<p id="heading36"> <h2><b>Output Burn Probability</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputBurnProbability
+
+The **Output Burn Probability** datasheet contains the burn probability map(s) created when **Burn Probability Map** or **Seasonal Burn Probability Map** is selected in the [Spatial](#heading15) datasheet. The burn probability of a cell is calculated by dividing the number of iterations in which it burned by the total number of iterations.
+
+This datasheet is an output for the *Summarize Burn Probability* transformer.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Season**
+
+**Column internal name:** Season
+
+*Optional*. Specifies the season associated with the map, if the **Seasonal Burn Probability Map** option was selected in the [Spatial](#heading15) datasheet.
+
+Seasons are defined in the project [Seasons](burn-p3-plus#heading02) datasheet under the **Advanced** node.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+### **Burn Probability Map**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+*Optional*. Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading37"> <h2><b>Output Relative Burn Probability</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputRelativeBurnProbability
+
+The **Output Relative Burn Probability** datasheet contains the relative burn probability map(s) created when **Relative Burn Probability Map** or **Seasonal Relative Burn Probability Map** is selected in the [Spatial](#heading15) datasheet. Relative burn probability expresses the burn probability of a cell relative (on a linear scale) to the average burn probability of all cells in the landscape.
+
+This datasheet is an output for the *Summarize Burn Probability* transformer.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Season**
+
+**Column internal name:** Season
+
+*Optional*. Specifies the season associated with the map, if the **Seasonal Relative Burn Probability Map** option was selected in the [Spatial](#heading15) datasheet.
+
+Seasons are defined in the project [Seasons](burn-p3-plus#heading02) datasheet under the **Advanced** node.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+### **Relative Burn Probability Map**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+*Optional*. Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading38"> <h2><b>Output Burn Count</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputBurnCount
+
+The **Output Burn Count** datasheet contains the burn count map(s) created when **Burn Count Map** or **Seasonal Burn Count Map** is selected in the [Spatial](#heading15) datasheet. Each cell records the number of times it burned across all iterations. This is an intermediate output to Burn Probability.
+
+This datasheet is an output for the *Summarize Burn Probability* transformer.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Season**
+
+**Column internal name:** Season
+
+*Optional*. Specifies the season associated with the map, if the **Seasonal Burn Count Map** option was selected in the [Spatial](#heading15) datasheet.
+
+Seasons are defined in the project [Seasons](burn-p3-plus#heading02) datasheet under the **Advanced** node.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+### **Burn Count Map**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+*Optional*. Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading39"> <h2><b>Output Burn Map</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputBurnMap
+
+The **Output Burn Map** datasheet contains the burn map(s) created when **Burn Maps** or **Seasonal Burn Maps** is selected in the [Spatial](#heading15) datasheet. Each cell describes whether or not it burned in a given iteration. Values are 1 (yes, the cell burned in any fire within the iteration), 0 (no, the cell did not burn in any fire within the iteration), or NA (the cell is masked out by the fuel map).
+
+This datasheet is an output for the *Summarize Burn Probability* transformer.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Season**
+
+**Column internal name:** Season
+
+*Optional*. Specifies the season associated with the map, if the **Seasonal Burn Maps** option was selected in the [Spatial](#heading15) datasheet.
+
+Seasons are defined in the project [Seasons](burn-p3-plus#heading02) datasheet under the **Advanced** node.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: List Item
+
+### **Burn Map**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+*Optional*. Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading40"> <h2><b>Output Fire Perimeters</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputFirePerimeter
+
+The **Output Fire Perimeters** datasheet contains the GeoPackage file(s) of fire perimeters created when **Burn Perimeters** is set to *Final* or *Daily* in the [Spatial](#heading15) datasheet.
+
+This datasheet is an output for the *Merge Fire Growth Scenarios* and *Summarize Burn Probability* transformers.
+
+### **Burn Perimeter**
+
+**Column internal name:** FileName
+
+Specifies the file name of the GeoPackage (.gpkg) containing the fire perimeter(s).
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Description**
+
+**Column internal name:** Description
+
+*Optional*. Provides a description of the fire perimeter output.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+<br>
+
+<p id="heading41"> <h2><b>Output Individual Burn Maps</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputAllPerim
+
+The **Output Individual Burn Maps** datasheet contains the raster(s) of the burned area for each fire created when **Output Individual Burn Maps** is selected in the [Spatial](#heading15) datasheet. Values are 1 (yes, the cell burned in this fire), 0 (no, the cell did not burn in this fire), or NA (the cell is masked out by the fuel map).
+
+This datasheet is an output for the *Summarize Burn Probability* transformer.
+
+### **Iteration**
+
+**Column internal name:** Iteration
+
+Specifies the map's iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Fire ID**
+
+**Column internal name:** FireID
+
+Specifies the map's fire ID.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Timestep**
+
+**Column internal name:** Timestep
+
+Specifies the map's timestep.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+### **Burn Map**
+
+**Column internal name:** FileName
+
+Specifies the map's file name.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Band**
+
+**Column internal name:** Band
+
+*Optional*. Specifies the map's band.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: Integer
+
+<br>
+
+<p id="heading42"> <h2><b>Output Burn Tables</b></h2> </p>
+
+**Datasheet internal name:** burnP3Plus_OutputRawTabular
+
+The **Output Burn Tables** datasheet contains the raw tabular burn record(s) (Parquet format) generated by the fire growth models. These tables are used internally to compute the burn probability, burn count, burn map, and related spatial outputs.
+
+This datasheet is an output for the *Merge Fire Growth Scenarios* and *Summarize Burn Probability* transformers.
+
+### **Burn Table**
+
+**Column internal name:** FileName
+
+Specifies the file name of the Parquet (.parquet) file containing the raw burn table.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
+
+### **Description**
+
+**Column internal name:** Description
+
+*Optional*. Provides a description of the burn table output.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
 
 <br>

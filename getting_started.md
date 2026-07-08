@@ -3,7 +3,7 @@ layout: default
 title: Getting started
 ---
 
-# **BurnP3PlusFireSTARR Quickstart Tutorial**
+# **Quickstart Tutorial**
 
 ### Here we provide a guided tutorial on **BurnP3+**, an open-source package for running spatially-explicit fire growth models to explore fire risk and susceptibility across a landscape. 
 
@@ -80,13 +80,13 @@ To open the **FireSTARR** template library in SyncroSim Studio:
 
     <img align="middle" style="padding: 3px" width="600" src="assets/getting_started_images/BurnP3Plus-screenshot-2.1.png">
 
-2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *BurnP3PlusFireSTARR Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
+2. Select the **burnP3PlusFireSTARR** (version 1.5.7) package. There are two templates available: the *Quickstart Tutorial* and the *Glacier Example (FireSTARR)*. For this walkthrough, select the *BurnP3PlusFireSTARR Quickstart Tutorial* template library, choose a folder to save it, and click **OK**.
 
-    #<img align="middle" style="padding: 3px" #width="600" src="assets/getting_started_images/#BurnP3Plus-screenshot-2.2.png"> 
+    <img align="middle" style="padding: 3px" #width="600" src="assets/getting_started_images/#BurnP3Plus-screenshot-2.2.png"> 
 
     > If prompted, update the library to the latest **core** package version. Click **Apply**.
 
-3. The *Getting Started with BurnP3+FireSTARR* library will automatically open in the SyncroSim Studio *Explorer* window. The **BurnP3Plus FireSTARR Example** library contains a [*project*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Baseline Burning Hours**.
+3. The *BurnP3PlusFireSTARR Quickstart Tutorial (Alberta)’* library will automatically open in the SyncroSim Studio *Explorer* window. This library contains a [*project*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Definitions**, with one [*scenario*](https://docs.syncrosim.com/get_started/overview.html){:target="_blank"} named **Baseline Burning Hours**.
 
     <img align="middle" style="padding: 3px" width="400" src="assets/getting_started_images/BurnP3Plus-screenshot-2.3.png">
 

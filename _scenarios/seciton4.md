@@ -63,28 +63,31 @@ permalink: reference/burn-p3-plus-scenario
                 <a class="lvl2" href="#heading17">Deterministic Burn Conditions</a>
                 <a class="lvl2" href="#heading18">Fire Resampling Options</a>
                 <a class="lvl2" href="#heading19">Distributions</a>
-                <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
-                <a class="lvl2" href="#heading36">Output Burn Probability</a>
-                <a class="lvl2" href="#heading37">Output Relative Burn Probability</a>
-                <a class="lvl2" href="#heading38">Output Burn Count</a>
-                <a class="lvl2" href="#heading39">Output Burn Map</a>
-                <a class="lvl2" href="#heading40">Output Fire Perimeters</a>
-                <a class="lvl2" href="#heading41">Output Individual Burn Maps</a>
-                <a class="lvl2" href="#heading42">Output Burn Tables</a>
-                <a class="lvl2" href="#heading22">Output Rate of Spread Map</a>
-                <a class="lvl2" href="#heading23">Output Rate of Spread Summary Map</a>
-                <a class="lvl2" href="#heading24">Output Fire Intensity Map</a>
-                <a class="lvl2" href="#heading25">Output Fire Intensity Summary Map</a>
-                <a class="lvl2" href="#heading26">Output Spread Direction Map</a>
-                <a class="lvl2" href="#heading27">Output Spread Direction Summary Map</a>
-                <a class="lvl2" href="#heading28">Output Surface Fuel Consumption Map</a>
-                <a class="lvl2" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
-                <a class="lvl2" href="#heading30">Output Crown Fraction Burned Map</a>
-                <a class="lvl2" href="#heading31">Output Crown Fraction Burned Summary Map</a>
-                <a class="lvl2" href="#heading32">Output Crown Fraction Consumed Map</a>
-                <a class="lvl2" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
-                <a class="lvl2" href="#heading34">Output Total Fuel Consumption Map</a>
-                <a class="lvl2" href="#heading35">Output Total Fuel Consumption Summary Map</a>
+                <details class="sidenav-group" open>
+                    <summary><a class="lvl2" href="#heading20">Output</a></summary>
+                    <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
+                    <a class="lvl2" href="#heading36">Output Burn Probability</a>
+                    <a class="lvl2" href="#heading37">Output Relative Burn Probability</a>
+                    <a class="lvl2" href="#heading38">Output Burn Count</a>
+                    <a class="lvl2" href="#heading39">Output Burn Map</a>
+                    <a class="lvl2" href="#heading40">Output Fire Perimeters</a>
+                    <a class="lvl2" href="#heading41">Output Individual Burn Maps</a>
+                    <a class="lvl2" href="#heading42">Output Burn Tables</a>
+                    <a class="lvl2" href="#heading22">Output Rate of Spread Map</a>
+                    <a class="lvl2" href="#heading23">Output Rate of Spread Summary Map</a>
+                    <a class="lvl2" href="#heading24">Output Fire Intensity Map</a>
+                    <a class="lvl2" href="#heading25">Output Fire Intensity Summary Map</a>
+                    <a class="lvl2" href="#heading26">Output Spread Direction Map</a>
+                    <a class="lvl2" href="#heading27">Output Spread Direction Summary Map</a>
+                    <a class="lvl2" href="#heading28">Output Surface Fuel Consumption Map</a>
+                    <a class="lvl2" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
+                    <a class="lvl2" href="#heading30">Output Crown Fraction Burned Map</a>
+                    <a class="lvl2" href="#heading31">Output Crown Fraction Burned Summary Map</a>
+                    <a class="lvl2" href="#heading32">Output Crown Fraction Consumed Map</a>
+                    <a class="lvl2" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
+                    <a class="lvl2" href="#heading34">Output Total Fuel Consumption Map</a>
+                    <a class="lvl2" href="#heading35">Output Total Fuel Consumption Summary Map</a>
+                </details>
             </details>
         {% endif %}
     {% endfor %}

@@ -13,9 +13,9 @@ Most **BurnP3+** workflows assume you are working through the SyncroSim Studio g
 
 <br>
 
-## Linux Tutorial
+## **Linux Tutorial**
 
-This tutorial will walk you through running **BurnP3+** on Linux. The steps include:
+### This tutorial will walk you through running **BurnP3+** on Linux. The steps include:
 
 1. <a href="#step1"> Installing SyncroSim on Linux </a>
     * <a href="#mono"> Install Mono </a>
@@ -51,7 +51,7 @@ Before you begin, make sure the following are in place:
 
 <br>
 
-<p id="mono"> <h3> Install Mono </h3> </p>
+<p id="mono"> <h2>Install Mono </h2> </p>
 
 Mono provides the .NET runtime needed to execute SyncroSim on Linux.
 
@@ -78,6 +78,9 @@ echo "deb [signed-by=/usr/share/keyrings/mono-keyring.gpg] \
     https://download.mono-project.com/repo/ubuntu stable-focal main" \
     | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 
+# Note: replace "stable-focal" with "stable-jammy" on Ubuntu 22.04,
+# or "stable-noble" on Ubuntu 24.04
+
 sudo apt-get update
 sudo apt-get install -y mono-complete
 ```
@@ -97,7 +100,7 @@ mono --version
 
 <br>
 
-<p id="miniconda"> <h3> Install Miniconda </h3> </p>
+<p id="miniconda"> <h2> Install Miniconda </h2> </p>
 
 Conda is used to set up the GDAL environment that SyncroSim needs for spatial operations. Install Miniconda, which is a lightweight version of the full Conda distribution:
 
@@ -123,7 +126,7 @@ conda config --set channel_priority strict
 
 <br>
 
-<p id="syncrosim"> <h3> Install SyncroSim </h3> </p>
+<p id="syncrosim"> <h2> Install SyncroSim </h2> </p>
 
 Download and extract the SyncroSim Linux build. You can find the latest version number on the <a href="https://syncrosim.com/download/" target="_blank">SyncroSim downloads page</a>:
 
@@ -163,7 +166,7 @@ sudo chmod +x /usr/local/bin/ssim /usr/local/bin/ssimpm
 
 <br>
 
-<p id="spatial"> <h3> Install system spatial libraries </h3> </p>
+<p id="spatial"> <h2> Install system spatial libraries </h2> </p>
 
 BurnP3+ requires several spatial C libraries for raster and vector operations. Install them system-wide via `apt`:
 ```bash
@@ -184,7 +187,8 @@ gdal-config --version
 proj
 ```
 
-<p id="gdal"> <h3> Set up the GDAL Conda environment </h3> </p>
+
+<p id="gdal"> <h2> Set up the GDAL Conda environment </h2> </p>
 
 SyncroSim requires GDAL C# bindings (`.dll` files) to interface with spatial raster files. These are provided by the `gdal-csharp` conda package. Note that this conda environment is only used during setup to copy the bindings into the SyncroSim folder — it does not need to be activated at runtime.
 ```bash
@@ -221,7 +225,7 @@ This registers the Conda path in SyncroSim's configuration so it can locate the 
 
 <br>
 
-<p id="env"> <h3> Configure your environment for runtime </h3> </p>
+<p id="env"> <h2> Configure your environment for runtime </h2> </p>
 
 Before running any spatially explicit model, set the library search path so SyncroSim can find its bundled libraries:
 ```bash
@@ -235,7 +239,8 @@ Add this line to your `~/.bashrc` if you are running **BurnP3+** frequently:
 echo 'export LD_LIBRARY_PATH=$HOME/syncrosim:${LD_LIBRARY_PATH:-}' >> ~/.bashrc
 ```
 
-### Install R Package Dependencies
+
+## Install R Package Dependencies
 
 BurnP3+ and FireSTARR require the following R packages. First install R and all required system dependencies:
 ```bash
@@ -286,10 +291,10 @@ The easiest approach is to install directly using the SyncroSim package manager,
 
 ```bash
 # Install BurnP3+ from the package server
-ssimpm --install=burnP3Plus --version=2.6.5
+ssimpm --install=burnP3Plus --version=2.6.11
 
 # Install the FireSTARR companion package
-ssimpm --install=burnP3PlusFireSTARR --version=1.5.5
+ssimpm --install=burnP3PlusFireSTARR --version=1.5.7
 ```
 
 > **Tip:** Check the <a href="https://github.com/BurnP3/BurnP3Plus/releases" target="_blank">BurnP3Plus GitHub releases page</a> for the current version numbers of **BurnP3+** and its compatible FireSTARR release. Always install versions that are listed as compatible with each other.
@@ -321,16 +326,16 @@ mkdir -p $HOME/burnp3
 Then, on your local machine, transfer the files:
 ```bash
 scp -i /path/to/your-key.pem \
-    /path/to/burnP3Plus-2-6-5.ssimpkg \
-    /path/to/burnP3PlusFireSTARR-1-5-5.ssimpkg \
+    /path/to/burnP3Plus-2-6-11.ssimpkg \
+    /path/to/burnP3PlusFireSTARR-1-5-7.ssimpkg \
     ubuntu@<server-ip>:$HOME/burnp3/
 ```
 
 > ***Windows users (PowerShell):** The backslash line continuation used above is bash syntax and will not work in PowerShell. Use backticks for line continuation, quote the filenames, and use the literal `/home/ubuntu` path instead of `$HOME` (which PowerShell will not expand on the remote side):*
 > ```powershell
 > scp -i C:\path\to\your-key.pem `
->     "C:\path\to\burnP3Plus-2-6-5.ssimpkg" `
->     "C:\path\to\burnP3PlusFireSTARR-1-5-5.ssimpkg" `
+>     "C:\path\to\burnP3Plus-2-6-11.ssimpkg" `
+>     "C:\path\to\burnP3PlusFireSTARR-1-5-7.ssimpkg" `
 >     ubuntu@<server-ip>:/home/ubuntu/burnp3/
 > ```
 
@@ -339,8 +344,8 @@ Replace `/path/to/your-key.pem` with your SSH key, `/path/to/` with the local di
 Then, back on the server, install from the local package files:
 ```bash
 # Run this on the SERVER
-ssimpm --finstall="$HOME/burnp3/burnP3Plus-2-6-5.ssimpkg"
-ssimpm --finstall="$HOME/burnp3/burnP3PlusFireSTARR-1-5-5.ssimpkg"
+ssimpm --finstall="$HOME/burnp3/burnP3Plus-2-6-11.ssimpkg"
+ssimpm --finstall="$HOME/burnp3/burnP3PlusFireSTARR-1-5-7.ssimpkg"
 ssimpm --list --installed
 
 chmod +x $HOME/syncrosim/Packages/burnP3PlusFireSTARR/*/tbd
@@ -361,7 +366,7 @@ ssim --lib=$SSIMLIB --list --scenarios
 
 <br>
 
-<p id="runcontrol"> <h3> Configuring run control and multiprocessing </h3> </p>
+<p id="runcontrol"> <h2> Configuring run control and multiprocessing </h2> </p>
 
 Before running a *scenario*, configure how many fire iterations to run and how many CPU cores to use. In SyncroSim, these settings live in *datasheets* — named tables that hold model configuration. You can import *datasheet* values from CSV files using the console.
 
@@ -399,7 +404,7 @@ Set `MaximumJobs` to match the number of CPU cores you want to use. On an HPC cl
 
 <br>
 
-<p id="runscenario"> <h3> Running a scenario </h3> </p>
+<p id="runscenario"> <h2> Running a scenario </h2> </p>
 
 ```bash
 # Set library path so SyncroSim can find its bundled libraries
@@ -430,25 +435,25 @@ The table below summarizes the most useful console flags. For a complete referen
 
 <br>
 
-<p id="transformers"> <h3> Running individual transformers </h3> </p>
+<p id="transformers"> <h2> Running individual transformers </h2> </p>
 
 **BurnP3+** runs a pipeline of processing steps called **transformers**. Normally, running a *scenario* executes all transformers in sequence automatically. However, you can also run each transformer individually — this is useful for debugging, restarting a failed run mid-pipeline, or inspecting intermediate outputs.
 
 A full **BurnP3+** run consists of four stages:
 
-- **Stage 1 — Generate Ignitions**: Determines where fires start based on your ignition probability inputs
-- **Stage 2 — Generate Burning Conditions**: Assigns weather streams to each fire iteration
+- **Stage 1 — Sample Ignitions**: Determines where fires start based on your ignition probability inputs
+- **Stage 2 — Sample Burning Conditions**: Assigns weather streams to each fire iteration
 - **Stage 3 — Fire Growth (FireSTARR)**: Simulates fire spread across the landscape for each iteration
-- **Stage 4 — Burn Probability**: Aggregates fire perimeters across iterations to produce the final probability map
+- **Stage 4 — Summarize Burn Probability**: Aggregates fire perimeters across iterations to produce the final probability map
 
 ```bash
 SSIMLIB=/path/to/your/burnp3.ssim
 
-# Stage 1 — Generate ignition locations
+# Stage 1 — Sample ignition locations
 ssim --lib=$SSIMLIB --run --sid=1 \
      --trx=burnP3Plus_generateIgnitions --inplace --verbose
 
-# Stage 2 — Generate burning conditions (weather)
+# Stage 2 — Sample burning conditions (weather)
 ssim --lib=$SSIMLIB --run --sid=1 \
      --trx=burnP3Plus_generateBurningConditions --inplace --verbose
 
@@ -467,7 +472,7 @@ ssim --lib=$SSIMLIB --run --sid=1 \
 
 <br>
 
-<p id="slurm"> <h3> Example SLURM job script </h3> </p>
+<p id="slurm"> <h2> Example SLURM job script </h2> </p>
 
 If you are running **BurnP3+** on an HPC cluster running SLURM, a minimal job script looks like this:
 
@@ -536,7 +541,7 @@ If the `.dll` files are missing, re-run the copy step from the [GDAL setup secti
 
 *Symptom:* After installing **BurnP3+** and FireSTARR, SyncroSim reports a version mismatch or a *package* fails to load.
 
-*Fix:* **BurnP3+** and FireSTARR must be installed as compatible versions. Check the <a href="https://github.com/ApexRMS/burnP3Plus/releases" target="_blank">BurnP3+ releases page</a> to confirm which FireSTARR version is required for your **BurnP3+** release. Uninstall and reinstall the mismatched *package*:
+*Fix:* **BurnP3+** and FireSTARR must be installed as compatible versions. Check the <a href="https://github.com/BurnP3/BurnP3Plus/releases" target="_blank">BurnP3+ releases page</a> to confirm which FireSTARR version is required for your **BurnP3+** release. Uninstall and reinstall the mismatched *package*:
 
 ```bash
 ssimpm --uninstall=burnP3PlusFireSTARR
@@ -600,4 +605,4 @@ All paths should point to `/lib/x86_64-linux-gnu/`.
 
 <br>
 
-*For more on SyncroSim, visit <a href="https://syncrosim.com" target="_blank">syncrosim.com</a>. **BurnP3+** package documentation is available at <a href="https://burnp3.github.io/BurnP3Plus" target="_blank">apexrms.github.io/burnP3Plus</a>. The full SyncroSim console reference can be found at <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.*
+*For more on SyncroSim, visit <a href="https://syncrosim.com" target="_blank">syncrosim.com</a>. **BurnP3+** package documentation is available at <a href="https://burnp3.github.io/BurnP3Plus" target="_blank">burnp3.github.io/BurnP3Plus</a>. The full SyncroSim console reference can be found at <a href="https://docs.syncrosim.com/reference/console_core.html" target="_blank">docs.syncrosim.com/reference/console_core.html</a>.*

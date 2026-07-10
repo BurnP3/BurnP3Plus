@@ -26,7 +26,6 @@
                 <div class="dropdown">
                   <a class="page-link dropdown-toggle" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
                   <div class="dropdown-content">
-                    <a href="{{ my_page.url | relative_url }}">Configuring models in BurnP3+</a>
                     {%- assign linux_page = site.pages | where: "path", "linux_tutorial.md" | first -%}
                     {%- if linux_page -%}
                     <a href="{{ linux_page.url | relative_url }}">Running on Linux</a>

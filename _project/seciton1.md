@@ -10,31 +10,31 @@ permalink: reference/burn-p3-plus
     <li>Library</li>
     {% for section in site.library %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
     <li>Project</li>
     {% for section in site.project %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
-            <a href="#heading01"> &emsp;&emsp;&emsp;Fuel Types</a>
-            <a href="#heading02"> &emsp;&emsp;&emsp;Seasons</a>
-            <a href="#heading03"> &emsp;&emsp;&emsp;Causes</a>
-            <a href="#heading04"> &emsp;&emsp;&emsp;Fire Zones</a>
-            <a href="#heading05"> &emsp;&emsp;&emsp;Weather Zones</a>
-            <a href="#heading06"> &emsp;&emsp;&emsp;Distributions</a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
+            <a class="lvl2" href="#heading01">Fuel Types</a>
+            <a class="lvl2" href="#heading02">Seasons</a>
+            <a class="lvl2" href="#heading03">Causes</a>
+            <a class="lvl2" href="#heading04">Fire Zones</a>
+            <a class="lvl2" href="#heading05">Weather Zones</a>
+            <a class="lvl2" href="#heading06">Distributions</a>
         {% endif %}
     {% endfor %}
     <li>Scenario</li>
     {% for section in site.scenarios %}
         {% if section.section != page.section %}
-            <a href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% else %}
-            <a class="selected" href="{{site.baseurl}}{{ section.url }}"> &emsp;{{ section.title }} </a>
+            <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -64,7 +64,7 @@ For more information on the Canadian Fire Behaviour Prediction (FBP) System fuel
 
 **Column internal name:** Name
 
-Defines a name for the fuel type. E.g., “Boreal Spruce”. Fuel Names are defined by the user (i.e., free-form) and must match the name(s) of the Fuel Type(s) in the fuel Crosswalk (e.g., <a href="cell2-fire#heading01">Cell2Fire Crosswalk</a>).
+Defines a name for the fuel type. E.g., “Boreal Spruce”. Fuel Names are defined by the user (i.e., free-form) and must match the name(s) of the Fuel Type(s) in the fuel Crosswalk (e.g., <a href="fire-starr#heading01">FireSTARR Crosswalk</a>).
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
 
@@ -266,7 +266,7 @@ Provides a numerical ID for the weather zone. IDs must match the weather zone ra
 
 **Datasheet internal name:** burnP3Plus_Distribution
 
-The **Distributions** datasheet is used to define distributions in the analysis. Further information on the distribution(s) defined in this datasheet is input in the <a href="burn-p3-plus-scenario#heading21">scenario Distributions datasheet</a>.
+The **Distributions** datasheet is used to define distributions in the analysis. Further information on the distribution(s) defined in this datasheet is input in the <a href="burn-p3-plus-scenario#heading19">scenario Distributions datasheet</a>.
 
 
 ### **Name**

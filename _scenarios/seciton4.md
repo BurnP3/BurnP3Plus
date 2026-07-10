@@ -31,46 +31,61 @@ permalink: reference/burn-p3-plus-scenario
             <a class="selected lvl1" href="{{site.baseurl}}{{ section.url }}">{{ section.title }}</a>
             <a class="lvl2" href="#heading01">Run Control</a>
             <a class="lvl2" href="#heading02">Landscape Maps</a>
-            <a class="lvl2" href="#heading03">Ignition Count</a>
-            <a class="lvl2" href="#heading04">Ignition Location</a>
-            <a class="lvl2" href="#heading05">Ignition Restrictions</a>
-            <a class="lvl2" href="#heading06">Ignition Distribution</a>
-            <a class="lvl2" href="#heading07">Spread Event Days</a>
-            <a class="lvl2" href="#heading08">Daily Burning Hours</a>
-            <a class="lvl2" href="#heading09">Daily Weather</a>
-            <a class="lvl2" href="#heading10">Weather Sampling Options</a>
-            <a class="lvl2" href="#heading11">Green Up</a>
-            <a class="lvl2" href="#heading12">Curing</a>
-            <a class="lvl2" href="#heading13">Wind Grid</a>
-            <a class="lvl2" href="#heading14">Tabular</a>
-            <a class="lvl2" href="#heading15">Spatial</a>
-            <a class="lvl2" href="#heading21">Spatial FBP</a>
-            <a class="lvl2" href="#heading16">Deterministic Ignition Location</a>
-            <a class="lvl2" href="#heading17">Deterministic Burn Conditions</a>
-            <a class="lvl2" href="#heading18">Fire Resampling Options</a>
-            <a class="lvl2" href="#heading19">Distributions</a>
-            <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
-            <a class="lvl2" href="#heading36">Output Burn Probability</a>
-            <a class="lvl2" href="#heading37">Output Relative Burn Probability</a>
-            <a class="lvl2" href="#heading38">Output Burn Count</a>
-            <a class="lvl2" href="#heading39">Output Burn Map</a>
-            <a class="lvl2" href="#heading40">Output Fire Perimeters</a>
-            <a class="lvl2" href="#heading41">Output Individual Burn Maps</a>
-            <a class="lvl2" href="#heading42">Output Burn Tables</a>
-            <a class="lvl2" href="#heading22">Output Rate of Spread Map</a>
-            <a class="lvl2" href="#heading23">Output Rate of Spread Summary Map</a>
-            <a class="lvl2" href="#heading24">Output Fire Intensity Map</a>
-            <a class="lvl2" href="#heading25">Output Fire Intensity Summary Map</a>
-            <a class="lvl2" href="#heading26">Output Spread Direction Map</a>
-            <a class="lvl2" href="#heading27">Output Spread Direction Summary Map</a>
-            <a class="lvl2" href="#heading28">Output Surface Fuel Consumption Map</a>
-            <a class="lvl2" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
-            <a class="lvl2" href="#heading30">Output Crown Fraction Burned Map</a>
-            <a class="lvl2" href="#heading31">Output Crown Fraction Burned Summary Map</a>
-            <a class="lvl2" href="#heading32">Output Crown Fraction Consumed Map</a>
-            <a class="lvl2" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
-            <a class="lvl2" href="#heading34">Output Total Fuel Consumption Map</a>
-            <a class="lvl2" href="#heading35">Output Total Fuel Consumption Summary Map</a>
+            <details class="sidenav-group" open>
+                <summary><a class="lvl2" href="#groupSampleIgnitions">Sample Ignitions</a></summary>
+                <a class="lvl2" href="#heading03">Ignition Count</a>
+                <a class="lvl2" href="#heading04">Ignition Location</a>
+                <a class="lvl2" href="#heading05">Ignition Restrictions</a>
+                <a class="lvl2" href="#heading06">Ignition Distribution</a>
+            </details>
+            <details class="sidenav-group" open>
+                <summary><a class="lvl2" href="#groupSampleBurningConditions">Sample Burning Conditions</a></summary>
+                <a class="lvl2" href="#heading07">Spread Event Days</a>
+                <a class="lvl2" href="#heading08">Daily Burning Hours</a>
+                <a class="lvl2" href="#heading09">Daily Weather</a>
+                <a class="lvl2" href="#heading10">Weather Sampling Options</a>
+            </details>
+            <details class="sidenav-group" open>
+                <summary><a class="lvl2" href="#groupFireGrowthModelOptions">Fire Growth Model Options</a></summary>
+                <a class="lvl2" href="#heading11">Green Up</a>
+                <a class="lvl2" href="#heading12">Curing</a>
+                <a class="lvl2" href="#heading13">Wind Grid</a>
+            </details>
+            <details class="sidenav-group" open>
+                <summary><a class="lvl2" href="#groupOutputOptions">Output Options</a></summary>
+                <a class="lvl2" href="#heading14">Tabular</a>
+                <a class="lvl2" href="#heading15">Spatial</a>
+                <a class="lvl2" href="#heading21">Spatial FBP</a>
+            </details>
+            <details class="sidenav-group" open>
+                <summary><a class="lvl2" href="#groupAdvanced">Advanced</a></summary>
+                <a class="lvl2" href="#heading16">Deterministic Ignition Location</a>
+                <a class="lvl2" href="#heading17">Deterministic Burn Conditions</a>
+                <a class="lvl2" href="#heading18">Fire Resampling Options</a>
+                <a class="lvl2" href="#heading19">Distributions</a>
+                <a class="lvl2" href="#heading20">Output Fire Statistics Table</a>
+                <a class="lvl2" href="#heading36">Output Burn Probability</a>
+                <a class="lvl2" href="#heading37">Output Relative Burn Probability</a>
+                <a class="lvl2" href="#heading38">Output Burn Count</a>
+                <a class="lvl2" href="#heading39">Output Burn Map</a>
+                <a class="lvl2" href="#heading40">Output Fire Perimeters</a>
+                <a class="lvl2" href="#heading41">Output Individual Burn Maps</a>
+                <a class="lvl2" href="#heading42">Output Burn Tables</a>
+                <a class="lvl2" href="#heading22">Output Rate of Spread Map</a>
+                <a class="lvl2" href="#heading23">Output Rate of Spread Summary Map</a>
+                <a class="lvl2" href="#heading24">Output Fire Intensity Map</a>
+                <a class="lvl2" href="#heading25">Output Fire Intensity Summary Map</a>
+                <a class="lvl2" href="#heading26">Output Spread Direction Map</a>
+                <a class="lvl2" href="#heading27">Output Spread Direction Summary Map</a>
+                <a class="lvl2" href="#heading28">Output Surface Fuel Consumption Map</a>
+                <a class="lvl2" href="#heading29">Output Surface Fuel Consumption Summary Map</a>
+                <a class="lvl2" href="#heading30">Output Crown Fraction Burned Map</a>
+                <a class="lvl2" href="#heading31">Output Crown Fraction Burned Summary Map</a>
+                <a class="lvl2" href="#heading32">Output Crown Fraction Consumed Map</a>
+                <a class="lvl2" href="#heading33">Output Crown Fraction Consumed Summary Map</a>
+                <a class="lvl2" href="#heading34">Output Total Fuel Consumption Map</a>
+                <a class="lvl2" href="#heading35">Output Total Fuel Consumption Summary Map</a>
+            </details>
         {% endif %}
     {% endfor %}
 </div>
@@ -186,6 +201,8 @@ A raster file (.tif) input where each pixel is an integer value representing a f
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
 
 <br>
+
+<p id="groupSampleIgnitions"></p>
 
 # **Sample Ignitions**
 
@@ -470,6 +487,8 @@ The Ignition Distribution datasheet in the **BurnP3+Prometheus** template librar
 <img src="../assets/ref_images/ref-8.png">
 
 <br>
+
+<p id="groupSampleBurningConditions"></p>
 
 # **Sample Burning Conditions**
 
@@ -847,17 +866,11 @@ Weather Zones are defined in the project [Weather Zones](burn-p3-plus#heading05)
 
 <br>
 
-# **Advanced**
-
-The **Advanced** node contains the following datasheet:
-
-*	Weather Sampling Options
-
 <p id="heading10"> <h2><b>Weather Sampling Options</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_WeatherOption
 
-The **Weather Sampling Options** datasheet can be found under the **Advanced** node and contains information regarding how the weather data will be sampled.
+The **Weather Sampling Options** datasheet can be found under the **Sample Burning Conditions** node and contains information regarding how the weather data will be sampled.
 
 ### **Sample Weather Sequentially**
 
@@ -873,17 +886,11 @@ If set to *Yes*, only the first day of burning will choose a random day of weath
 
 <br>
 
+<p id="groupFireGrowthModelOptions"></p>
+
 # **Fire Growth Model Options**
 
 The *Fire Growth* transformers are responsible for simulating the spread of individual fires across a landscape using the deterministic inputs sampled by the previous two transformers. The BurnP3+ package does not include a Fire Growth transformer, but datasheets in this node are used to configure Fire Growth transformers in other packages, including BurnP3+Prometheus and BurnP3+FireSTARR.
-
-The **Advanced** node groups the following datasheets:
-
-*	Green Up
-*	Curing
-*	Wind Grid
-
-# **Advanced**
 
 <p id="heading11"> <h2><b>Green Up</b></h2> </p>
 
@@ -1093,6 +1100,8 @@ A raster file (.tif) input that contains the resulting local wind direction unde
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Data Type*: String
 
 <br>
+
+<p id="groupOutputOptions"></p>
 
 # **Output Options**
 
@@ -2070,23 +2079,17 @@ Specifies the map's band.
 
 <br>
 
+<p id="groupAdvanced"></p>
 
 # **Advanced**
 
-# **Deterministic Inputs**
-
-The **Deterministic Inputs** node groups the following datasheets:
-
-*	Deterministic Ignition Location
-*	Deterministic Burn Conditions
-
-Each of these datasheets are automatically populated from the first two BurnP3+ transformers (i.e., 1 – Sample Ignitions, and 2 – Sample Burning Conditions). However, users may populate these tables with their own data instead of sampling them with these transformers when creating a deterministic model (e.g., when modeling historical fires, etc.).
+Deterministic Ignition Location and Deterministic Burn Conditions are automatically populated from the first two BurnP3+ transformers (i.e., 1 – Sample Ignitions, and 2 – Sample Burning Conditions). However, users may populate these tables with their own data instead of sampling them with these transformers when creating a deterministic model (e.g., when modeling historical fires, etc.).
 
 <p id="heading16"> <h2><b>Deterministic Ignition Location</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_DeterministicIgnitionLocation
 
-The **Deterministic Ignition Location** datasheet can be found under the **Deterministic Inputs** node and provides information on the ignition locations in the simulation. 
+The **Deterministic Ignition Location** datasheet can be found under the **Advanced** node and provides information on the ignition locations in the simulation. 
 
 This datasheet is usually populated by the *Sample Ignitions* transformer but can be filled by hand for deterministic runs.  
 
@@ -2154,7 +2157,7 @@ Causes are defined in the project [Causes](burn-p3-plus#heading03) datasheet und
 
 **Datasheet internal name:** burnP3Plus_DeterministicBurnCondition
 
-The **Deterministic Burn Conditions** datasheet can be found under the **Deterministic Inputs** node and provides information on the burn conditions experienced by each ignition for each day of burning. 
+The **Deterministic Burn Conditions** datasheet can be found under the **Advanced** node and provides information on the burn conditions experienced by each ignition for each day of burning. 
 
 This is usually populated by the *Sample Burning Conditions* transformer but can be filled by hand for deterministic runs.  
 

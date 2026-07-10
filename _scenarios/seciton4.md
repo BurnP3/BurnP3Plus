@@ -307,19 +307,11 @@ Users may choose between two built-in Statistical distributions: Normal or Gamma
 
 <br>
 
-# **Advanced**
-
-The **Sample Ignitions | Advanced** node groups the following scenario datasheets:
-
-*	Ignition Location
-*	Ignition Restrictions
-*	Ignition Distribution
-
 <p id="heading04"> <h2><b>Ignition Location</b></h2> </p>
 
 **Datasheet internal name:** burnP3Plus_ProbabilisticIgnitionLocation
 
-The **Ignition Location** datasheet can be found under the **Advanced** node and contains information about the location of fire ignitions.
+The **Ignition Location** datasheet can be found under the **Sample Ignitions** node and contains information about the location of fire ignitions.
 
 This datasheet is an input for the *Sample Ignitions* transformer.
 
@@ -359,7 +351,7 @@ Causes are defined in the project [Causes](burn-p3-plus#heading03) datasheet und
 
 **Datasheet internal name:** burnP3Plus_IgnitionRestriction
 
-The **Ignition Restrictions** datasheet can be found under the **Advanced** node and contains information about fire ignition restrictions that define the conditions and locations where ignitions can be sampled.
+The **Ignition Restrictions** datasheet can be found under the **Sample Ignitions** node and contains information about fire ignition restrictions that define the conditions and locations where ignitions can be sampled.
 
 This datasheet is an input for the *Sample Ignitions* transformer.
 
@@ -425,7 +417,7 @@ Here, we can see that the ignitions cannot occur in the Matted Grass (O-1a) fuel
 
 **Datasheet internal name:** burnP3Plus_IgnitionDistribution
 
-The **Ignition Distribution** datasheet can be found under the **Advanced** node and contains information about how ignitions should be assigned to seasons, causes, and/or fire zones. This information can then be used to stratify ignition locations, burning conditions, etc.
+The **Ignition Distribution** datasheet can be found under the **Sample Ignitions** node and contains information about how ignitions should be assigned to seasons, causes, and/or fire zones. This information can then be used to stratify ignition locations, burning conditions, etc.
 
 This datasheet is an input for the *Sample Ignitions* transformer.
 

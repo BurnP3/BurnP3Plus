@@ -356,13 +356,22 @@ savePartitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
         # Clean up and rename
         map(str_replace_all, "=", "") %>%
         map_chr(str_c, collapse = "-"),
+      PartInfo = OldFileName %>%
+        # Above a certain number of records, each batch might further be split into parts
+        # - Grab the partition number
+        basename() %>%
+        tools::file_path_sans_ext() %>%
+        # Clean up as with batch info
+        str_replace("-", "") %>%
+        str_replace("part","-Part"),
       FileName = OldFileName %>%
         dirname %>%
-        str_c("/raw-tabular-", BatchInfo, ".parquet") %>%
+        str_c("/raw-tabular-", BatchInfo, PartInfo, ".parquet") %>%
         normalizePath(mustWork = F),
       Description = str_c(
         "Raw tabular outputs - ",
-        BatchInfo %>% str_replace_all("(\\d+)", " \\1") %>% str_replace_all("-", " - ")))
+        BatchInfo %>% str_replace_all("(\\d+)", " \\1") %>% str_replace_all("-", " - "), " ",
+        PartInfo %>% str_replace_all("(\\d+)", " \\1") %>% str_replace_all("-", " - ")))
 
   # Rename partitions files to avoid file colisions / be more descriptive 
   walk2(
@@ -372,7 +381,7 @@ savePartitionedParquetToSyncroSim <- function(partitioned_parquet_path) {
   
   # Clean up and save
   OutputRawTabular <- OutputRawTabular %>%
-    dplyr::select(-OldFileName, -BatchInfo)
+    dplyr::select(-OldFileName, -BatchInfo, -PartInfo)
   
   saveDatasheet(myScenario, OutputRawTabular, str_c("burnP3Plus_OutputRawTabular"), append = F)
 }

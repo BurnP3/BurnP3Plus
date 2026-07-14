@@ -484,7 +484,7 @@
 	<!--Transformers-->
 
 	<!--Generate Ignitions Transformer-->
-	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="generateIgnitions" displayName="1 - Sample Ignitions" isRunnable="True" programName="Rscript" programArguments="ignitions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="IgnitionsPerIteration" type="Input"/>
@@ -497,7 +497,7 @@
 	</transformer>
 
 	<!--Generate Burning Conditions Transformer-->
-	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="generateBurningConditions" displayName="2 - Sample Burning Conditions" isRunnable="True" programName="Rscript" programArguments="conditions.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DistributionValue" type="Input"/>
 		<dataSheet name="FireDuration" type="Input"/>
@@ -519,7 +519,7 @@
 	</transformer>
 
 	<!--Summarize Burn Probability Transformer-->
-	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="3">
+	<transformer name="burnProbability" displayName="4 - Summarize Burn Probability" isRunnable="True" programName="Rscript" programArguments="burnProbability.R" configurationSheet="burnP3Plus_RunControl" condaEnv="burnP3Plus.yml" condaEnvVersion="4">
 		<dataSheet name="RunControl" type="Input"/>
 		<dataSheet name="DeterministicIgnitionLocation" type="Both"/>
 		<dataSheet name="DeterministicBurnCondition" type="Both"/>
